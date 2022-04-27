@@ -1,0 +1,27 @@
+#header {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #63B4D1;
+}
+
+#header a {
+  font-weight: bold;
+  font-size: 25px;
+  display: inline;
+  margin-right: 10px;
+  padding-bottom: 5px;
+  color: #9448BC;
+}
+
+#header a:hover {
+  color: #7699D4;
+  cursor: pointer;
+}
+
+#header a:link {
+  text-decoration: none;
+}
+
+#header a:active {
+  color: #63B4D1;
+}
+

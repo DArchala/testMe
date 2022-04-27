@@ -4,15 +4,23 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import {AppRoutingModule} from "./app-routing.module";
+import { ExamsComponent } from './pages/exams/exams.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import {HttpClientModule} from "@angular/common/http";
+import { ExamComponent } from './pages/exam/exam.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    ExamsComponent,
+    PageNotFoundComponent,
+    ExamComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
