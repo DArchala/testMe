@@ -8,6 +8,7 @@ import { ExamsComponent } from './pages/exams/exams.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import {HttpClientModule} from "@angular/common/http";
 import { ExamComponent } from './pages/exam/exam.component';
+import { ExamTimerPipe } from './pipes/exam-timer.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ExamComponent } from './pages/exam/exam.component';
     HomeComponent,
     ExamsComponent,
     PageNotFoundComponent,
-    ExamComponent
+    ExamComponent,
+    ExamTimerPipe
   ],
   imports: [
     BrowserModule,

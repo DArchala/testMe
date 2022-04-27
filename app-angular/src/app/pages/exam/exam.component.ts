@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ExamsService} from "../../services/exams.service";
 import {Exam} from "../../models/exam";
 import {ActivatedRoute} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-exam',
@@ -10,11 +11,14 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ExamComponent implements OnInit {
 
-  constructor(private examService: ExamsService, private route: ActivatedRoute) { }
+  constructor(private examService: ExamsService,
+              private route: ActivatedRoute) {
+  }
 
   exam!: Exam;
   examStarted = false;
-  examEnded = false;
+  timeLeft: number = 10;
+  interval: any;
 
   ngOnInit() {
     const examId = this.route.snapshot.paramMap.get('id');
@@ -22,14 +26,28 @@ export class ExamComponent implements OnInit {
   }
 
   startTest() {
+    console.log("startTest()");
     this.examStarted = true;
+    this.startTimer();
+  }
+
+  startTimer() {
+    this.interval = setInterval(() => {
+      console.log("this.timeLeft -> " + this.timeLeft);
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.interval);
+        this.finishTest();
+      }
+    }, 1000);
   }
 
   finishTest() {
-    this.examEnded = true;
+    clearInterval(this.interval);
     alert("Egzamin zakończony!");
     this.examStarted = false;
-    this.examEnded = false;
+    this.timeLeft = 10;
   }
 
 }

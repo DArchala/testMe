@@ -11,6 +11,9 @@
 </div>
 <div *ngIf="examStarted" align="center" id="examQuestionsContainer">
   <div id="examQuestions">
+    <div id="timer">
+      {{timeLeft | examTimer}}
+    </div>
     <div id="examQuestion" *ngFor="let question of exam.questions">
       <p id="questionContent">{{question.questionContent}}</p>
       <div id="answers" *ngFor="let answer of question.answers">
