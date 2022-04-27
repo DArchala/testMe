@@ -1,0 +1,34 @@
+#examsContainer {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;;
+  margin: 10px;
+}
+
+#examDivOuter {
+  border: 4px solid cadetblue;
+  border-radius: 10px;
+  margin: 10px;
+  min-width: 330px;
+  max-width: 360px;
+  background-color: white;
+}
+
+#examDivOuter:hover {
+  background-color: #b4ffd3;
+  cursor: pointer;
+  box-shadow: 5px 5px 5px #b4f6ff;
+}
+
+#examDivInner {
+  margin: 10px;
+}
+
+#examDivInner p span {
+  font-weight: bold;
+}
+
+#idSpan {
+  border-bottom: 2px solid cadetblue;
+}

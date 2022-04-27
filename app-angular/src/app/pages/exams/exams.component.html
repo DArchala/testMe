@@ -1,0 +1,10 @@
+<div id="examsContainer">
+  <div *ngFor="let exam of exams" routerLink="exam/{{exam.id}}" id="examDivOuter" >
+    <div id="examDivInner">
+      <p id="idSpan"><span>ID:</span> {{exam.id}}</p>
+      <p><span>Exam name:</span> {{exam.examName}}</p>
+      <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
+      <p><span>Questions number: </span>{{exam.examQuestionsNumber}}</p>
+    </div>
+  </div>
+</div>
