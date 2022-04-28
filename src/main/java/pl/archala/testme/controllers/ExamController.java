@@ -53,8 +53,16 @@ public class ExamController {
     public ResponseEntity<Exam> getExamById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
         if (exam.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        ResponseEntity<Exam> response = new ResponseEntity<>(exam.get(), HttpStatus.OK);
+
+        ResponseEntity<Exam> response = new ResponseEntity<>(exam.get().setAllAnswersFalse(), HttpStatus.OK);
+
         return response;
+    }
+
+    @PostMapping("/exam/{id}")
+    public ResponseEntity<Exam> checkExamCorrectness(Exam exam) {
+        log.info("exam = " + exam);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 }

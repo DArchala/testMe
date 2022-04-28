@@ -18,7 +18,7 @@
       <p id="questionContent">{{question.content}}</p>
       <div id="answers" *ngFor="let answer of question.answers">
         <input (click)="printAnswer(question)" type="checkbox" [(ngModel)]="answer.correctness" [value]="true"
-               name="{{question.id}}">{{answer.content}} / {{answer.correctness}}
+               name="{{question.id}}">{{answer.content}}
       </div>
     </div>
   </div>

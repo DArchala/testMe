@@ -17,4 +17,8 @@ export class ExamsService {
     return this.httpClient.get<Exam>(`http://localhost:8080/exams/exam/` + examId);
   }
 
+  postExamToCheckCorrectness(exam: Exam) {
+    return this.httpClient.post<Exam>(`http://localhost:8080/exams/exam/` + exam.id, exam);
+  }
+
 }

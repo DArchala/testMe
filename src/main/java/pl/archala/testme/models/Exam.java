@@ -39,5 +39,9 @@ public class Exam {
         this.questions = questions;
     }
 
+    public Exam setAllAnswersFalse() {
+        questions.forEach(question -> question.getAnswers().forEach(answer -> answer.setCorrectness(false)));
+        return this;
+    }
 
 }
