@@ -9,6 +9,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import {HttpClientModule} from "@angular/common/http";
 import { ExamComponent } from './pages/exam/exam.component';
 import { ExamTimerPipe } from './pipes/exam-timer.pipe';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -19,11 +20,12 @@ import { ExamTimerPipe } from './pipes/exam-timer.pipe';
     ExamComponent,
     ExamTimerPipe
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule
+    ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]

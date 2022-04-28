@@ -18,12 +18,12 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String questionContent;
-    @ElementCollection
-    private List<String> answers;
+    private String content;
+    @OneToMany
+    private List<Answer> answers;
 
-    public Question(String questionContent, List<String> answers) {
-        this.questionContent = questionContent;
+    public Question(String content, List<Answer> answers) {
+        this.content = content;
         this.answers = answers;
     }
 

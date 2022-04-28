@@ -10,12 +10,12 @@ export class ExamTimerPipe implements PipeTransform {
     let min = "00";
     let sec = "00";
     if(seconds >= 3600) {
-      h = (seconds/3600).toString();
-      min = ((seconds%3600)/60).toString();
-      sec = ((seconds%3600)%60).toString();
+      h = Math.floor(seconds/3600).toString();
+      min = Math.floor(((seconds%3600)/60)).toString();
+      sec = Math.floor((seconds%3600)%60).toString();
     } else if (seconds >= 60) {
-      min = ((seconds%3600)/60).toString();
-      sec = ((seconds%3600)%60).toString();
+      min = Math.floor(((seconds%3600)/60)).toString();
+      sec = Math.floor((seconds%3600)%60).toString();
     } else sec = seconds.toString();
     if(h.length == 1) h = "0"+h;
     if(min.length == 1) min = "0"+min;

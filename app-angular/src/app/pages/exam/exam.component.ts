@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ExamsService} from "../../services/exams.service";
 import {Exam} from "../../models/exam";
 import {ActivatedRoute} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
+import {Question} from "../../models/question";
+import {Answer} from "../../models/answer";
 
 @Component({
   selector: 'app-exam',
@@ -17,7 +18,7 @@ export class ExamComponent implements OnInit {
 
   exam!: Exam;
   examStarted = false;
-  timeLeft: number = 10;
+  timeLeft: number = 3600;
   interval: any;
 
   ngOnInit() {
@@ -26,14 +27,12 @@ export class ExamComponent implements OnInit {
   }
 
   startTest() {
-    console.log("startTest()");
     this.examStarted = true;
     this.startTimer();
   }
 
   startTimer() {
     this.interval = setInterval(() => {
-      console.log("this.timeLeft -> " + this.timeLeft);
       if (this.timeLeft > 0) {
         this.timeLeft--;
       } else {
@@ -47,7 +46,10 @@ export class ExamComponent implements OnInit {
     clearInterval(this.interval);
     alert("Egzamin zakończony!");
     this.examStarted = false;
-    this.timeLeft = 10;
+    this.timeLeft = 3600;
   }
 
+  printAnswer(answer: any) {
+    console.log(answer);
+  }
 }

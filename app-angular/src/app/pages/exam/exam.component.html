@@ -15,9 +15,10 @@
       {{timeLeft | examTimer}}
     </div>
     <div id="examQuestion" *ngFor="let question of exam.questions">
-      <p id="questionContent">{{question.questionContent}}</p>
+      <p id="questionContent">{{question.content}}</p>
       <div id="answers" *ngFor="let answer of question.answers">
-        <input type="radio" name="{{question.questionContent}}"> {{answer}}
+        <input (click)="printAnswer(question)" type="checkbox" [(ngModel)]="answer.correctness" [value]="true"
+               name="{{question.id}}">{{answer.content}} / {{answer.correctness}}
       </div>
     </div>
   </div>

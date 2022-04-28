@@ -2,8 +2,8 @@ package pl.archala.testme.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import pl.archala.testme.models.Exam;
+import pl.archala.testme.models.Answer;
 
 @Repository
-public interface ExamRepository extends CrudRepository<Exam, Long> {
+public interface AnswerRepository extends CrudRepository<Answer, Long> {
 }
