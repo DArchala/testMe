@@ -17,10 +17,12 @@ export class ExamComponent implements OnInit {
   }
 
   exam!: Exam;
+  responseExam!: Exam;
   examStarted = false;
   timeLeft: number = 3600;
   interval: any;
   examId: number | any;
+
 
   ngOnInit() {
     this.examId = this.route.snapshot.paramMap.get('id');
@@ -45,8 +47,7 @@ export class ExamComponent implements OnInit {
 
   finishTest() {
     clearInterval(this.interval);
-    console.log(this.exam);
-    this.examService.postExamToCheckCorrectness(this.exam);
+    this.examService.postExamToCheckCorrectness(this.exam).subscribe(data => this.responseExam = data);
     alert("Egzamin zakończony!");
     this.examStarted = false;
     this.timeLeft = 3600;
@@ -55,4 +56,5 @@ export class ExamComponent implements OnInit {
   printAnswer(answer: any) {
     console.log(answer);
   }
+
 }

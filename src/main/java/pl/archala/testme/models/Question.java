@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="questions")
+@Table(name = "questions")
 public class Question {
 
     @Id
@@ -27,4 +27,17 @@ public class Question {
         this.answers = answers;
     }
 
+    public boolean isFilledCorrectly(Question questionTemplate) {
+        for (Answer answer : this.getAnswers()) {
+            Answer answerTemplate = questionTemplate.getAnswerById(answer.getId());
+            if (answer.isCorrectness() != answerTemplate.isCorrectness()) return false;
+        }
+        return true;
+    }
+
+    private Answer getAnswerById(long id) {
+        return this.getAnswers().stream()
+                .filter(answer -> answer.getId() == id)
+                .findFirst().orElseThrow();
+    }
 }

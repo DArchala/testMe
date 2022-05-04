@@ -1,24 +1,28 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Exam} from "../models/exam";
+import {tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExamsService {
 
-  constructor(private httpClient: HttpClient) { }
+  private url = "http://localhost:8080";
+
+  constructor(private httpClient: HttpClient) {
+  }
 
   getExams() {
-    return this.httpClient.get<Exam[]>(`http://localhost:8080/exams`);
+    return this.httpClient.get<Exam[]>(this.url + `/exams`);
   }
 
   getExamById(examId: string | any) {
-    return this.httpClient.get<Exam>(`http://localhost:8080/exams/exam/` + examId);
+    return this.httpClient.get<Exam>(this.url + `/exams/exam/` + examId);
   }
 
   postExamToCheckCorrectness(exam: Exam) {
-    return this.httpClient.post<Exam>(`http://localhost:8080/exams/exam/` + exam.id, exam);
+    return this.httpClient.post<Exam>(this.url + `/exams/exam`, exam).pipe(tap(console.log));
   }
 
 }

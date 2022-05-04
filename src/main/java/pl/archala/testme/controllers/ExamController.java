@@ -49,20 +49,18 @@ public class ExamController {
         return response;
     }
 
+    @PostMapping("/exam")
+    public ResponseEntity<Exam> checkExamCorrectness(@RequestBody Exam exam) {
+        log.info("exam = " + exam);
+        return new ResponseEntity<>(new Exam(), HttpStatus.OK);
+    }
+
     @GetMapping("/exam/{id}")
     public ResponseEntity<Exam> getExamById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
         if (exam.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-
-        ResponseEntity<Exam> response = new ResponseEntity<>(exam.get().setAllAnswersFalse(), HttpStatus.OK);
-
-        return response;
-    }
-
-    @PostMapping("/exam/{id}")
-    public ResponseEntity<Exam> checkExamCorrectness(Exam exam) {
-        log.info("exam = " + exam);
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        log.info("exam = " + exam.get());
+        return new ResponseEntity<>(exam.get().setAllAnswersFalse(), HttpStatus.OK);
     }
 
 }

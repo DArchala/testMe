@@ -10,11 +10,11 @@ import java.util.List;
 @Service
 public class ExamService {
 
+    private final ExamRepository examRepo;
+
     public ExamService(ExamRepository examRepo) {
         this.examRepo = examRepo;
     }
-
-    private final ExamRepository examRepo;
 
     public void addSampleExams(List<Question> questions) {
         if (examRepo.count() == 0) {
@@ -24,6 +24,8 @@ public class ExamService {
                     questions));
         }
     }
+
+
 
 
 }
