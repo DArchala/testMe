@@ -57,8 +57,9 @@ public class QuestionService {
     public int countUserExamPoints(Exam userExam) {
         int counter = 0;
         for (Question question : userExam.getQuestions()) {
-            Question questionTemplate = questionRepo.findById(question.getId())
-                    .orElseThrow();
+            Question questionTemplate = questionRepo
+                    .findById(question.getId())
+                    .orElse(null);
             if (question.isFilledCorrectly(questionTemplate)) counter++;
         }
         return counter;
