@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ExamsService} from "../../services/exams.service";
 import {Exam} from "../../models/exam";
 import {ActivatedRoute} from "@angular/router";
-import {Question} from "../../models/question";
 import {Answer} from "../../models/answer";
+import {Question} from "../../models/question";
 
 @Component({
   selector: 'app-exam',
@@ -17,12 +17,12 @@ export class ExamComponent implements OnInit {
   }
 
   exam!: Exam;
-  responseExam!: Exam;
+  responseExamPoints!: any;
   examStarted = false;
   timeLeft: number = 3600;
   interval: any;
   examId: number | any;
-
+  userExamTime!: number;
 
   ngOnInit() {
     this.examId = this.route.snapshot.paramMap.get('id');
@@ -30,6 +30,7 @@ export class ExamComponent implements OnInit {
   }
 
   startTest() {
+    this.examService.getExamById(this.examId).subscribe(data => this.exam = data);
     this.examStarted = true;
     this.startTimer();
   }
@@ -47,14 +48,19 @@ export class ExamComponent implements OnInit {
 
   finishTest() {
     clearInterval(this.interval);
-    this.examService.postExamToCheckCorrectness(this.exam).subscribe(data => this.responseExam = data);
+    this.userExamTime = 3600 - this.timeLeft;
+    this.examService.postExamToCheckCorrectness(this.exam).subscribe(data => this.responseExamPoints = data);
     alert("Egzamin zakończony!");
     this.examStarted = false;
     this.timeLeft = 3600;
   }
 
-  printAnswer(answer: any) {
-    console.log(answer);
+  uncheckOtherAnswers(answer: Answer, question: Question) {
+    question.answers.forEach(answer => answer.correctness = false);
+    answer.correctness = true;
   }
 
+  calcExamUserTime() {
+
+  }
 }

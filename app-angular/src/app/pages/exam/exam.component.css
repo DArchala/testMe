@@ -30,6 +30,7 @@
 #answers {
   text-align: left;
   margin-left: 10%;
+  margin-bottom: 2%;
 }
 
 #answers input:hover {
@@ -39,4 +40,14 @@
 #timer {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+#answerCheckBox {
+  transform: scale(1.5);
+  margin-right: 10px;
+}
+
+#examEndButton {
+  margin: 2.5%;
+  transform: scale(2);
 }

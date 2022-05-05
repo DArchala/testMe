@@ -4,6 +4,9 @@
     <p><span>Exam name:</span> {{exam.examName}}</p>
     <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
     <p><span>Questions number: </span>{{exam.examQuestionsNumber}}</p>
+    <p><span>Your last score: </span>{{this.responseExamPoints}}<a
+      *ngIf="this.responseExamPoints != null">/{{exam.examQuestionsNumber}}</a></p>
+    <p><span>Your last exam time:</span> {{userExamTime | examTimer}}</p>
   </div>
 </div>
 <div id="examStartButton" *ngIf="!examStarted">
@@ -17,12 +20,14 @@
     <div id="examQuestion" *ngFor="let question of exam.questions">
       <p id="questionContent">{{question.content}}</p>
       <div id="answers" *ngFor="let answer of question.answers">
-        <input (click)="printAnswer(question)" type="checkbox" [(ngModel)]="answer.correctness" [value]="true"
+        <input type="checkbox" id="answerCheckBox"
+               (change)="uncheckOtherAnswers(answer, question)"
+               [(ngModel)]="answer.correctness" [value]="true"
                name="{{question.id}}">{{answer.content}}
       </div>
     </div>
   </div>
 </div>
-<div id="examEndButton" *ngIf="examStarted">
-  <button (click)="finishTest()">Wyślij egzamin</button>
+<div align="center" *ngIf="examStarted">
+  <button id="examEndButton" (click)="finishTest()">Wyślij egzamin</button>
 </div>

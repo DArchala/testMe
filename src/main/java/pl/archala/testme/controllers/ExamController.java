@@ -41,25 +41,21 @@ public class ExamController {
 
     @GetMapping
     public ResponseEntity<List<Exam>> getExams() {
-        answerService.addSampleAnswers();
-        questionService.addSampleQuestions(((List<Answer>) answerRepo.findAll()));
-        examService.addSampleExams((List<Question>) questionRepo.findAll());
         List<Exam> exams = (List<Exam>) examRepo.findAll();
         ResponseEntity<List<Exam>> response = new ResponseEntity<>(exams, HttpStatus.OK);
         return response;
     }
 
     @PostMapping("/exam")
-    public ResponseEntity<Exam> checkExamCorrectness(@RequestBody Exam exam) {
-        log.info("exam = " + exam);
-        return new ResponseEntity<>(new Exam(), HttpStatus.OK);
+    public int checkExamCorrectness(@RequestBody Exam exam) {
+
+        return questionService.countUserExamPoints(exam);
     }
 
     @GetMapping("/exam/{id}")
     public ResponseEntity<Exam> getExamById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
         if (exam.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        log.info("exam = " + exam.get());
         return new ResponseEntity<>(exam.get().setAllAnswersFalse(), HttpStatus.OK);
     }
 

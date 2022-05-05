@@ -84,39 +84,6 @@ class QuestionServiceTest {
         assertThat(questionService.countUserExamPoints(exam), equalTo(3));
     }
 
-    @Test
-    void shouldReturnNullIfQuestionNotExistInDB() {
-        //given
-        Exam exam = new Exam(1L, null, "EXXAM", 3, "Easy");
-
-        Question question1 = new Question(1L, "What means PC?",
-                Arrays.asList(
-                        new Answer(1, "Personal Computer", true),
-                        new Answer(2, "Polish crysis"),
-                        new Answer(3, "Mouse"),
-                        new Answer(4, "Materazzi")
-                ));
-        Question question2 = new Question(2L, "What is HDD?",
-                Arrays.asList(
-                        new Answer(5, "Hard Disk-Driver", true),
-                        new Answer(6, "House Doom Driver"),
-                        new Answer(7, "Hello Dummy Damn"),
-                        new Answer(8, "Hard River Down")
-                ));
-        Question question3 = new Question(3L, "What is int?",
-                Arrays.asList(
-                        new Answer(9, "Variable type", true),
-                        new Answer(10, "IDE type"),
-                        new Answer(11, "Nothing special"),
-                        new Answer(12, "A word")
-                ));
-        List<Question> questions = Arrays.asList(question1, question2, question3);
-        exam.setQuestions(questions);
-
-        //when
-        when(questionRepo.findById(1L)).thenReturn(Optional.of(question1));
-
-    }
 
 
 
