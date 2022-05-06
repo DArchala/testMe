@@ -115,15 +115,18 @@ public class TestMeApplication {
 
             // Exams
 
-            examRepo.save(new Exam("Java knowledge",
+            Exam exam1 = new Exam("Java knowledge",
                     3,
                     "Easy",
-                    questions1));
+                    questions1);
+            exam1.setTimeInSeconds(1800);
 
-            examRepo.save(new Exam("Hibernate knowledge",
+            Exam exam2 = new Exam("Hibernate knowledge",
                     3,
                     "Medium",
-                    questions2));
+                    questions2);
+
+            examRepo.saveAll(Arrays.asList(exam1, exam2));
         };
     }
 

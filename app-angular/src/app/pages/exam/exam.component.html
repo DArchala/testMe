@@ -4,18 +4,21 @@
     <p><span>Exam name:</span> {{exam.examName}}</p>
     <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
     <p><span>Questions number: </span>{{exam.examQuestionsNumber}}</p>
-    <p><span>Your last score: </span>{{this.responseExamPoints}}<a
-      *ngIf="this.responseExamPoints != null">/{{exam.examQuestionsNumber}}</a></p>
-    <p><span>Your last exam time:</span> {{userExamTime | examTimer}}</p>
+    <p><span>Your last exam score: </span>{{this.responseExamPoints}}
+      <a *ngIf="this.responseExamPoints != null">/ {{exam.examQuestionsNumber}}</a>
+    </p>
+    <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
   </div>
 </div>
+
 <div id="examStartButton" *ngIf="!examStarted">
-  <button (click)="startTest()">Rozpocznij test!</button>
+  <button (click)="startTest()">Start exam!</button>
 </div>
+
 <div *ngIf="examStarted" align="center" id="examQuestionsContainer">
   <div id="examQuestions">
     <div id="timer">
-      {{timeLeft | examTimer}}
+      {{examTimeLeft | examTimer}}
     </div>
     <div id="examQuestion" *ngFor="let question of exam.questions">
       <p id="questionContent">{{question.content}}</p>
@@ -28,6 +31,7 @@
     </div>
   </div>
 </div>
+
 <div align="center" *ngIf="examStarted">
-  <button id="examEndButton" (click)="finishTest()">Wyślij egzamin</button>
+  <button id="examEndButton" (click)="finishTest()">Send exam</button>
 </div>

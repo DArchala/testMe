@@ -12,22 +12,30 @@ import {Question} from "../../models/question";
 })
 export class ExamComponent implements OnInit {
 
-  constructor(private examService: ExamsService,
-              private route: ActivatedRoute) {
-  }
 
   exam!: Exam;
   responseExamPoints!: any;
   examStarted = false;
-  timeLeft: number = 3600;
   interval: any;
   examId: number | any;
-  userExamTime!: number;
+  maxExamTime!: number;
+  examTimeLeft!: number;
+  userLastExamTime!: number;
+
+  constructor(private examService: ExamsService,
+              private route: ActivatedRoute) {
+    this.examId = this.route.snapshot.paramMap.get('id');
+    this.examService.getExamById(this.examId).subscribe(data => {
+      this.exam = data;
+      this.maxExamTime = data.timeInSeconds;
+      this.examTimeLeft = data.timeInSeconds;
+    });
+  }
 
   ngOnInit() {
-    this.examId = this.route.snapshot.paramMap.get('id');
-    this.examService.getExamById(this.examId).subscribe(data => this.exam = data);
+
   }
+
 
   startTest() {
     this.examService.getExamById(this.examId).subscribe(data => this.exam = data);
@@ -37,8 +45,8 @@ export class ExamComponent implements OnInit {
 
   startTimer() {
     this.interval = setInterval(() => {
-      if (this.timeLeft > 0) {
-        this.timeLeft--;
+      if (this.examTimeLeft > 0) {
+        this.examTimeLeft--;
       } else {
         clearInterval(this.interval);
         this.finishTest();
@@ -48,11 +56,11 @@ export class ExamComponent implements OnInit {
 
   finishTest() {
     clearInterval(this.interval);
-    this.userExamTime = 3600 - this.timeLeft;
     this.examService.postExamToCheckCorrectness(this.exam).subscribe(data => this.responseExamPoints = data);
+    this.userLastExamTime = this.maxExamTime - this.examTimeLeft;
     alert("Egzamin zakończony!");
     this.examStarted = false;
-    this.timeLeft = 3600;
+    this.examService.getExamById(this.examId).subscribe(data => this.examTimeLeft = data.timeInSeconds);
   }
 
   uncheckOtherAnswers(answer: Answer, question: Question) {
@@ -60,7 +68,4 @@ export class ExamComponent implements OnInit {
     answer.correctness = true;
   }
 
-  calcExamUserTime() {
-
-  }
 }

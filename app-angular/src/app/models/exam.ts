@@ -6,4 +6,5 @@ export class Exam {
   examName: string | any;
   examQuestionsNumber: number | any;
   questions: Question[] | any;
+  timeInSeconds!: number;
 }

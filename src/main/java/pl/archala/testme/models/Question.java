@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Parent class for different types of question
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +22,7 @@ public class Question {
     private long id;
 
     private String content;
+
     @OneToMany
     private List<Answer> answers;
 

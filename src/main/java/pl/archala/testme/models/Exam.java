@@ -27,6 +27,7 @@ public class Exam {
     private String examName;
     private long examQuestionsNumber;
     private String difficultyLevel;
+    private long timeInSeconds = 3600;
 
     public Exam(String examName, long examQuestionsNumber, String difficultyLevel) {
         this.examName = examName;
@@ -45,6 +46,5 @@ public class Exam {
         questions.forEach(question -> question.getAnswers().forEach(answer -> answer.setCorrectness(false)));
         return this;
     }
-
 
 }
