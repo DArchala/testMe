@@ -12,7 +12,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @Table(name = "questions")
-public abstract class Question implements Countable {
+public abstract class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +39,6 @@ public abstract class Question implements Countable {
                 .filter(answer -> answer.getId() == id)
                 .findFirst().orElseThrow();
     }
-
-    public abstract int countQuestionPoints(Question questionTemplate);
 
     public long getId() {
         return id;

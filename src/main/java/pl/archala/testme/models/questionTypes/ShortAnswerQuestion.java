@@ -6,26 +6,27 @@ import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * Question which cointains user answer/s
+ * for every correct user answer, user gets one point
+ */
 @Getter
 @AllArgsConstructor
 public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
 
-    @Override
-    public int countQuestionPoints(Question questionTemplate) {
-        var userAnswer = new ShortAnswerQuestion("content", Arrays.asList(), "userAnswer");
+    public int countQuestionPoints() {
         int points = 0;
-        if(answers.size() > 1) {
-            List<String> userAnswers = new ArrayList<>(List.of(userAnswer.getUserAnswer().split(",")));
-            for (Answer answer : answers) {
-                if(userAnswers.contains(answer)) points++;
-            }
-        } else if (answers.size() == 1) {
-            if(userAnswer.getUserAnswer().equals(answers.get(0))) points++;
+        List<String> userAnswers = new ArrayList<>();
+        for (String s : List.of(this.getUserAnswer().split(","))) {
+            userAnswers.add(s.toLowerCase());
+        }
+        for (Answer answer : answers) {
+            if(userAnswers.contains(answer.getContent().toLowerCase())) points++;
         }
         return points;
     }

@@ -11,8 +11,8 @@ import java.util.List;
  * User can collect 1 or 0 points for this type question.
  */
 public class SingleChoiceQuestion extends Question {
-    @Override
-    public int countQuestionPoints(Question questionTemplate) {
+
+    public int countQuestionPoints(SingleChoiceQuestion questionTemplate) {
         int counter = 1;
         for (Answer answer : answers) {
             Answer answerTemplate = questionTemplate.getAnswerById(answer.getId());
