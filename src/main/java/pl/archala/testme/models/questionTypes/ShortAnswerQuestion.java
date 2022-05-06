@@ -7,7 +7,6 @@ import pl.archala.testme.models.Question;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Question which cointains user answer/s
@@ -19,7 +18,7 @@ public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
 
-    public int countQuestionPoints() {
+    public int countPoints() {
         int points = 0;
         List<String> userAnswers = new ArrayList<>();
         for (String s : List.of(this.getUserAnswer().split(","))) {
@@ -30,6 +29,7 @@ public class ShortAnswerQuestion extends Question {
         }
         return points;
     }
+
 
     public ShortAnswerQuestion(String content, List<Answer> answers, String userAnswer) {
         super(content, answers);

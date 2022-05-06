@@ -36,7 +36,7 @@ class ShortAnswerQuestionTest {
         ), "Blablacar");
 
         //when
-        int points = answerQuestion.countQuestionPoints();
+        int points = answerQuestion.countPoints();
 
         //then
         assertEquals(points, 1);
@@ -52,7 +52,7 @@ class ShortAnswerQuestionTest {
         ), "Blablacar,Uber");
 
         //when
-        int points = answerQuestion.countQuestionPoints();
+        int points = answerQuestion.countPoints();
 
         //then
         assertEquals(2, points);
@@ -68,7 +68,7 @@ class ShortAnswerQuestionTest {
         ), "Pyszne.pl");
 
         //when
-        int points = answerQuestion.countQuestionPoints();
+        int points = answerQuestion.countPoints();
 
         //then
         assertEquals(points, 0);

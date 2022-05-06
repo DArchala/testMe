@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SingleChoiceQuestion extends Question {
 
-    public int countQuestionPoints(SingleChoiceQuestion questionTemplate) {
+    public int countPoints(SingleChoiceQuestion questionTemplate) {
         int counter = 1;
         for (Answer answer : answers) {
             Answer answerTemplate = questionTemplate.getAnswerById(answer.getId());
@@ -26,8 +26,13 @@ public class SingleChoiceQuestion extends Question {
 
     public SingleChoiceQuestion(String content, List<Answer> answers) {
         super(content, answers);
+        if (answers.size() < 2)
+            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
         if (answers.stream().filter(Answer::isCorrectness).count() != 1)
             throw new IllegalArgumentException("Number of correct answers in SingleChoiceQuestion has to be equal to 1.");
     }
 
+    public SingleChoiceQuestion(long id, String content, List<Answer> answers) {
+        super(id, content, answers);
+    }
 }
