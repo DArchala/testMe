@@ -4,16 +4,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import pl.archala.testme.models.Answer;
-import pl.archala.testme.models.Exam;
-import pl.archala.testme.models.Question;
 import pl.archala.testme.repositories.AnswerRepository;
 import pl.archala.testme.repositories.ExamRepository;
 import pl.archala.testme.repositories.QuestionRepository;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class TestMeApplication {
@@ -27,7 +20,7 @@ public class TestMeApplication {
     }
 
 
-    @Bean
+/*    @Bean
     public CommandLineRunner loadData(ExamRepository examRepo,
                                       AnswerRepository answerRepo,
                                       QuestionRepository questionRepo) {
@@ -127,6 +120,17 @@ public class TestMeApplication {
                     questions2);
 
             examRepo.saveAll(Arrays.asList(exam1, exam2));
+        };
+    }*/
+
+    @Bean
+    public CommandLineRunner loadData(ExamRepository examRepo,
+                                      AnswerRepository answerRepo,
+                                      QuestionRepository questionRepo) {
+        return (args) -> {
+
+
+
         };
     }
 

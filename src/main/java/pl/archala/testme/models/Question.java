@@ -1,8 +1,6 @@
 package pl.archala.testme.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,38 +8,58 @@ import java.util.List;
 /**
  * Parent class for different types of question
  */
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "questions")
-public class Question {
+public abstract class Question implements Countable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    protected long id;
 
-    private String content;
+    protected String content;
 
     @OneToMany
-    private List<Answer> answers;
+    protected List<Answer> answers;
 
-    public Question(String content, List<Answer> answers) {
+    protected Question(long id, String content, List<Answer> answers) {
+        this.id = id;
         this.content = content;
         this.answers = answers;
     }
 
-    public boolean isFilledCorrectly(Question questionTemplate) {
-        for (Answer answer : this.getAnswers()) {
-            Answer answerTemplate = questionTemplate.getAnswerById(answer.getId());
-            if (answer.isCorrectness() != answerTemplate.isCorrectness()) return false;
-        }
-        return true;
+    protected Question(String content, List<Answer> answers) {
+        this.content = content;
+        this.answers = answers;
     }
 
-    private Answer getAnswerById(long id) {
+    public Answer getAnswerById(long id) {
         return this.getAnswers().stream()
                 .filter(answer -> answer.getId() == id)
                 .findFirst().orElseThrow();
+    }
+
+    public abstract int countQuestionPoints(Question questionTemplate);
+
+    public long getId() {
+        return id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", answers=" + answers +
+                '}';
     }
 }

@@ -48,7 +48,6 @@ public class ExamController {
 
     @PostMapping("/exam")
     public int checkExamCorrectness(@RequestBody Exam exam) {
-
         return questionService.countUserExamPoints(exam);
     }
 
