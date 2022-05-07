@@ -6,4 +6,5 @@ import pl.archala.testme.models.Exam;
 
 @Repository
 public interface ExamRepository extends CrudRepository<Exam, Long> {
+
 }

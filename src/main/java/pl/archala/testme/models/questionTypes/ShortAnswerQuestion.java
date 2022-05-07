@@ -15,12 +15,13 @@ import java.util.List;
  * for every correct user answer, user gets one point
  */
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
+
+    public ShortAnswerQuestion() {}
 
     public int countPoints() {
         int points = 0;
@@ -47,9 +48,8 @@ public class ShortAnswerQuestion extends Question {
     public String toString() {
         return "ShortAnswerQuestion{" +
                 "userAnswer='" + userAnswer + '\'' +
-                ", id=" + getId() +
                 ", content='" + content + '\'' +
                 ", answers=" + answers +
-                '}';
+                "} " + super.toString();
     }
 }

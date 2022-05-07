@@ -10,12 +10,14 @@ import java.util.Objects;
 /**
  * Parent class for different types of question
  */
-@NoArgsConstructor
 @Entity
+@Table(name = "questions")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Question extends AbstractEntity<Long> implements Serializable {
 
     protected String content;
+
+    protected Question() {}
 
     @OneToMany
     protected List<Answer> answers;
@@ -26,7 +28,10 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
 
     public Answer getAnswerById(Long id) {
         return this.getAnswers().stream()
-                .filter(answer -> answer.getId() == id)
+                .filter(answer -> {
+                    assert answer.getId() != null;
+                    return answer.getId().equals(id);
+                })
                 .findFirst().orElseThrow();
     }
 

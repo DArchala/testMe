@@ -9,6 +9,7 @@ import pl.archala.testme.models.Question;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -17,9 +18,10 @@ import java.util.List;
  * Every wrong answer subtract one point (min points = 0)
  * Every correct answer add one point
  */
-@NoArgsConstructor
 @Entity
 public class MultipleChoiceQuestion extends Question {
+
+    public MultipleChoiceQuestion() {}
 
     public int countQuestionPoints(MultipleChoiceQuestion questionTemplate) {
         int points = 0;
@@ -42,5 +44,13 @@ public class MultipleChoiceQuestion extends Question {
             throw new IllegalArgumentException("Number of correct answers should be less than number of answers.");
         if (answers.stream().noneMatch(Answer::isCorrectness))
             throw new IllegalArgumentException("Number of correct answers should be greater or equal to 1.");
+    }
+
+    @Override
+    public String toString() {
+        return "MultipleChoiceQuestion{" +
+                "content='" + content + '\'' +
+                ", answers=" + answers +
+                "} " + super.toString();
     }
 }

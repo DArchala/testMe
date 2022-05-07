@@ -1,5 +1,6 @@
 package pl.archala.testme.models.questionTypes;
 
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
@@ -14,7 +15,7 @@ import java.util.List;
  * on a few possible to choose.
  * User can collect 1 or 0 points for this type question.
  */
-@NoArgsConstructor
+
 @Entity
 public class SingleChoiceQuestion extends Question {
 
@@ -25,6 +26,8 @@ public class SingleChoiceQuestion extends Question {
         if (answers.stream().filter(Answer::isCorrectness).count() != 1)
             throw new IllegalArgumentException("Number of correct answers in SingleChoiceQuestion has to be equal to 1.");
     }
+
+    public SingleChoiceQuestion() {}
 
     public int countPoints(SingleChoiceQuestion questionTemplate) {
         int counter = 1;
@@ -38,4 +41,11 @@ public class SingleChoiceQuestion extends Question {
         return counter;
     }
 
+    @Override
+    public String toString() {
+        return "SingleChoiceQuestion{" +
+                "content='" + content + '\'' +
+                ", answers=" + answers +
+                "} " + super.toString();
+    }
 }
