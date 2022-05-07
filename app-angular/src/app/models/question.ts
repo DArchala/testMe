@@ -1,9 +1,8 @@
 import {Answer} from "./answer";
 
-export class Question {
+export abstract class Question {
   id: number | any;
   content!: string;
   answers!: Answer[];
-
 
 }

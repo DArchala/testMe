@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Exam;
+import pl.archala.testme.models.ExamDifficultyLevel;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.repositories.AnswerRepository;
 import pl.archala.testme.repositories.ExamRepository;
@@ -44,7 +45,7 @@ public class TestMeApplication {
                     new ArrayList<>(List.of(s1)),
                     "examtestName",
                     1,
-                    "Easy",
+                    ExamDifficultyLevel.EASY,
                     60
             );
             examRepo.save(exam);
