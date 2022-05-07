@@ -29,17 +29,12 @@ public class Exam {
     private String difficultyLevel;
     private long timeInSeconds = 3600;
 
-    public Exam(String examName, long examQuestionsNumber, String difficultyLevel) {
-        this.examName = examName;
-        this.examQuestionsNumber = examQuestionsNumber;
-        this.difficultyLevel = difficultyLevel;
-    }
-
-    public Exam(String examName, long examQuestionsNumber, String difficultyLevel, List<Question> questions) {
-        this.examName = examName;
-        this.examQuestionsNumber = examQuestionsNumber;
-        this.difficultyLevel = difficultyLevel;
+    public Exam(List<Question> questions, String examName, long examQuestionsNumber, String difficultyLevel, long timeInSeconds) {
         this.questions = questions;
+        this.examName = examName;
+        this.examQuestionsNumber = examQuestionsNumber;
+        this.difficultyLevel = difficultyLevel;
+        this.timeInSeconds = timeInSeconds;
     }
 
     public Exam setAllAnswersFalse() {

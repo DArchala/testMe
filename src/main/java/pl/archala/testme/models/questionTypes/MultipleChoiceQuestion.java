@@ -1,8 +1,12 @@
 package pl.archala.testme.models.questionTypes;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
@@ -11,6 +15,8 @@ import java.util.List;
  * Every wrong answer subtract one point (min points = 0)
  * Every correct answer add one point
  */
+@NoArgsConstructor
+@Entity
 public class MultipleChoiceQuestion extends Question {
 
     public int countQuestionPoints(MultipleChoiceQuestion questionTemplate) {

@@ -1,8 +1,10 @@
 package pl.archala.testme.models.questionTypes;
 
+import lombok.NoArgsConstructor;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
@@ -10,7 +12,17 @@ import java.util.List;
  * on a few possible to choose.
  * User can collect 1 or 0 points for this type question.
  */
+@NoArgsConstructor
+@Entity
 public class SingleChoiceQuestion extends Question {
+
+    public SingleChoiceQuestion(String content, List<Answer> answers) {
+        super(content, answers);
+        if (answers.size() < 2)
+            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
+        if (answers.stream().filter(Answer::isCorrectness).count() != 1)
+            throw new IllegalArgumentException("Number of correct answers in SingleChoiceQuestion has to be equal to 1.");
+    }
 
     public int countPoints(SingleChoiceQuestion questionTemplate) {
         int counter = 1;
@@ -24,15 +36,4 @@ public class SingleChoiceQuestion extends Question {
         return counter;
     }
 
-    public SingleChoiceQuestion(String content, List<Answer> answers) {
-        super(content, answers);
-        if (answers.size() < 2)
-            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
-        if (answers.stream().filter(Answer::isCorrectness).count() != 1)
-            throw new IllegalArgumentException("Number of correct answers in SingleChoiceQuestion has to be equal to 1.");
-    }
-
-    public SingleChoiceQuestion(long id, String content, List<Answer> answers) {
-        super(id, content, answers);
-    }
 }

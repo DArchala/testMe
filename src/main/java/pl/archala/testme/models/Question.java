@@ -3,45 +3,32 @@ package pl.archala.testme.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Parent class for different types of question
  */
 @NoArgsConstructor
-@EqualsAndHashCode
 @Entity
-@Table(name = "questions")
-public abstract class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+@MappedSuperclass
+public abstract class Question extends AbstractEntity<Long> implements Serializable {
 
     protected String content;
 
     @OneToMany
     protected List<Answer> answers;
 
-    protected Question(long id, String content, List<Answer> answers) {
-        this.id = id;
-        this.content = content;
-        this.answers = answers;
-    }
-
     protected Question(String content, List<Answer> answers) {
         this.content = content;
         this.answers = answers;
     }
 
-    public Answer getAnswerById(long id) {
+    public Answer getAnswerById(Long id) {
         return this.getAnswers().stream()
                 .filter(answer -> answer.getId() == id)
                 .findFirst().orElseThrow();
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getContent() {
@@ -55,9 +42,23 @@ public abstract class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + this.getId() +
                 ", content='" + content + '\'' +
                 ", answers=" + answers +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Question question = (Question) o;
+        return Objects.equals(content, question.content) && Objects.equals(answers, question.answers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), content, answers);
     }
 }

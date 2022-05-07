@@ -2,9 +2,12 @@ package pl.archala.testme.models.questionTypes;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +16,10 @@ import java.util.List;
  * for every correct user answer, user gets one point
  */
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "shortAnswerQuestions")
 public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
@@ -44,7 +50,7 @@ public class ShortAnswerQuestion extends Question {
     public String toString() {
         return "ShortAnswerQuestion{" +
                 "userAnswer='" + userAnswer + '\'' +
-                ", id=" + id +
+                ", id=" + getId() +
                 ", content='" + content + '\'' +
                 ", answers=" + answers +
                 '}';

@@ -4,9 +4,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import pl.archala.testme.models.Answer;
+import pl.archala.testme.models.Exam;
+import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.repositories.AnswerRepository;
 import pl.archala.testme.repositories.ExamRepository;
 import pl.archala.testme.repositories.QuestionRepository;
+import pl.archala.testme.repositories.ShortAnswerQuestionRepository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class TestMeApplication {
@@ -19,6 +27,32 @@ public class TestMeApplication {
         SpringApplication.run(TestMeApplication.class, args);
     }
 
+    @Bean
+    public CommandLineRunner loadData(ExamRepository examRepo,
+                                      AnswerRepository answerRepo,
+                                      ShortAnswerQuestionRepository shortAnswerRepo) {
+        return (args) -> {
+            Answer a1 = new Answer("answer1");
+            Answer a2 = new Answer("answer2");
+            Answer a3 = new Answer("answer3");
+            answerRepo.save(a1);
+            answerRepo.save(a2);
+            answerRepo.save(a3);
+            var s1 = new ShortAnswerQuestion("questionContent",
+                    Arrays.asList(
+                            answerRepo.findById(1L).orElseThrow(),
+                            answerRepo.findById(2L).orElseThrow(),
+                            answerRepo.findById(3L).orElseThrow()), "");
+/*
+            shortAnswerRepo.save(s1);
+            Exam exam = new Exam(new ArrayList<>(List.of(questionRepo.findById(1L).orElseThrow())),
+                    "examSample",
+                    1,
+                    "Easy",
+                    1800);
+            examRepo.save(exam);*/
+        };
+    }
 
 /*    @Bean
     public CommandLineRunner loadData(ExamRepository examRepo,
@@ -123,15 +157,5 @@ public class TestMeApplication {
         };
     }*/
 
-    @Bean
-    public CommandLineRunner loadData(ExamRepository examRepo,
-                                      AnswerRepository answerRepo,
-                                      QuestionRepository questionRepo) {
-        return (args) -> {
-
-
-
-        };
-    }
 
 }
