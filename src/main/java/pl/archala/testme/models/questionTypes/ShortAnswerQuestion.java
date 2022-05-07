@@ -7,7 +7,6 @@ import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "shortAnswerQuestions")
 public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
@@ -35,7 +33,6 @@ public class ShortAnswerQuestion extends Question {
         }
         return points;
     }
-
 
     public ShortAnswerQuestion(String content, List<Answer> answers, String userAnswer) {
         super(content, answers);

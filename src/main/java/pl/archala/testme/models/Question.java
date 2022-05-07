@@ -12,14 +12,13 @@ import java.util.Objects;
  */
 @NoArgsConstructor
 @Entity
-@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Question extends AbstractEntity<Long> implements Serializable {
 
     protected String content;
 
     @OneToMany
     protected List<Answer> answers;
-
     protected Question(String content, List<Answer> answers) {
         this.content = content;
         this.answers = answers;

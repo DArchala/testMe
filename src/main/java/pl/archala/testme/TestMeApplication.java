@@ -32,20 +32,18 @@ public class TestMeApplication {
                                       AnswerRepository answerRepo,
                                       ShortAnswerQuestionRepository shortAnswerRepo) {
         return (args) -> {
-            Answer a1 = new Answer("answer1");
-            Answer a2 = new Answer("answer2");
-            Answer a3 = new Answer("answer3");
+            Answer a1 = new Answer("answer1", true);
+            Answer a2 = new Answer("answer2", true);
+            Answer a3 = new Answer("answer3", true);
             answerRepo.save(a1);
             answerRepo.save(a2);
             answerRepo.save(a3);
-            var s1 = new ShortAnswerQuestion("questionContent",
-                    Arrays.asList(
-                            answerRepo.findById(1L).orElseThrow(),
-                            answerRepo.findById(2L).orElseThrow(),
-                            answerRepo.findById(3L).orElseThrow()), "");
-/*
+            List<Answer> answerList = new ArrayList<>();
+            for (Answer a : answerRepo.findAll()) answerList.add(a);
+            ShortAnswerQuestion s1 = new ShortAnswerQuestion("content", answerList, "");
             shortAnswerRepo.save(s1);
-            Exam exam = new Exam(new ArrayList<>(List.of(questionRepo.findById(1L).orElseThrow())),
+
+/*            Exam exam = new Exam(new ArrayList<>(List.of(questionRepo.findById(1L).orElseThrow())),
                     "examSample",
                     1,
                     "Easy",

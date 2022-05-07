@@ -7,6 +7,8 @@ import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import java.util.List;
 
 /**

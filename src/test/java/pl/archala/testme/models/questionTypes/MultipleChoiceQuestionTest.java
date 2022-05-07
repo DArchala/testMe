@@ -14,19 +14,21 @@ class MultipleChoiceQuestionTest {
     void markingOneCorrectAnswerShouldReturnOnePoint() {
 
         //given
-        var fromUser = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", true),
-                        new Answer(2L, "answContent2", false),
-                        new Answer(3L, "answContent3", false)
-                ));
+        Answer a1 = new Answer("answContent1", true);
+        a1.setId(1L);
+        Answer a2 = new Answer("answContent2", false);
+        a2.setId(2L);
+        Answer a3 = new Answer("answContent3", false);
+        a3.setId(3L);
+        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
 
-        var template = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", true),
-                        new Answer(2L, "answContent2", false),
-                        new Answer(3L, "answContent3", true)
-                ));
+        Answer a4 = new Answer("answContent1", true);
+        a4.setId(1L);
+        Answer a5 = new Answer("answContent2", false);
+        a5.setId(2L);
+        Answer a6 = new Answer("answContent3", false);
+        a6.setId(3L);
+        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
         int points = fromUser.countQuestionPoints(template);
@@ -39,19 +41,21 @@ class MultipleChoiceQuestionTest {
     @Test
     void markingTwoCorrectAnswerShouldReturnTwoPoint() {
         //given
-        var fromUser = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", true),
-                        new Answer(2L, "answContent2", false),
-                        new Answer(3L, "answContent3", true)
-                ));
+        Answer a1 = new Answer("answContent1", true);
+        a1.setId(1L);
+        Answer a2 = new Answer("answContent2", true);
+        a2.setId(2L);
+        Answer a3 = new Answer("answContent3", false);
+        a3.setId(3L);
+        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
 
-        var template = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", true),
-                        new Answer(2L, "answContent2", false),
-                        new Answer(3L, "answContent3", true)
-                ));
+        Answer a4 = new Answer("answContent1", true);
+        a4.setId(1L);
+        Answer a5 = new Answer("answContent2", true);
+        a5.setId(2L);
+        Answer a6 = new Answer("answContent3", false);
+        a6.setId(3L);
+        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
         int points = fromUser.countQuestionPoints(template);
@@ -63,19 +67,21 @@ class MultipleChoiceQuestionTest {
     @Test
     void markingOneWrongAnswerShouldReturnZeroPoints() {
         //given
-        var fromUser = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", true),
-                        new Answer(2L, "answContent2", true),
-                        new Answer(3L, "answContent3", false)
-                ));
+        Answer a1 = new Answer("answContent1", true);
+        a1.setId(1L);
+        Answer a2 = new Answer("answContent2", true);
+        a2.setId(2L);
+        Answer a3 = new Answer("answContent3", false);
+        a3.setId(3L);
+        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
 
-        var template = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", false),
-                        new Answer(2L, "answContent2", false),
-                        new Answer(3L, "answContent3", true)
-                ));
+        Answer a4 = new Answer("answContent1", false);
+        a4.setId(1L);
+        Answer a5 = new Answer("answContent2", false);
+        a5.setId(2L);
+        Answer a6 = new Answer("answContent3", true);
+        a6.setId(3L);
+        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
         int points = fromUser.countQuestionPoints(template);
@@ -87,19 +93,21 @@ class MultipleChoiceQuestionTest {
     @Test
     void markingOneCorrectAndOneWrongAnswerShouldReturnZeroPoints() {
         //given
-        var fromUser = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", true),
-                        new Answer(2L, "answContent2", true),
-                        new Answer(3L, "answContent3", false)
-                ));
+        Answer a1 = new Answer("answContent1", true);
+        a1.setId(1L);
+        Answer a2 = new Answer("answContent2", true);
+        a2.setId(2L);
+        Answer a3 = new Answer("answContent3", false);
+        a3.setId(3L);
+        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
 
-        var template = new MultipleChoiceQuestion("questContent",
-                Arrays.asList(
-                        new Answer(1L, "answContent1", false),
-                        new Answer(2L, "answContent2", true),
-                        new Answer(3L, "answContent3", false)
-                ));
+        Answer a4 = new Answer("answContent1", true);
+        a4.setId(1L);
+        Answer a5 = new Answer("answContent2", false);
+        a5.setId(2L);
+        Answer a6 = new Answer("answContent3", false);
+        a6.setId(3L);
+        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
         int points = fromUser.countQuestionPoints(template);
