@@ -43,6 +43,14 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
         return answers;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
     @Override
     public String toString() {
         return "Question{" +

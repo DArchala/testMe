@@ -42,13 +42,12 @@ public class ExamController {
     @GetMapping
     public ResponseEntity<List<Exam>> getExams() {
         List<Exam> exams = (List<Exam>) examRepo.findAll();
-        ResponseEntity<List<Exam>> response = new ResponseEntity<>(exams, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
     @PostMapping("/exam")
     public int checkExamCorrectness(@RequestBody Exam exam) {
-        return questionService.countUserExamPoints(exam);
+        return examService.countUserExamPoints(exam);
     }
 
     @GetMapping("/exam/{id}")

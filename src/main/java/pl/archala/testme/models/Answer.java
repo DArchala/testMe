@@ -1,16 +1,21 @@
 package pl.archala.testme.models;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
-@NoArgsConstructor
 @Entity
 public class Answer extends AbstractEntity<Long> {
 
     private String content;
     private boolean correctness = false;
+
+    public Answer() {
+    }
+
+    public Answer(String content) {
+        this.content = content;
+    }
 
     public Answer(String content, boolean correctness) {
         this.content = content;
@@ -31,9 +36,5 @@ public class Answer extends AbstractEntity<Long> {
 
     public void setCorrectness(boolean correctness) {
         this.correctness = correctness;
-    }
-
-    public Answer(String content) {
-        this.content = content;
     }
 }

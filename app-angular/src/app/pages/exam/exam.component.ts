@@ -12,7 +12,6 @@ import {Question} from "../../models/question";
 })
 export class ExamComponent implements OnInit {
 
-
   exam!: Exam;
   responseExamPoints!: any;
   examStarted = false;
