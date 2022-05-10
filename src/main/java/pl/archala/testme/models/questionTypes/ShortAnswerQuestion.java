@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
+import pl.archala.testme.models.Questionable;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
@@ -22,6 +23,10 @@ public class ShortAnswerQuestion extends Question {
     private String userAnswer = "";
 
     public ShortAnswerQuestion() {}
+
+    public int countPoints(Questionable question) {
+        return countPoints();
+    }
 
     public int countPoints() {
         int points = 0;

@@ -2,6 +2,7 @@ package pl.archala.testme.models.questionTypes;
 
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
+import pl.archala.testme.models.Questionable;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -17,7 +18,8 @@ public class MultipleChoiceQuestion extends Question {
 
     public MultipleChoiceQuestion() {}
 
-    public int countQuestionPoints(MultipleChoiceQuestion questionTemplate) {
+    public int countPoints(Questionable question) {
+        MultipleChoiceQuestion questionTemplate = (MultipleChoiceQuestion) question;
         int points = 0;
         for (Answer answer : answers) {
             Answer answerTemplate = questionTemplate.getAnswerById(answer.getId());
