@@ -28,20 +28,16 @@ public class Exam extends AbstractEntity<Long> {
 
     private String examName;
 
-    @Size(min=1)
-    private long examQuestionsNumber;
-
     @NotEmpty
-    private ExamDifficultyLevel difficultyLevel;
+    private ExamDifficultyLevel difficultyLevel = ExamDifficultyLevel.MEDIUM;
 
-    @Min(60)
-    @Max(86_400)
+    @Min(60)        // 60s
+    @Max(86_400)    // 24h * 60min * 60s
     private long timeInSeconds = 3600;
 
-    public Exam(List<Question> questions, String examName, long examQuestionsNumber, ExamDifficultyLevel difficultyLevel, long timeInSeconds) {
+    public Exam(List<Question> questions, String examName, ExamDifficultyLevel difficultyLevel, long timeInSeconds) {
         this.questions = questions;
         this.examName = examName;
-        this.examQuestionsNumber = examQuestionsNumber;
         this.difficultyLevel = difficultyLevel;
         this.timeInSeconds = timeInSeconds;
     }
