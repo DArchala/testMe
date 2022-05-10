@@ -5,128 +5,68 @@ import pl.archala.testme.models.Answer;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MultipleChoiceQuestionTest {
 
     @Test
     void markingOneCorrectAnswerShouldReturnOnePoint() {
-
         //given
-        Answer a1 = new Answer("answContent1", true);
-        a1.setId(1L);
-        Answer a2 = new Answer("answContent2", false);
-        a2.setId(2L);
-        Answer a3 = new Answer("answContent3", false);
-        a3.setId(3L);
-        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer("answContent1", true);
-        a4.setId(1L);
-        Answer a5 = new Answer("answContent2", false);
-        a5.setId(2L);
-        Answer a6 = new Answer("answContent3", false);
-        a6.setId(3L);
-        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
-
-        //when
-        int points = fromUser.countPoints(template);
+        var fromUser = getQuestionWithTheseAnswers(true, false, false);
+        var correct = getQuestionWithTheseAnswers(true, false, false);
 
         //then
-        assertEquals(points, 1);
+        assertEquals(1, fromUser.countPoints(correct));
 
     }
 
     @Test
     void markingTwoCorrectAnswerShouldReturnTwoPoint() {
         //given
-        Answer a1 = new Answer("answContent1", true);
-        a1.setId(1L);
-        Answer a2 = new Answer("answContent2", true);
-        a2.setId(2L);
-        Answer a3 = new Answer("answContent3", false);
-        a3.setId(3L);
-        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer("answContent1", true);
-        a4.setId(1L);
-        Answer a5 = new Answer("answContent2", true);
-        a5.setId(2L);
-        Answer a6 = new Answer("answContent3", false);
-        a6.setId(3L);
-        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
-
-        //when
-        int points = fromUser.countPoints(template);
+        var fromUser = getQuestionWithTheseAnswers(true, true, false);
+        var correct = getQuestionWithTheseAnswers(true, true, false);
 
         //then
-        assertEquals(points, 2);
+        assertEquals(2, fromUser.countPoints(correct));
+
     }
 
     @Test
-    void markingOneWrongAnswerShouldReturnZeroPoints() {
+    void markingOneWrongAndOneCorrectAnswerShouldReturnZeroPoints() {
         //given
-        Answer a1 = new Answer("answContent1", true);
-        a1.setId(1L);
-        Answer a2 = new Answer("answContent2", true);
-        a2.setId(2L);
-        Answer a3 = new Answer("answContent3", false);
-        a3.setId(3L);
-        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer("answContent1", false);
-        a4.setId(1L);
-        Answer a5 = new Answer("answContent2", false);
-        a5.setId(2L);
-        Answer a6 = new Answer("answContent3", true);
-        a6.setId(3L);
-        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
-
-        //when
-        int points = fromUser.countPoints(template);
+        var fromUser = getQuestionWithTheseAnswers(true, true, false);
+        var correct = getQuestionWithTheseAnswers(true, false, false);
 
         //then
-        assertEquals(0, points);
+        assertEquals(0, fromUser.countPoints(correct));
+
     }
 
     @Test
-    void markingOneCorrectAndOneWrongAnswerShouldReturnZeroPoints() {
+    void markingOneWrongAndTwoCorrectAnswerShouldReturnOnePoint() {
         //given
-        Answer a1 = new Answer("answContent1", true);
-        a1.setId(1L);
-        Answer a2 = new Answer("answContent2", true);
-        a2.setId(2L);
-        Answer a3 = new Answer("answContent3", false);
-        a3.setId(3L);
-        var fromUser = new MultipleChoiceQuestion("questContent", Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer("answContent1", true);
-        a4.setId(1L);
-        Answer a5 = new Answer("answContent2", false);
-        a5.setId(2L);
-        Answer a6 = new Answer("answContent3", false);
-        a6.setId(3L);
-        var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
-
-        //when
-        int points = fromUser.countPoints(template);
+        var fromUser = getQuestionWithTheseAnswers(true, true, true);
+        var correct = getQuestionWithTheseAnswers(true, true, false);
 
         //then
-        assertEquals(0, points);
+        assertEquals(1, fromUser.countPoints(correct));
+
+    }
+
+    private MultipleChoiceQuestion getQuestionWithTheseAnswers(boolean b, boolean b1, boolean b2) {
+        Answer templateAnswer4 = new Answer("Database", b);
+        Answer templateAnswer5 = new Answer("Drum&Bass", b1);
+        Answer templateAnswer6 = new Answer("DigitalBorneo", b2);
+        templateAnswer4.setId(1L);
+        templateAnswer5.setId(2L);
+        templateAnswer6.setId(3L);
+        return new MultipleChoiceQuestion("What is DB?",
+                Arrays.asList(templateAnswer4, templateAnswer5, templateAnswer6));
     }
 
     @Test
     void multipleChoiceQuestionShouldThrowExceptionIfNumberOfAnswersIsLessThanTwo() {
         assertThrows(IllegalArgumentException.class, () -> new MultipleChoiceQuestion("content", Arrays.asList()));
-    }
-
-    @Test
-    void multipleChoiceQuestionShouldThrowExceptionIfAllAnswersAreCorrect() {
-        assertThrows(IllegalArgumentException.class, () -> new MultipleChoiceQuestion("content", Arrays.asList(
-                new Answer("answ1", true),
-                new Answer("answ2", true)
-        )));
     }
 
     @Test
