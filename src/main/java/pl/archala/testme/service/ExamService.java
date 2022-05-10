@@ -14,14 +14,11 @@ public class ExamService {
     }
 
     public int countUserExamPoints(Exam userExam) {
-
         int points = 0;
-        assert userExam.getId() != null : "userExam id is null";
 
-        for (Question q : userExam.getQuestions()) {
-            assert q.getId() != null : "question id is null";
+        for (Question q : userExam.getQuestions())
             points += questionService.countQuestionPoints(q);
-        }
+        
         return points;
     }
 
