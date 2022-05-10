@@ -39,9 +39,6 @@ class ExamServiceTest {
     @Mock
     private QuestionRepository questionRepo;
 
-    @Mock
-    private AnswerRepository answerRepo;
-
     @BeforeEach
     void setUp() {
         questionService = new QuestionService(questionRepo);
@@ -85,7 +82,117 @@ class ExamServiceTest {
         Exam userExam = new Exam(questions, "sampleExamName", ExamDifficultyLevel.MEDIUM, 3600);
         userExam.setId(1L);
 
-        //dbExam
+        Question[] questionsDB = getAnswersFromDB();
+
+        //when
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(questionsDB[0]));
+        when(questionRepo.findById(2L)).thenReturn(Optional.of(questionsDB[1]));
+        when(questionRepo.findById(3L)).thenReturn(Optional.of(questionsDB[2]));
+
+        //then
+        assertEquals(5, examService.countUserExamPoints(userExam));
+
+    }
+
+    @Test
+    void countUserExamPointsShouldReturnTwoPoints() {
+        //given
+        //userExam
+        Answer single1 = new Answer("Database", true);
+        Answer single2 = new Answer("DuaLipa");
+        Answer single3 = new Answer("DiagramBeta");
+        single1.setId(1L);
+        single2.setId(2L);
+        single3.setId(3L);
+        List<Answer> singleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(single1, single2, single3));
+        var singleChoiceQuestion = new SingleChoiceQuestion("Co to jest DB?", singleChoiceQuestionAnswers);
+        singleChoiceQuestion.setId(1L);
+
+        Answer multi1 = new Answer("class");
+        Answer multi2 = new Answer("assert");
+        Answer multi3 = new Answer("jump", true);
+        multi1.setId(4L);
+        multi2.setId(5L);
+        multi3.setId(6L);
+        List<Answer> multipleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(multi1, multi2, multi3));
+        var multipleChoiceQuestion = new MultipleChoiceQuestion("Wybierz słowa kluczowe:", multipleChoiceQuestionAnswers);
+        multipleChoiceQuestion.setId(2L);
+
+        Answer short1 = new Answer("float", true);
+        Answer short2 = new Answer("double", true);
+        short1.setId(7L);
+        short2.setId(8L);
+        List<Answer> shortAnswerQuestionAnswers = new ArrayList<>(Arrays.asList(short1, short2));
+        var shortAnswerQuestion = new ShortAnswerQuestion("Wymień 2 typy zmiennych przechowujących liczby zmiennoprzecinkowe.", shortAnswerQuestionAnswers, "float");
+        shortAnswerQuestion.setId(3L);
+
+        List<Question> questions = new ArrayList<>(Arrays.asList(singleChoiceQuestion, multipleChoiceQuestion, shortAnswerQuestion));
+
+        Exam userExam = new Exam(questions, "sampleExamName", ExamDifficultyLevel.MEDIUM, 3600);
+        userExam.setId(1L);
+
+        Question[] questionsDB = getAnswersFromDB();
+
+        //when
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(questionsDB[0]));
+        when(questionRepo.findById(2L)).thenReturn(Optional.of(questionsDB[1]));
+        when(questionRepo.findById(3L)).thenReturn(Optional.of(questionsDB[2]));
+
+        //then
+        assertEquals(2, examService.countUserExamPoints(userExam));
+
+    }
+
+    @Test
+    void countUserExamPointsShouldReturnZeroPoints() {
+        //given
+        //userExam
+        Answer single1 = new Answer("Database");
+        Answer single2 = new Answer("DuaLipa", true);
+        Answer single3 = new Answer("DiagramBeta");
+        single1.setId(1L);
+        single2.setId(2L);
+        single3.setId(3L);
+        List<Answer> singleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(single1, single2, single3));
+        var singleChoiceQuestion = new SingleChoiceQuestion("Co to jest DB?", singleChoiceQuestionAnswers);
+        singleChoiceQuestion.setId(1L);
+
+        Answer multi1 = new Answer("class");
+        Answer multi2 = new Answer("assert");
+        Answer multi3 = new Answer("jump", true);
+        multi1.setId(4L);
+        multi2.setId(5L);
+        multi3.setId(6L);
+        List<Answer> multipleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(multi1, multi2, multi3));
+        var multipleChoiceQuestion = new MultipleChoiceQuestion("Wybierz słowa kluczowe:", multipleChoiceQuestionAnswers);
+        multipleChoiceQuestion.setId(2L);
+
+        Answer short1 = new Answer("float", true);
+        Answer short2 = new Answer("double", true);
+        short1.setId(7L);
+        short2.setId(8L);
+        List<Answer> shortAnswerQuestionAnswers = new ArrayList<>(Arrays.asList(short1, short2));
+        var shortAnswerQuestion = new ShortAnswerQuestion("Wymień 2 typy zmiennych przechowujących liczby zmiennoprzecinkowe.", shortAnswerQuestionAnswers, "integer");
+        shortAnswerQuestion.setId(3L);
+
+        List<Question> questions = new ArrayList<>(Arrays.asList(singleChoiceQuestion, multipleChoiceQuestion, shortAnswerQuestion));
+
+        Exam userExam = new Exam(questions, "sampleExamName", ExamDifficultyLevel.MEDIUM, 3600);
+        userExam.setId(1L);
+
+        Question[] questionsDB = getAnswersFromDB();
+
+        //when
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(questionsDB[0]));
+        when(questionRepo.findById(2L)).thenReturn(Optional.of(questionsDB[1]));
+        when(questionRepo.findById(3L)).thenReturn(Optional.of(questionsDB[2]));
+
+        //then
+        assertEquals(0, examService.countUserExamPoints(userExam));
+
+    }
+
+    private Question[] getAnswersFromDB() {
         Answer single1DB = new Answer("Database", true);
         Answer single2DB = new Answer("DuaLipa");
         Answer single3DB = new Answer("DiagramBeta");
@@ -113,31 +220,15 @@ class ExamServiceTest {
         List<Answer> shortAnswerQuestionAnswersDB = new ArrayList<>(Arrays.asList(short1DB, short2DB));
         var shortAnswerQuestionDB = new ShortAnswerQuestion("Wymień 2 typy zmiennych przechowujących liczby zmiennoprzecinkowe.", shortAnswerQuestionAnswersDB, "");
         shortAnswerQuestionDB.setId(3L);
-        List<Question> questionsDB = new ArrayList<>(Arrays.asList(singleChoiceQuestionDB, multipleChoiceQuestionDB, shortAnswerQuestionDB));
 
-        Exam dbExam = new Exam(questionsDB, "sampleExamName", ExamDifficultyLevel.MEDIUM, 3600);
-        dbExam.setId(1L);
+        Question[] questions = new Question[3];
 
-        //when
-        when(questionRepo.findById(1L)).thenReturn(Optional.of(singleChoiceQuestionDB));
-        when(questionRepo.findById(2L)).thenReturn(Optional.of(multipleChoiceQuestionDB));
-        when(questionRepo.findById(3L)).thenReturn(Optional.of(shortAnswerQuestionDB));
+        questions[0] = singleChoiceQuestionDB;
+        questions[1] = multipleChoiceQuestionDB;
+        questions[2] = shortAnswerQuestionDB;
 
-/*
-        when(answerRepo.findById(1L)).thenReturn(Optional.of(single1DB));
-        when(answerRepo.findById(2L)).thenReturn(Optional.of(single2DB));
-        when(answerRepo.findById(3L)).thenReturn(Optional.of(single3DB));
-
-        when(answerRepo.findById(4L)).thenReturn(Optional.of(multi1DB));
-        when(answerRepo.findById(5L)).thenReturn(Optional.of(multi2DB));
-        when(answerRepo.findById(6L)).thenReturn(Optional.of(multi3DB));
-
-        when(answerRepo.findById(7L)).thenReturn(Optional.of(short1DB));
-        when(answerRepo.findById(8L)).thenReturn(Optional.of(short2DB));
-*/
-
-        //then
-        assertEquals(5, examService.countUserExamPoints(userExam));
-
+        return questions;
     }
+
+
 }
