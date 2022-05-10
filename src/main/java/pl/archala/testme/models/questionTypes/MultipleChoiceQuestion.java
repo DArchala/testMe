@@ -36,8 +36,6 @@ public class MultipleChoiceQuestion extends Question {
         super(content, answers);
         if (answers.size() < 2)
             throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
-        if (answers.stream().filter(Answer::isCorrectness).count() == answers.size())
-            throw new IllegalArgumentException("Number of correct answers should be less than number of answers.");
         if (answers.stream().noneMatch(Answer::isCorrectness))
             throw new IllegalArgumentException("Number of correct answers should be greater or equal to 1.");
     }
