@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repositories.QuestionRepository;
 
 import java.util.ArrayList;
@@ -70,6 +71,60 @@ class QuestionServiceTest {
 
         //then
         assertEquals(2, questionService.countQuestionPoints(multipleChoiceQuestion));
+
+    }
+
+    @Test
+    void shouldReturnZeroPointsForSingleChoiceQuestion() {
+        //given
+
+        Answer a1 = new Answer();
+        a1.setId(1L);
+        a1.setContent("Pies");
+        a1.setCorrectness(false);
+
+        Answer a2 = new Answer();
+        a2.setId(2L);
+        a2.setContent("Ściana");
+        a2.setCorrectness(true);
+
+        Answer a3 = new Answer();
+        a3.setId(3L);
+        a3.setContent("Ser");
+        a3.setCorrectness(false);
+        List<Answer> answersFromUser = new ArrayList<>(Arrays.asList(a1, a2, a3));
+
+        Answer a4 = new Answer();
+        a4.setId(1L);
+        a4.setContent("Pies");
+        a4.setCorrectness(true);
+
+        Answer a5 = new Answer();
+        a5.setId(2L);
+        a5.setContent("Ściana");
+        a5.setCorrectness(false);
+
+        Answer a6 = new Answer();
+        a6.setId(3L);
+        a6.setContent("Ser");
+        a6.setCorrectness(false);
+        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a4, a5, a6));
+
+        var singleChoiceQuestion = new SingleChoiceQuestion();
+        singleChoiceQuestion.setId(1L);
+        singleChoiceQuestion.setContent("Wybierz zwierzę:");
+        singleChoiceQuestion.setAnswers(answersFromUser);
+
+        var singleChoiceQuestionTemplate = new SingleChoiceQuestion();
+        singleChoiceQuestionTemplate.setId(1L);
+        singleChoiceQuestionTemplate.setContent("Wybierz zwierzę:");
+        singleChoiceQuestionTemplate.setAnswers(answersTemplate);
+
+        //when
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(singleChoiceQuestionTemplate));
+
+        //then
+        assertEquals(0, questionService.countQuestionPoints(singleChoiceQuestion));
 
     }
 }
