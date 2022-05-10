@@ -31,7 +31,7 @@ class MultipleChoiceQuestionTest {
         var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
-        int points = fromUser.countQuestionPoints(template);
+        int points = fromUser.countPoints(template);
 
         //then
         assertEquals(points, 1);
@@ -58,7 +58,7 @@ class MultipleChoiceQuestionTest {
         var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
-        int points = fromUser.countQuestionPoints(template);
+        int points = fromUser.countPoints(template);
 
         //then
         assertEquals(points, 2);
@@ -84,7 +84,7 @@ class MultipleChoiceQuestionTest {
         var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
-        int points = fromUser.countQuestionPoints(template);
+        int points = fromUser.countPoints(template);
 
         //then
         assertEquals(points, 0);
@@ -110,7 +110,7 @@ class MultipleChoiceQuestionTest {
         var template = new MultipleChoiceQuestion("questContent", Arrays.asList(a4, a5, a6));
 
         //when
-        int points = fromUser.countQuestionPoints(template);
+        int points = fromUser.countPoints(template);
 
         //then
         assertEquals(points, 0);
