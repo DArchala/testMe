@@ -353,4 +353,35 @@ class QuestionServiceTest {
 
     }
 
+    @Test
+    void shouldReturnTwoPointsForShortAnswerQuestion() {
+        //given
+        Answer a1 = new Answer();
+        a1.setId(1L);
+        a1.setContent("Pies");
+        a1.setCorrectness(true);
+
+        Answer a2 = new Answer();
+        a2.setId(2L);
+        a2.setContent("Kot");
+        a2.setCorrectness(true);
+
+        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a1, a2));
+
+        var shortAnswerQuestion = new ShortAnswerQuestion(
+                "Dwa najczęstsze domowe zwierzęta:",
+                answersTemplate,
+                "pies,kot"
+        );
+        shortAnswerQuestion.setId(1L);
+
+        //when
+        // In this variant we don't need question template, so we can pass any ShortAnswerQuestion
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(new ShortAnswerQuestion()));
+
+        //then
+        assertEquals(2, questionService.countQuestionPoints(shortAnswerQuestion));
+
+    }
+
 }
