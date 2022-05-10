@@ -87,7 +87,7 @@ class MultipleChoiceQuestionTest {
         int points = fromUser.countPoints(template);
 
         //then
-        assertEquals(points, 0);
+        assertEquals(0, points);
     }
 
     @Test
@@ -113,7 +113,7 @@ class MultipleChoiceQuestionTest {
         int points = fromUser.countPoints(template);
 
         //then
-        assertEquals(points, 0);
+        assertEquals(0, points);
     }
 
     @Test
