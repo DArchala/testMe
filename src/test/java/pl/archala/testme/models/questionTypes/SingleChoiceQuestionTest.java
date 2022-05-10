@@ -22,17 +22,25 @@ class SingleChoiceQuestionTest {
 
     @BeforeEach
     void setUp() {
-        Answer a1 = new Answer("answCont1", false); a1.setId(1L);
-        Answer a2 = new Answer("answCont2", false); a2.setId(2L);
-        Answer a3 = new Answer("answCont3", false); a3.setId(3L);
-        Answer a4 = new Answer("answCont4", false); a4.setId(4L);
+        Answer a1 = new Answer("answCont1", false);
+        a1.setId(1L);
+        Answer a2 = new Answer("answCont2", false);
+        a2.setId(2L);
+        Answer a3 = new Answer("answCont3", false);
+        a3.setId(3L);
+        Answer a4 = new Answer("answCont4", false);
+        a4.setId(4L);
 
         answersFromUser.addAll(Arrays.asList(a1, a2, a3, a4));
 
-        Answer a5 = new Answer("answCont1", false); a5.setId(1L);
-        Answer a6 = new Answer("answCont2", false); a6.setId(2L);
-        Answer a7 = new Answer("answCont3", false); a7.setId(3L);
-        Answer a8 = new Answer("answCont4", false); a8.setId(4L);
+        Answer a5 = new Answer("answCont1", false);
+        a5.setId(1L);
+        Answer a6 = new Answer("answCont2", false);
+        a6.setId(2L);
+        Answer a7 = new Answer("answCont3", false);
+        a7.setId(3L);
+        Answer a8 = new Answer("answCont4", false);
+        a8.setId(4L);
 
         answersTemplate.addAll(Arrays.asList(a5, a6, a7, a8));
 
@@ -56,7 +64,7 @@ class SingleChoiceQuestionTest {
         points = fromUser.countPoints(template);
 
         //then
-        assertEquals(points, 1);
+        assertEquals(1, points);
 
     }
 
@@ -78,7 +86,7 @@ class SingleChoiceQuestionTest {
         points = fromUser.countPoints(template);
 
         //then
-        assertEquals(points, 0);
+        assertEquals(0, points);
 
     }
 
