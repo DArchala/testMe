@@ -9,7 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import pl.archala.testme.models.Answer;
+import pl.archala.testme.models.Questionable;
 import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repositories.QuestionRepository;
 
@@ -18,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -288,5 +291,35 @@ class QuestionServiceTest {
 
     }
 
+    @Test
+    void shouldReturnOnePointForShortAnswerQuestion() {
+        //given
+        Answer a1 = new Answer();
+        a1.setId(1L);
+        a1.setContent("Pies");
+        a1.setCorrectness(true);
+
+        Answer a2 = new Answer();
+        a2.setId(2L);
+        a2.setContent("Kot");
+        a2.setCorrectness(true);
+
+        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a1, a2));
+
+        var shortAnswerQuestion = new ShortAnswerQuestion(
+                "Dwa najczęstsze domowe zwierzęta:",
+                answersTemplate,
+                "pies"
+        );
+        shortAnswerQuestion.setId(1L);
+
+        //when
+        // In this variant we don't need question template, so we can pass any ShortAnswerQuestion
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(new ShortAnswerQuestion()));
+
+        //then
+        assertEquals(1, questionService.countQuestionPoints(shortAnswerQuestion));
+
+    }
 
 }
