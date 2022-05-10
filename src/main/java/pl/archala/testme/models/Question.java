@@ -1,7 +1,5 @@
 package pl.archala.testme.models;
 
-import lombok.*;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "questions")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Question extends AbstractEntity<Long> implements Serializable {
+public abstract class Question extends AbstractEntity<Long> implements Serializable, Questionable {
 
     protected String content;
 
@@ -47,10 +45,6 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
         this.content = content;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
     @Override
     public String toString() {
         return "Question{" +
@@ -59,6 +53,8 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
                 ", answers=" + answers +
                 '}';
     }
+
+    public abstract int countPoints(Questionable question);
 
     @Override
     public boolean equals(Object o) {
