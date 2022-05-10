@@ -4,15 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Exam;
-import pl.archala.testme.models.Question;
-import pl.archala.testme.repositories.AnswerRepository;
 import pl.archala.testme.repositories.ExamRepository;
-import pl.archala.testme.repositories.QuestionRepository;
-import pl.archala.testme.service.AnswerService;
 import pl.archala.testme.service.ExamService;
-import pl.archala.testme.service.QuestionService;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,18 +19,10 @@ public class ExamController {
 
     private final ExamRepository examRepo;
     private final ExamService examService;
-    private final QuestionRepository questionRepo;
-    private final QuestionService questionService;
-    private final AnswerRepository answerRepo;
-    private final AnswerService answerService;
 
-    public ExamController(ExamRepository examRepo, ExamService examService, QuestionRepository questionRepo, QuestionService questionService, AnswerRepository answerRepo, AnswerService answerService) {
+    public ExamController(ExamRepository examRepo, ExamService examService) {
         this.examRepo = examRepo;
         this.examService = examService;
-        this.questionRepo = questionRepo;
-        this.questionService = questionService;
-        this.answerRepo = answerRepo;
-        this.answerService = answerService;
     }
 
     @GetMapping
