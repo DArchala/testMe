@@ -29,8 +29,6 @@ class ExamTest {
         Exam exam = new Exam();
         exam.setId(1L);
         exam.setQuestions(questions);
-        exam.setExamQuestionsNumber(2);
-        exam.setDifficultyLevel(ExamDifficultyLevel.VERY_EASY);
         exam.setTimeInSeconds(60);
 
         //when
