@@ -15,8 +15,10 @@ import pl.archala.testme.repositories.QuestionRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -59,12 +61,12 @@ class QuestionServiceTest {
         multipleChoiceQuestion.setAnswers(answersFromUser);
 
         var multipleChoiceQuestionTemplate = new MultipleChoiceQuestion();
-        multipleChoiceQuestion.setId(1L);
-        multipleChoiceQuestion.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestion.setAnswers(answersFromUser);
+        multipleChoiceQuestionTemplate.setId(1L);
+        multipleChoiceQuestionTemplate.setContent("Wybierz zwierzęta:");
+        multipleChoiceQuestionTemplate.setAnswers(answersFromUser);
 
         //when
-        when(questionRepo.findById(1L).orElseThrow()).thenReturn(multipleChoiceQuestionTemplate);
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(multipleChoiceQuestionTemplate));
 
         //then
         assertEquals(2, questionService.countQuestionPoints(multipleChoiceQuestion));
