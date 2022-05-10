@@ -30,16 +30,16 @@ public class QuestionService {
         if(userQuestion instanceof SingleChoiceQuestion) {
             var userQuest = (SingleChoiceQuestion) userQuestion;
             var templateQuest = questionRepo.findById(userQuest.getId()).orElseThrow();
-            return userQuest.countPoints((SingleChoiceQuestion) templateQuest);
+            return userQuest.countPoints(templateQuest);
 
         } else if(userQuestion instanceof MultipleChoiceQuestion) {
             var userQuest = (MultipleChoiceQuestion) userQuestion;
             var templateQuest = questionRepo.findById(userQuest.getId()).orElseThrow();
-            return userQuest.countQuestionPoints((MultipleChoiceQuestion) templateQuest);
+            return userQuest.countPoints(templateQuest);
 
         } else if(userQuestion instanceof ShortAnswerQuestion) {
             var userQuest = (ShortAnswerQuestion) userQuestion;
-            return userQuest.countPoints();
+            return userQuest.countPoints(null);
         }
         return 0;
     }
