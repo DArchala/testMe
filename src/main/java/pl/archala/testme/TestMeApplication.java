@@ -44,7 +44,6 @@ public class TestMeApplication {
             Exam exam = new Exam(
                     new ArrayList<>(List.of(s1)),
                     "examtestName",
-                    1,
                     ExamDifficultyLevel.EASY,
                     60
             );
