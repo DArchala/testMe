@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import pl.archala.testme.models.Answer;
-import pl.archala.testme.models.Questionable;
 import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
@@ -20,9 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -42,32 +40,10 @@ class QuestionServiceTest {
 
     @Test
     void shouldReturnTwoPointsForMultipleChoiceQuestion() {
-        //given
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(true);
+        List<Answer> answersFromUser = getSampleAnswers(true, true, false);
 
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Kot");
-        a2.setCorrectness(true);
-
-        Answer a3 = new Answer();
-        a3.setId(3L);
-        a3.setContent("Ser");
-        a3.setCorrectness(false);
-        List<Answer> answersFromUser = new ArrayList<>(Arrays.asList(a1, a2, a3));
-
-        var multipleChoiceQuestion = new MultipleChoiceQuestion();
-        multipleChoiceQuestion.setId(1L);
-        multipleChoiceQuestion.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestion.setAnswers(answersFromUser);
-
-        var multipleChoiceQuestionTemplate = new MultipleChoiceQuestion();
-        multipleChoiceQuestionTemplate.setId(1L);
-        multipleChoiceQuestionTemplate.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestionTemplate.setAnswers(answersFromUser);
+        var multipleChoiceQuestion = getSampleMultipleChoiceQuestion(answersFromUser);
+        var multipleChoiceQuestionTemplate = getSampleMultipleChoiceQuestion(answersFromUser);
 
         //when
         when(questionRepo.findById(1L)).thenReturn(Optional.of(multipleChoiceQuestionTemplate));
@@ -80,47 +56,11 @@ class QuestionServiceTest {
     @Test
     void shouldReturnOnePointForMultipleChoiceQuestion() {
         //given
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(true);
+        List<Answer> answersFromUser = getSampleAnswers(true, false, false);
+        List<Answer> answersTemplate = getSampleAnswers(true, true, false);
 
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Kot");
-        a2.setCorrectness(false);
-
-        Answer a3 = new Answer();
-        a3.setId(3L);
-        a3.setContent("Ser");
-        a3.setCorrectness(false);
-        List<Answer> answersFromUser = new ArrayList<>(Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer();
-        a4.setId(1L);
-        a4.setContent("Pies");
-        a4.setCorrectness(true);
-
-        Answer a5 = new Answer();
-        a5.setId(2L);
-        a5.setContent("Kot");
-        a5.setCorrectness(true);
-
-        Answer a6 = new Answer();
-        a6.setId(3L);
-        a6.setContent("Ser");
-        a6.setCorrectness(false);
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a4, a5, a6));
-
-        var multipleChoiceQuestion = new MultipleChoiceQuestion();
-        multipleChoiceQuestion.setId(1L);
-        multipleChoiceQuestion.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestion.setAnswers(answersFromUser);
-
-        var multipleChoiceQuestionTemplate = new MultipleChoiceQuestion();
-        multipleChoiceQuestionTemplate.setId(1L);
-        multipleChoiceQuestionTemplate.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestionTemplate.setAnswers(answersTemplate);
+        var multipleChoiceQuestion = getSampleMultipleChoiceQuestion(answersFromUser);
+        var multipleChoiceQuestionTemplate = getSampleMultipleChoiceQuestion(answersTemplate);
 
         //when
         when(questionRepo.findById(1L)).thenReturn(Optional.of(multipleChoiceQuestionTemplate));
@@ -132,48 +72,13 @@ class QuestionServiceTest {
 
     @Test
     void shouldReturnZeroPointsForMultipleChoiceQuestion() {
+
         //given
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(true);
+        List<Answer> answersFromUser = getSampleAnswers(true, true, false);
+        List<Answer> answersTemplate = getSampleAnswers(true, false, false);
 
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Kot");
-        a2.setCorrectness(true);
-
-        Answer a3 = new Answer();
-        a3.setId(3L);
-        a3.setContent("Ser");
-        a3.setCorrectness(false);
-        List<Answer> answersFromUser = new ArrayList<>(Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer();
-        a4.setId(1L);
-        a4.setContent("Pies");
-        a4.setCorrectness(true);
-
-        Answer a5 = new Answer();
-        a5.setId(2L);
-        a5.setContent("Kot");
-        a5.setCorrectness(false);
-
-        Answer a6 = new Answer();
-        a6.setId(3L);
-        a6.setContent("Ser");
-        a6.setCorrectness(false);
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a4, a5, a6));
-
-        var multipleChoiceQuestion = new MultipleChoiceQuestion();
-        multipleChoiceQuestion.setId(1L);
-        multipleChoiceQuestion.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestion.setAnswers(answersFromUser);
-
-        var multipleChoiceQuestionTemplate = new MultipleChoiceQuestion();
-        multipleChoiceQuestionTemplate.setId(1L);
-        multipleChoiceQuestionTemplate.setContent("Wybierz zwierzęta:");
-        multipleChoiceQuestionTemplate.setAnswers(answersTemplate);
+        var multipleChoiceQuestion = getSampleMultipleChoiceQuestion(answersFromUser);
+        var multipleChoiceQuestionTemplate = getSampleMultipleChoiceQuestion(answersTemplate);
 
         //when
         when(questionRepo.findById(1L)).thenReturn(Optional.of(multipleChoiceQuestionTemplate));
@@ -183,51 +88,40 @@ class QuestionServiceTest {
 
     }
 
-    @Test
-    void shouldReturnOnePointForSingleChoiceQuestion() {
-        //given
+    private MultipleChoiceQuestion getSampleMultipleChoiceQuestion(List<Answer> answers) {
+        var multipleChoiceQuestionTemplate = new MultipleChoiceQuestion();
+        multipleChoiceQuestionTemplate.setId(1L);
+        multipleChoiceQuestionTemplate.setContent("Wybierz zwierzęta:");
+        multipleChoiceQuestionTemplate.setAnswers(answers);
+        return multipleChoiceQuestionTemplate;
+    }
 
+    private List<Answer> getSampleAnswers(boolean b, boolean b1, boolean b2) {
         Answer a1 = new Answer();
         a1.setId(1L);
         a1.setContent("Pies");
-        a1.setCorrectness(true);
+        a1.setCorrectness(b);
 
         Answer a2 = new Answer();
         a2.setId(2L);
-        a2.setContent("Ściana");
-        a2.setCorrectness(false);
+        a2.setContent("Kot");
+        a2.setCorrectness(b1);
 
         Answer a3 = new Answer();
         a3.setId(3L);
         a3.setContent("Ser");
-        a3.setCorrectness(false);
-        List<Answer> answersFromUser = new ArrayList<>(Arrays.asList(a1, a2, a3));
+        a3.setCorrectness(b2);
+        return new ArrayList<>(Arrays.asList(a1, a2, a3));
+    }
 
-        Answer a4 = new Answer();
-        a4.setId(1L);
-        a4.setContent("Pies");
-        a4.setCorrectness(true);
+    @Test
+    void shouldReturnOnePointForSingleChoiceQuestion() {
+        //given
+        List<Answer> answersFromUser = getSampleAnswers(true, false, false);
+        List<Answer> answersTemplate = getSampleAnswers(true, false, false);
 
-        Answer a5 = new Answer();
-        a5.setId(2L);
-        a5.setContent("Ściana");
-        a5.setCorrectness(false);
-
-        Answer a6 = new Answer();
-        a6.setId(3L);
-        a6.setContent("Ser");
-        a6.setCorrectness(false);
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a4, a5, a6));
-
-        var singleChoiceQuestion = new SingleChoiceQuestion();
-        singleChoiceQuestion.setId(1L);
-        singleChoiceQuestion.setContent("Wybierz zwierzę:");
-        singleChoiceQuestion.setAnswers(answersFromUser);
-
-        var singleChoiceQuestionTemplate = new SingleChoiceQuestion();
-        singleChoiceQuestionTemplate.setId(1L);
-        singleChoiceQuestionTemplate.setContent("Wybierz zwierzę:");
-        singleChoiceQuestionTemplate.setAnswers(answersTemplate);
+        var singleChoiceQuestion = getSampleSingleChoiceQuestion(answersFromUser);
+        var singleChoiceQuestionTemplate = getSampleSingleChoiceQuestion(answersTemplate);
 
         //when
         when(questionRepo.findById(1L)).thenReturn(Optional.of(singleChoiceQuestionTemplate));
@@ -240,48 +134,11 @@ class QuestionServiceTest {
     @Test
     void shouldReturnZeroPointsForSingleChoiceQuestion() {
         //given
+        List<Answer> answersFromUser = getSampleAnswers(false, true, false);
+        List<Answer> answersTemplate = getSampleAnswers(true, false, false);
 
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(false);
-
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Ściana");
-        a2.setCorrectness(true);
-
-        Answer a3 = new Answer();
-        a3.setId(3L);
-        a3.setContent("Ser");
-        a3.setCorrectness(false);
-        List<Answer> answersFromUser = new ArrayList<>(Arrays.asList(a1, a2, a3));
-
-        Answer a4 = new Answer();
-        a4.setId(1L);
-        a4.setContent("Pies");
-        a4.setCorrectness(true);
-
-        Answer a5 = new Answer();
-        a5.setId(2L);
-        a5.setContent("Ściana");
-        a5.setCorrectness(false);
-
-        Answer a6 = new Answer();
-        a6.setId(3L);
-        a6.setContent("Ser");
-        a6.setCorrectness(false);
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a4, a5, a6));
-
-        var singleChoiceQuestion = new SingleChoiceQuestion();
-        singleChoiceQuestion.setId(1L);
-        singleChoiceQuestion.setContent("Wybierz zwierzę:");
-        singleChoiceQuestion.setAnswers(answersFromUser);
-
-        var singleChoiceQuestionTemplate = new SingleChoiceQuestion();
-        singleChoiceQuestionTemplate.setId(1L);
-        singleChoiceQuestionTemplate.setContent("Wybierz zwierzę:");
-        singleChoiceQuestionTemplate.setAnswers(answersTemplate);
+        var singleChoiceQuestion = getSampleSingleChoiceQuestion(answersFromUser);
+        var singleChoiceQuestionTemplate = getSampleSingleChoiceQuestion(answersTemplate);
 
         //when
         when(questionRepo.findById(1L)).thenReturn(Optional.of(singleChoiceQuestionTemplate));
@@ -291,20 +148,19 @@ class QuestionServiceTest {
 
     }
 
+    private SingleChoiceQuestion getSampleSingleChoiceQuestion(List<Answer> answers) {
+        var singleChoiceQuestion = new SingleChoiceQuestion();
+        singleChoiceQuestion.setId(1L);
+        singleChoiceQuestion.setContent("Wybierz zwierzę:");
+        singleChoiceQuestion.setAnswers(answers);
+        return singleChoiceQuestion;
+    }
+
     @Test
     void shouldReturnOnePointForShortAnswerQuestion() {
         //given
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(true);
 
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Kot");
-        a2.setCorrectness(true);
-
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a1, a2));
+        List<Answer> answersTemplate = getSampleShortAnswers();
 
         var shortAnswerQuestion = new ShortAnswerQuestion(
                 "Dwa najczęstsze domowe zwierzęta:",
@@ -325,17 +181,7 @@ class QuestionServiceTest {
     @Test
     void shouldReturnZeroPointsForShortAnswerQuestion() {
         //given
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(true);
-
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Kot");
-        a2.setCorrectness(true);
-
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a1, a2));
+        List<Answer> answersTemplate = getSampleShortAnswers();
 
         var shortAnswerQuestion = new ShortAnswerQuestion(
                 "Dwa najczęstsze domowe zwierzęta:",
@@ -356,17 +202,7 @@ class QuestionServiceTest {
     @Test
     void shouldReturnTwoPointsForShortAnswerQuestion() {
         //given
-        Answer a1 = new Answer();
-        a1.setId(1L);
-        a1.setContent("Pies");
-        a1.setCorrectness(true);
-
-        Answer a2 = new Answer();
-        a2.setId(2L);
-        a2.setContent("Kot");
-        a2.setCorrectness(true);
-
-        List<Answer> answersTemplate = new ArrayList<>(Arrays.asList(a1, a2));
+        List<Answer> answersTemplate = getSampleShortAnswers();
 
         var shortAnswerQuestion = new ShortAnswerQuestion(
                 "Dwa najczęstsze domowe zwierzęta:",
@@ -382,6 +218,19 @@ class QuestionServiceTest {
         //then
         assertEquals(2, questionService.countQuestionPoints(shortAnswerQuestion));
 
+    }
+
+    private List<Answer> getSampleShortAnswers() {
+        Answer a1 = new Answer();
+        a1.setId(1L);
+        a1.setContent("Pies");
+        a1.setCorrectness(true);
+
+        Answer a2 = new Answer();
+        a2.setId(2L);
+        a2.setContent("Kot");
+        a2.setCorrectness(true);
+        return new ArrayList<>(Arrays.asList(a1, a2));
     }
 
 }
