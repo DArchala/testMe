@@ -7,9 +7,11 @@ import org.springframework.context.annotation.Bean;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Exam;
 import pl.archala.testme.models.ExamDifficultyLevel;
+import pl.archala.testme.models.Question;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.repositories.AnswerRepository;
 import pl.archala.testme.repositories.ExamRepository;
+import pl.archala.testme.repositories.QuestionRepository;
 import pl.archala.testme.repositories.ShortAnswerQuestionRepository;
 
 import java.util.ArrayList;
@@ -19,10 +21,6 @@ import java.util.List;
 @SpringBootApplication
 public class TestMeApplication {
 
-    private ExamRepository examRepo;
-    private AnswerRepository answerRepo;
-    private ShortAnswerQuestionRepository shortAnsQuestRepo;
-
     public static void main(String[] args) {
         SpringApplication.run(TestMeApplication.class, args);
     }
@@ -30,7 +28,7 @@ public class TestMeApplication {
     @Bean
     public CommandLineRunner loadData(ExamRepository examRepo,
                                       AnswerRepository answerRepo,
-                                      ShortAnswerQuestionRepository shortAnsQuestRepo) {
+                                      QuestionRepository questionRepo) {
         return (args) -> {
 
             Answer a1 = new Answer("Kot", true);
@@ -39,7 +37,7 @@ public class TestMeApplication {
             answerRepo.save(a2);
 
             var s1 = new ShortAnswerQuestion("Jaki to zwierz?", Arrays.asList(a1, a2), "");
-            shortAnsQuestRepo.save(s1);
+            questionRepo.save(s1);
 
             Exam exam = new Exam(
                     new ArrayList<>(List.of(s1)),
