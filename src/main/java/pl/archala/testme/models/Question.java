@@ -1,13 +1,13 @@
 package pl.archala.testme.models;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.springframework.data.geo.Circle;
 import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +18,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "questions")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SingleChoiceQuestion.class, name = "single"),
+        @JsonSubTypes.Type(value = MultipleChoiceQuestion.class, name = "multiple"),
+        @JsonSubTypes.Type(value = ShortAnswerQuestion.class, name = "short")
+})
 public abstract class Question extends AbstractEntity<Long> implements Serializable, Questionable {
 
     protected String content;
