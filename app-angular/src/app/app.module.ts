@@ -10,6 +10,9 @@ import {HttpClientModule} from "@angular/common/http";
 import { ExamComponent } from './pages/exam/exam.component';
 import { ExamTimerPipe } from './pipes/exam-timer.pipe';
 import {FormsModule} from "@angular/forms";
+import { MultipleChoiceQuestionComponent } from './pages/question-types/multiple-choice-question/multiple-choice-question.component';
+import { ShortAnswerQuestionComponent } from './pages/question-types/short-answer-question/short-answer-question.component';
+import { SingleChoiceQuestionComponent } from './pages/question-types/single-choice-question/single-choice-question.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import {FormsModule} from "@angular/forms";
     ExamsComponent,
     PageNotFoundComponent,
     ExamComponent,
-    ExamTimerPipe
+    ExamTimerPipe,
+    MultipleChoiceQuestionComponent,
+    ShortAnswerQuestionComponent,
+    SingleChoiceQuestionComponent
   ],
     imports: [
         BrowserModule,
