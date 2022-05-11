@@ -4,9 +4,9 @@
     <p><span>Exam name:</span> {{exam.examName}}</p>
     <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
     <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
-    <p><span>Questions number: </span>{{exam.examQuestionsNumber}}</p>
+    <p><span>Questions number: </span>{{exam.questions.length}}</p>
     <p><span>Your last exam score: </span>{{this.responseExamPoints}}
-      <a *ngIf="this.responseExamPoints != null">/ {{exam.examQuestionsNumber}}</a>
+      <a *ngIf="this.responseExamPoints != null">/ ADD GETTING MAX POINTS EXAM</a>
     </p>
     <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
   </div>
