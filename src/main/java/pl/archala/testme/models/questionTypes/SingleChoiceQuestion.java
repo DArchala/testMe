@@ -1,5 +1,6 @@
 package pl.archala.testme.models.questionTypes;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 import pl.archala.testme.models.Questionable;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 
 @Entity
+@JsonTypeName("single")
 public class SingleChoiceQuestion extends Question {
 
     public SingleChoiceQuestion(String content, List<Answer> answers) {

@@ -1,5 +1,6 @@
 package pl.archala.testme.models.questionTypes;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @Entity
+@JsonTypeName("short")
 public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
