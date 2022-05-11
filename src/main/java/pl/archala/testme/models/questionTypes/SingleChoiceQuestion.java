@@ -40,9 +40,9 @@ public class SingleChoiceQuestion extends Question {
     @Override
     public String toString() {
         return "SingleChoiceQuestion{" +
+                "id='" + getId() + '\'' +
                 "content='" + content + '\'' +
                 ", answers=" + answers +
-                "} " + super.toString();
+                '}';
     }
-
 }

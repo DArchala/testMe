@@ -47,4 +47,13 @@ public class Exam extends AbstractEntity<Long> {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Exam{" +
+                "questions=" + questions +
+                ", examName='" + examName + '\'' +
+                ", difficultyLevel=" + difficultyLevel +
+                ", timeInSeconds=" + timeInSeconds +
+                '}';
+    }
 }

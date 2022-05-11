@@ -1,6 +1,13 @@
 package pl.archala.testme.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
+import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
+import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
+
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +22,12 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
 
     protected String content;
 
-    protected Question() {}
+    protected Question() {
+    }
 
     @OneToMany
     protected List<Answer> answers;
+
     protected Question(String content, List<Answer> answers) {
         this.content = content;
         this.answers = answers;
@@ -49,14 +58,8 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
         this.answers = answers;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + this.getId() +
-                ", content='" + content + '\'' +
-                ", answers=" + answers +
-                '}';
-    }
+
+    public abstract String toString();
 
     public abstract int countPoints(Questionable question);
 

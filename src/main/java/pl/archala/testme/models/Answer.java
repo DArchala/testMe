@@ -1,7 +1,5 @@
 package pl.archala.testme.models;
 
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 
 @Entity
@@ -36,5 +34,14 @@ public class Answer extends AbstractEntity<Long> {
 
     public void setCorrectness(boolean correctness) {
         this.correctness = correctness;
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id='" + getId() + '\'' +
+                "content='" + content + '\'' +
+                ", correctness=" + correctness +
+                '}';
     }
 }

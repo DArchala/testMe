@@ -56,9 +56,10 @@ public class ShortAnswerQuestion extends Question {
     @Override
     public String toString() {
         return "ShortAnswerQuestion{" +
+                "id='" + getId() + '\'' +
+                "content='" + content + '\'' +
                 "userAnswer='" + userAnswer + '\'' +
-                ", content='" + content + '\'' +
                 ", answers=" + answers +
-                "} " + super.toString();
+                '}';
     }
 }

@@ -43,8 +43,9 @@ public class MultipleChoiceQuestion extends Question {
     @Override
     public String toString() {
         return "MultipleChoiceQuestion{" +
+                "id='" + getId() + '\'' +
                 "content='" + content + '\'' +
                 ", answers=" + answers +
-                "} " + super.toString();
+                '}';
     }
 }
