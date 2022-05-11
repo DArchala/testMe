@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
@@ -50,6 +49,7 @@ public class Exam extends AbstractEntity<Long> {
     @Override
     public String toString() {
         return "Exam{" +
+                "id='" + getId() + '\'' +
                 "questions=" + questions +
                 ", examName='" + examName + '\'' +
                 ", difficultyLevel=" + difficultyLevel +
