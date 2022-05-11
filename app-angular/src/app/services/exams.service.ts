@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Exam} from "../models/exam";
-import {tap} from "rxjs";
+import {finalize, tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ExamsService {
   }
 
   getExamById(examId: string | any) {
-    return this.httpClient.get<Exam>(this.url + `/exams/exam/` + examId);
+    return this.httpClient.get<Exam>(this.url + `/exams/exam/` + examId).pipe(tap(console.log));
   }
 
   postExamToCheckCorrectness(exam: Exam) {
