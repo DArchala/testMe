@@ -16,7 +16,7 @@
   <button (click)="startTest()">Start exam!</button>
 </div>
 
-<div *ngIf="examStarted" align="center" id="examQuestionsContainer">
+<div *ngIf="examStarted">
   <div id="examQuestions">
     <div id="timer">
       {{examTimeLeft | examTimer}}
@@ -33,6 +33,6 @@
   </div>
 </div>
 
-<div align="center" *ngIf="examStarted">
-  <button id="examEndButton" (click)="finishTest()">Send exam</button>
+<div id="examFinishButtonDiv" *ngIf="examStarted">
+  <button id="examFinishButton" (click)="finishTest()">Send exam</button>
 </div>
