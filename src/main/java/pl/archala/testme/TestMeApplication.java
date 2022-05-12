@@ -8,7 +8,9 @@ import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Exam;
 import pl.archala.testme.models.ExamDifficultyLevel;
 import pl.archala.testme.models.Question;
+import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
+import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repositories.AnswerRepository;
 import pl.archala.testme.repositories.ExamRepository;
 import pl.archala.testme.repositories.QuestionRepository;
@@ -31,21 +33,38 @@ public class TestMeApplication {
                                       QuestionRepository questionRepo) {
         return (args) -> {
 
-            Answer a1 = new Answer("Kot", true);
-            Answer a2 = new Answer("Pies", true);
-            answerRepo.save(a1);
-            answerRepo.save(a2);
+            Answer single1 = new Answer("Database", true);
+            Answer single2 = new Answer("DuaLipa");
+            Answer single3 = new Answer("DiagramBeta");
+            answerRepo.save(single1);
+            answerRepo.save(single2);
+            answerRepo.save(single3);
+            List<Answer> singleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(single1, single2, single3));
+            var singleChoiceQuestion = new SingleChoiceQuestion("Co to jest DB?", singleChoiceQuestionAnswers);
+            questionRepo.save(singleChoiceQuestion);
 
-            var s1 = new ShortAnswerQuestion("Jaki to zwierz?", Arrays.asList(a1, a2), "");
-            questionRepo.save(s1);
+            Answer multi1 = new Answer("class", true);
+            Answer multi2 = new Answer("assert", true);
+            Answer multi3 = new Answer("jump");
+            answerRepo.save(multi1);
+            answerRepo.save(multi2);
+            answerRepo.save(multi3);
+            List<Answer> multipleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(multi1, multi2, multi3));
+            var multipleChoiceQuestion = new MultipleChoiceQuestion("Wybierz słowa kluczowe:", multipleChoiceQuestionAnswers);
+            questionRepo.save(multipleChoiceQuestion);
 
-            Exam exam = new Exam(
-                    new ArrayList<>(List.of(s1)),
-                    "examtestName",
-                    ExamDifficultyLevel.EASY,
-                    60
-            );
-            examRepo.save(exam);
+            Answer short1 = new Answer("float", true);
+            Answer short2 = new Answer("double", true);
+            answerRepo.save(short1);
+            answerRepo.save(short2);
+            List<Answer> shortAnswerQuestionAnswers = new ArrayList<>(Arrays.asList(short1, short2));
+            var shortAnswerQuestion = new ShortAnswerQuestion("Wymień 2 typy zmiennych przechowujących liczby zmiennoprzecinkowe.", shortAnswerQuestionAnswers, "");
+            questionRepo.save(shortAnswerQuestion);
+
+            List<Question> questions = new ArrayList<>(Arrays.asList(singleChoiceQuestion, multipleChoiceQuestion, shortAnswerQuestion));
+
+            Exam userExam = new Exam(questions, "sampleExamName", ExamDifficultyLevel.MEDIUM, 3600);
+            examRepo.save(userExam);
         };
     }
 
