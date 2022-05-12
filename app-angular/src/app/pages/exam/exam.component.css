@@ -10,6 +10,10 @@
   border: 4px solid cadetblue;
   border-radius: 10px;
   max-width: 30%;
+  background-color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #examQuestion {
@@ -17,6 +21,7 @@
   border-radius: 5px;
   margin: 5px;
   padding-bottom: 10px;
+  background-color: #f2f2f2;
 }
 
 #examStartButton {
@@ -47,7 +52,11 @@
   margin-right: 10px;
 }
 
-#examEndButton {
+#examFinishButton {
   margin: 2.5%;
   transform: scale(2);
+}
+
+#examFinishButtonDiv {
+  text-align: center;
 }
