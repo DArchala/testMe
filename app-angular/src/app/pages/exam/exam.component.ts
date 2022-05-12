@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ExamsService} from "../../services/exams.service";
 import {Exam} from "../../models/exam";
 import {ActivatedRoute} from "@angular/router";
@@ -10,7 +10,7 @@ import {Question} from "../../models/question";
   templateUrl: './exam.component.html',
   styleUrls: ['./exam.component.css']
 })
-export class ExamComponent implements OnInit {
+export class ExamComponent {
 
   exam!: Exam;
   responseExamPoints!: any;
@@ -29,10 +29,6 @@ export class ExamComponent implements OnInit {
       this.maxExamTime = data.timeInSeconds;
       this.examTimeLeft = data.timeInSeconds;
     });
-  }
-
-  ngOnInit() {
-
   }
 
 
