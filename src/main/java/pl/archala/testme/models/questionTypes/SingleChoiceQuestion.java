@@ -22,8 +22,6 @@ public class SingleChoiceQuestion extends Question {
         super(content, answers);
         if (answers.size() < 2)
             throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
-        if (answers.stream().filter(Answer::isCorrectness).count() != 1)
-            throw new IllegalArgumentException("Number of correct answers in SingleChoiceQuestion has to be equal to 1.");
     }
     public SingleChoiceQuestion() {}
     public int countPoints(Questionable question) {
@@ -31,7 +29,7 @@ public class SingleChoiceQuestion extends Question {
         int counter = 1;
         for (Answer answer : answers) {
             Answer answerTemplate = questionTemplate.getAnswerById(answer.getId());
-            if (answer.isCorrectness() != answerTemplate.isCorrectness()) {
+            if (answers.stream().noneMatch(Answer::isCorrectness) || answer.isCorrectness() != answerTemplate.isCorrectness()) {
                 counter = 0;
                 return counter;
             }
