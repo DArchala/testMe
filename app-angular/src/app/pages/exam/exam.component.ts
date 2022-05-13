@@ -12,14 +12,14 @@ import {Question} from "../../models/question";
 })
 export class ExamComponent {
 
-  exam!: Exam;
+  exam = new Exam();
   responseExamPoints = 0;
   examStarted = false;
   interval: any;
-  examId: number | any;
+  examId: any;
   maxExamTime!: number;
   examTimeLeft!: number;
-  userLastExamTime!: number;
+  userLastExamTime = 0;
   examMaxPoints!: number;
 
   constructor(private examService: ExamsService,
@@ -29,7 +29,6 @@ export class ExamComponent {
       this.exam = data;
       this.maxExamTime = data.timeInSeconds;
       this.examTimeLeft = data.timeInSeconds;
-      // this.responseExamPoints = 0;
     });
     this.examService.postExamGetMaxPoints(this.examId).subscribe(data => this.examMaxPoints = data);
   }
