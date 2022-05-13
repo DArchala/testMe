@@ -69,6 +69,10 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
 
     public abstract int countPoints(Questionable question);
 
+    public long countCorrectAnswers() {
+        return answers.stream().filter(Answer::isCorrectness).count();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
