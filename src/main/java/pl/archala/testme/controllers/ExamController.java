@@ -36,6 +36,11 @@ public class ExamController {
         return examService.countUserExamPoints(exam);
     }
 
+    @PostMapping("/exam/{id}")
+    public long getExamMaxPoints(@PathVariable("id") Long id) {
+        return examService.getMaxPossibleExamPoints(id);
+    }
+
     @GetMapping("/exam/{id}")
     public ResponseEntity<Exam> getExamById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
