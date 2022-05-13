@@ -6,9 +6,8 @@
     <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
     <p><span>Questions number: </span>{{exam.questions.length}}</p>
     <p><span>Your last exam score: </span>{{this.responseExamPoints}}
-      <a *ngIf="this.responseExamPoints != null">/ ADD GETTING MAX POINTS EXAM</a>
+      <a *ngIf="this.responseExamPoints != null">/ {{this.examMaxPoints}}</a>
     </p>
-    <a>ADD TRIM METHOD TO USER ANSWER</a>
     <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
   </div>
 </div>
