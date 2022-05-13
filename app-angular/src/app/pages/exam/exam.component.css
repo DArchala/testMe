@@ -1,3 +1,7 @@
+#examSuperContainer {
+  font-size: 20px;
+}
+
 #examDivInner {
   margin: 10px;
 }
@@ -61,6 +65,10 @@
 #examFinishButton {
   margin: 2.5%;
   transform: scale(2);
+}
+
+.userAnswerTextInput {
+  transform: scale(1.5);
 }
 
 #examFinishButtonDiv {
