@@ -1,9 +1,9 @@
 import {Question} from "./question";
 
 export class Exam {
-  id: number | any;
+  id: any;
   questions!: Question[];
-  examName: string | any;
+  examName!: string;
   difficultyLevel!: string;
   timeInSeconds!: number;
 }
