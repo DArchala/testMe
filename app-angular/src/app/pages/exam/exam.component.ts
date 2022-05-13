@@ -13,7 +13,7 @@ import {Question} from "../../models/question";
 export class ExamComponent {
 
   exam!: Exam;
-  responseExamPoints!: any;
+  responseExamPoints = 0;
   examStarted = false;
   interval: any;
   examId: number | any;
@@ -29,6 +29,7 @@ export class ExamComponent {
       this.exam = data;
       this.maxExamTime = data.timeInSeconds;
       this.examTimeLeft = data.timeInSeconds;
+      // this.responseExamPoints = 0;
     });
     this.examService.postExamGetMaxPoints(this.examId).subscribe(data => this.examMaxPoints = data);
   }
