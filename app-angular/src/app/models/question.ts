@@ -5,5 +5,5 @@ export abstract class Question {
   content!: string;
   answers!: Answer[];
   type!: string;
-
+  userAnswer!: string;
 }
