@@ -90,14 +90,22 @@ class SingleChoiceQuestionTest {
 
     }
 
-
     @Test
-    void numberOfCorrectAnswersShouldBeEqualToOne() {
-        assertThrows(IllegalArgumentException.class, () -> new SingleChoiceQuestion("questCont", Arrays.asList(
-                new Answer("answCont1", true),
-                new Answer("answCont2", true)
-        )));
-    }
+    void noneUserAnswerShouldReturnZeroPoints() {
+        //given
+        Answer templ = new Answer("answCont2", true);
+        templ.setId(2L);
 
+        //when
+        answersTemplate.set(1, templ);
+
+        fromUser = new SingleChoiceQuestion("questCont", answersFromUser);
+        template = new SingleChoiceQuestion("questCont", answersTemplate);
+
+        points = fromUser.countPoints(template);
+
+        //then
+        assertEquals(0, points);
+    }
 
 }
