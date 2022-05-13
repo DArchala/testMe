@@ -1,63 +1,66 @@
-<div id="examDataDiv">
-  <div id="examDivInner">
-    <p><span>ID:</span> {{exam.id}}</p>
-    <p><span>Exam name:</span> {{exam.examName}}</p>
-    <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
-    <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
-    <p><span>Questions number: </span>{{exam.questions.length}}</p>
-    <p><span>Your last exam score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}</p>
-    <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
-  </div>
-</div>
-
-<div id="examStartButton" *ngIf="!examStarted">
-  <button (click)="startTest()">Start exam!</button>
-</div>
-
-<div *ngIf="examStarted">
-  <div id="examQuestions">
-    <div id="timer">
-      {{examTimeLeft | examTimer}}
-    </div>
-    <div id="examQuestion" *ngFor="let question of exam.questions">
-
-      <p id="questionContent">{{question.content}}</p>
-
-
-      <ng-container [ngSwitch]="question.type">
-
-        <div *ngSwitchCase="'single'">
-          <div class="answers" *ngFor="let answer of question.answers">
-            <input type="checkbox" class="answerRadio"
-                   (change)="uncheckOtherAnswers(answer, question)"
-                   [(ngModel)]="answer.correctness" [value]="true"
-                   name="{{question.id}}">
-            <span>{{answer.content}}</span>
-          </div>
-        </div>
-
-        <div *ngSwitchCase="'multiple'">
-          <div class="answers" *ngFor="let answer of question.answers">
-            <input type="checkbox" class="answerCheckBox"
-                   [(ngModel)]="answer.correctness" [value]="true"
-                   name="{{question.id}}">
-            <span>{{answer.content}}</span>
-          </div>
-        </div>
-
-        <div *ngSwitchCase="'short'">
-          <input type="text" class="userAnswerTextInput"
-                 [(ngModel)]="question.userAnswer"
-                 name="{{question.id}}">
-        </div>
-
-      </ng-container>
-
-
+<div id="examSuperContainer">
+  <div id="examDataDiv">
+    <div id="examDivInner">
+      <p><span>ID:</span> {{exam.id}}</p>
+      <p><span>Exam name:</span> {{exam.examName}}</p>
+      <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
+      <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
+      <p><span>Questions number: </span>{{exam.questions?.length}}</p>
+      <p><span>Your last exam score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}} = {{(this.responseExamPoints/this.examMaxPoints)*100}}%</p>
+      <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
     </div>
   </div>
-</div>
 
-<div id="examFinishButtonDiv" *ngIf="examStarted">
-  <button id="examFinishButton" (click)="finishTest()">Send exam</button>
+  <div id="examStartButton" *ngIf="!examStarted">
+    <button (click)="startTest()">Start exam!</button>
+  </div>
+
+  <div *ngIf="examStarted">
+    <div id="examQuestions">
+      <div id="timer">
+        {{examTimeLeft | examTimer}}
+      </div>
+      <div id="examQuestion" *ngFor="let question of exam.questions">
+
+        <p id="questionContent">{{question.content}}</p>
+
+
+        <ng-container [ngSwitch]="question.type">
+
+          <div *ngSwitchCase="'single'">
+            <div class="answers" *ngFor="let answer of question.answers">
+              <input type="checkbox" class="answerRadio"
+                     (change)="uncheckOtherAnswers(answer, question)"
+                     [(ngModel)]="answer.correctness" [value]="true"
+                     name="{{question.id}}">
+              <span>{{answer.content}}</span>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'multiple'">
+            <div class="answers" *ngFor="let answer of question.answers">
+              <input type="checkbox" class="answerCheckBox"
+                     [(ngModel)]="answer.correctness" [value]="true"
+                     name="{{question.id}}">
+              <span>{{answer.content}}</span>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'short'">
+            <input type="text" class="userAnswerTextInput"
+                   [(ngModel)]="question.userAnswer"
+                   name="{{question.id}}">
+          </div>
+
+        </ng-container>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div id="examFinishButtonDiv" *ngIf="examStarted">
+    <button id="examFinishButton" (click)="finishTest()">Send exam</button>
+  </div>
+
 </div>
