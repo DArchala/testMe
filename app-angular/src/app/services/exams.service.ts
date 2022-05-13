@@ -25,4 +25,8 @@ export class ExamsService {
     return this.httpClient.post<Exam>(this.url + `/exams/exam`, exam).pipe(tap(console.log));
   }
 
+  postExamGetMaxPoints(examId: string | any) {
+    return this.httpClient.post<number>(this.url + `/exams/exam/` + examId, null).pipe(tap(console.log));
+  }
+
 }
