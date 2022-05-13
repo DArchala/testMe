@@ -43,6 +43,7 @@ public class ShortAnswerQuestion extends Question {
         int points = 0;
         List<String> userAnswers = new ArrayList<>();
         for (String s : List.of(this.getUserAnswer().split(","))) {
+            s = s.trim();
             userAnswers.add(s.toLowerCase());
         }
         for (Answer answer : answers) {
