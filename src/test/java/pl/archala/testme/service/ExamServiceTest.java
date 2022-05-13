@@ -16,6 +16,7 @@ import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repositories.AnswerRepository;
+import pl.archala.testme.repositories.ExamRepository;
 import pl.archala.testme.repositories.QuestionRepository;
 
 import java.util.ArrayList;
@@ -39,10 +40,13 @@ class ExamServiceTest {
     @Mock
     private QuestionRepository questionRepo;
 
+    @Mock
+    private ExamRepository examRepo;
+
     @BeforeEach
     void setUp() {
         questionService = new QuestionService(questionRepo);
-        examService = new ExamService(questionService);
+        examService = new ExamService(questionService, examRepo);
     }
 
     @Test
