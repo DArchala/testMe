@@ -8,6 +8,7 @@
     <p><span>Your last exam score: </span>{{this.responseExamPoints}}
       <a *ngIf="this.responseExamPoints != null">/ ADD GETTING MAX POINTS EXAM</a>
     </p>
+    <a>ADD TRIM METHOD TO USER ANSWER</a>
     <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
   </div>
 </div>
@@ -22,13 +23,40 @@
       {{examTimeLeft | examTimer}}
     </div>
     <div id="examQuestion" *ngFor="let question of exam.questions">
+
       <p id="questionContent">{{question.content}}</p>
-      <div id="answers" *ngFor="let answer of question.answers">
-        <input type="checkbox" id="answerCheckBox"
-               (change)="uncheckOtherAnswers(answer, question)"
-               [(ngModel)]="answer.correctness" [value]="true"
-               name="{{question.id}}">{{answer.content}}
-      </div>
+
+
+      <ng-container [ngSwitch]="question.type">
+
+        <div *ngSwitchCase="'single'">
+          <div class="answers" *ngFor="let answer of question.answers">
+            <input type="checkbox" class="answerRadio"
+                   (change)="uncheckOtherAnswers(answer, question)"
+                   [(ngModel)]="answer.correctness" [value]="true"
+                   name="{{question.id}}">
+            <span>{{answer.content}}</span>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'multiple'">
+          <div class="answers" *ngFor="let answer of question.answers">
+            <input type="checkbox" class="answerCheckBox"
+                   [(ngModel)]="answer.correctness" [value]="true"
+                   name="{{question.id}}">
+            <span>{{answer.content}}</span>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="'short'">
+          <input type="text" class="userAnswerTextInput"
+                 [(ngModel)]="question.userAnswer"
+                 name="{{question.id}}">
+        </div>
+
+      </ng-container>
+
+
     </div>
   </div>
 </div>
