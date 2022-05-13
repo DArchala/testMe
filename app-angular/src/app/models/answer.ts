@@ -1,6 +1,5 @@
 export class Answer {
-  id!: number;
+  id: any;
   content!: string;
   correctness!: boolean;
-
 }
