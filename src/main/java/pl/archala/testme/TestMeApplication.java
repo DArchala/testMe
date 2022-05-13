@@ -44,12 +44,18 @@ public class TestMeApplication {
             questionRepo.save(singleChoiceQuestion);
 
             Answer multi1 = new Answer("class", true);
-            Answer multi2 = new Answer("assert", true);
+            Answer multi2 = new Answer("continue", true);
             Answer multi3 = new Answer("jump");
+            Answer multi4 = new Answer("math");
+            Answer multi5 = new Answer("money");
+            Answer multi6 = new Answer("compiler");
             answerRepo.save(multi1);
             answerRepo.save(multi2);
             answerRepo.save(multi3);
-            List<Answer> multipleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(multi1, multi2, multi3));
+            answerRepo.save(multi4);
+            answerRepo.save(multi5);
+            answerRepo.save(multi6);
+            List<Answer> multipleChoiceQuestionAnswers = new ArrayList<>(Arrays.asList(multi1, multi2, multi3, multi4, multi5, multi6));
             var multipleChoiceQuestion = new MultipleChoiceQuestion("Wybierz słowa kluczowe:", multipleChoiceQuestionAnswers);
             questionRepo.save(multipleChoiceQuestion);
 
