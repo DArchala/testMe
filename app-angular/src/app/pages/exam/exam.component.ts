@@ -20,6 +20,7 @@ export class ExamComponent {
   maxExamTime!: number;
   examTimeLeft!: number;
   userLastExamTime!: number;
+  examMaxPoints!: number;
 
   constructor(private examService: ExamsService,
               private route: ActivatedRoute) {
@@ -29,6 +30,7 @@ export class ExamComponent {
       this.maxExamTime = data.timeInSeconds;
       this.examTimeLeft = data.timeInSeconds;
     });
+    this.examService.postExamGetMaxPoints(this.examId).subscribe(data => this.examMaxPoints = data);
   }
 
 
