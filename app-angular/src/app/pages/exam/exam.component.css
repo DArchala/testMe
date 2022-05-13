@@ -32,13 +32,13 @@
   font-weight: bold;
 }
 
-#answers {
+.answers {
   text-align: left;
   margin-left: 10%;
   margin-bottom: 2%;
 }
 
-#answers input:hover {
+.answers input:hover {
   cursor: pointer;
 }
 
@@ -47,9 +47,15 @@
   margin-bottom: 5px;
 }
 
-#answerCheckBox {
+.answerCheckBox {
   transform: scale(1.5);
   margin-right: 10px;
+}
+
+.answerRadio {
+  transform: scale(1.5);
+  margin-right: 10px;
+  clip-path: circle(50% at 50% 50%);
 }
 
 #examFinishButton {
