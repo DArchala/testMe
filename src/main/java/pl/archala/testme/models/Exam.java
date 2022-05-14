@@ -25,6 +25,7 @@ public class Exam extends AbstractEntity<Long> {
     @OneToMany
     private List<Question> questions = new ArrayList<>();
 
+    @NotEmpty
     private String examName;
 
     @NotEmpty
