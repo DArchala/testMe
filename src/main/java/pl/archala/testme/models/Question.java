@@ -17,7 +17,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "questions")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SingleChoiceQuestion.class, name = "single"),

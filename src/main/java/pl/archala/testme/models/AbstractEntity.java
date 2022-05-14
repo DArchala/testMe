@@ -10,7 +10,7 @@ import java.util.Objects;
 public abstract class AbstractEntity<ID extends Serializable> implements Persistable<ID> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private ID id;
 
