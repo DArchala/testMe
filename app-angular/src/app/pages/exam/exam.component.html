@@ -6,7 +6,7 @@
       <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
       <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
       <p><span>Questions number: </span>{{exam.questions?.length}}</p>
-      <p><span>Your last exam score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}} = {{(this.responseExamPoints/this.examMaxPoints)*100}}%</p>
+      <p><span>Your last exam score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}} = {{getPercentageExamScore(this.responseExamPoints, this.examMaxPoints)}}</p>
       <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
     </div>
   </div>
@@ -20,10 +20,9 @@
       <div id="timer">
         {{examTimeLeft | examTimer}}
       </div>
-      <div id="examQuestion" *ngFor="let question of exam.questions">
+      <div id="examQuestion" *ngFor="let question of exam.questions; let i = index">
 
-        <p id="questionContent">{{question.content}}</p>
-
+        <p id="questionContent">{{i+1 + '. ' +question.content}}</p>
 
         <ng-container [ngSwitch]="question.type">
 
@@ -53,7 +52,6 @@
           </div>
 
         </ng-container>
-
 
       </div>
     </div>
