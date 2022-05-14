@@ -196,6 +196,20 @@ class ExamServiceTest {
 
     }
 
+    @Test
+    void getMaxPossibleExamPointsShouldReturnAmountOfCorrectAnswersInExam() {
+        //given
+        Exam exam = new Exam(List.of(getAnswersFromDB()), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+        exam.setId(1L);
+
+        //when
+        when(examRepo.findById(1L)).thenReturn(Optional.of(exam));
+        long points = examService.getMaxPossibleExamPoints(exam.getId());
+
+        //then
+        assertEquals(5, points);
+    }
+
     private Question[] getAnswersFromDB() {
         Answer single1DB = new Answer("Database", true);
         Answer single2DB = new Answer("DuaLipa");
