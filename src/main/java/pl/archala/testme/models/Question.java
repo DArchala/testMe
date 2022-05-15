@@ -38,12 +38,9 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
         this.answers = answers;
     }
 
-    public Answer getAnswerById(Long id) {
+    public Answer getAnswerById(long id) {
         return this.getAnswers().stream()
-                .filter(answer -> {
-                    assert answer.getId() != null;
-                    return answer.getId().equals(id);
-                })
+                .filter(answer -> Objects.equals(answer.getId(), id))
                 .findFirst().orElseThrow();
     }
 
