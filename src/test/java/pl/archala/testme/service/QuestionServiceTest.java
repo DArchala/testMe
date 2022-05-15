@@ -9,18 +9,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import pl.archala.testme.models.Answer;
+import pl.archala.testme.models.Questionable;
 import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repositories.QuestionRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -218,6 +216,19 @@ class QuestionServiceTest {
         //then
         assertEquals(2, questionService.countQuestionPoints(shortAnswerQuestion));
 
+    }
+
+    @Test
+    void shouldThrowNoSuchElementExceptionIfQuestionTemplateNotExistInDB() {
+        //given
+        var question = new SingleChoiceQuestion("content", List.of(new Answer(), new Answer()));
+        question.setId(1L);
+
+        //when
+        when(questionRepo.findById(1L)).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(NoSuchElementException.class, () -> questionService.countQuestionPoints(question));
     }
 
     private List<Answer> getSampleShortAnswers() {
