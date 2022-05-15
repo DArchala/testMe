@@ -28,9 +28,9 @@ public class ExamService {
         return points;
     }
 
-    public long getMaxPossibleExamPoints(Long examId) {
+    public int getMaxPossibleExamPoints(Long examId) {
         Optional<Exam> exam = examRepo.findById(examId);
-        long counter = 0;
+        int counter = 0;
         for(Question q : exam.orElseThrow().getQuestions()) {
             counter += q.countCorrectAnswers();
         }
