@@ -37,7 +37,7 @@ public class ExamController {
     }
 
     @PostMapping("/exam/{id}")
-    public long getExamMaxPoints(@PathVariable("id") Long id) {
+    public int getExamMaxPoints(@PathVariable("id") Long id) {
         return examService.getMaxPossibleExamPoints(id);
     }
 
