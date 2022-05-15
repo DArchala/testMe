@@ -10,7 +10,9 @@ import pl.archala.testme.models.Questionable;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Question which cointains user answer/s
@@ -24,14 +26,15 @@ public class ShortAnswerQuestion extends Question {
 
     private String userAnswer = "";
 
-    public ShortAnswerQuestion() {}
+    public ShortAnswerQuestion() {
+    }
 
     public ShortAnswerQuestion(String content, List<Answer> answers, String userAnswer) {
         super(content, answers);
         this.userAnswer = userAnswer;
-        if(answers.size() < 1)
+        if (answers.size() < 1)
             throw new IllegalArgumentException("Number of answers in ShortAnswerQuestion has to be greater than 0.");
-        if(answers.stream().anyMatch(answer -> !answer.isCorrectness()))
+        if (answers.stream().anyMatch(answer -> !answer.isCorrectness()))
             throw new IllegalArgumentException("Number of incorrect answers in ShortAnswerQuestion has to be equal to 0.");
     }
 
@@ -41,14 +44,20 @@ public class ShortAnswerQuestion extends Question {
 
     public int countPoints() {
         int points = 0;
-        List<String> userAnswers = new ArrayList<>();
-        for (String s : List.of(this.getUserAnswer().split(","))) {
-            s = s.trim();
-            userAnswers.add(s.toLowerCase());
+        Set<String> userAnswers = new HashSet<>();
+
+        for (String userAnswer : List.of(this.getUserAnswer().split(","))) {
+            userAnswer = userAnswer.trim();
+            userAnswers.add(userAnswer.toLowerCase());
         }
-        for (Answer answer : answers) {
-            if(userAnswers.contains(answer.getContent().toLowerCase())) points++;
+
+        for (Answer answer : this.answers) {
+            if (userAnswers.contains(answer.getContent().toLowerCase())) points++;
         }
+
+        if (userAnswers.size() > this.answers.size())
+            points -= (userAnswers.size() - this.answers.size());
+
         return points;
     }
 
