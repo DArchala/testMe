@@ -73,4 +73,20 @@ class ShortAnswerQuestionTest {
         //then
         assertEquals(points, 0);
     }
+
+    @Test
+    void threeUserAnswersWhenOnlyTwoAreCorrectShouldReturnOnePointLess() {
+        //given
+        var answerQuestion = new ShortAnswerQuestion("Aplikacje do podróżowania to:", Arrays.asList(
+                new Answer("Blablacar", true),
+                new Answer("Uber", true)
+
+        ), "blablacar, uber, makao");
+
+        //when
+        int points = answerQuestion.countPoints();
+
+        //then
+        assertEquals(1, points);
+    }
 }
