@@ -1,1 +1,26 @@
-<p>new-exam works!</p>
+<p>Nazwij egzamin:</p>
+<input type="text" [(ngModel)]="examModel.examName">
+<p>Poziom trudności:</p>
+<input type="text" [(ngModel)]="examModel.difficultyLevel">
+<p>Czas egzaminu:</p>
+<input type="text" [(ngModel)]="examModel.timeInSeconds">
+<p>
+  <button (click)="addNewQuestion()">Dodaj pytanie</button>
+  <select [(ngModel)]="newQuestionType">
+    <option [ngValue]="'single'">Jednokrotny wybór</option>
+    <option [ngValue]="'multiple'">Wielokrotny wybór</option>
+    <option [ngValue]="'short'">Pisemna odpowiedź</option>
+  </select>
+</p>
+<p style="text-align: center">Lista pytań</p>
+<div *ngFor="let question of examModel.questions; let i = index" class="questionsList">
+  <div class="question">
+    <span>{{(i + 1) + "."}} <input type="text" [(ngModel)]="question.content"></span>
+    <button (click)="addNewAnswerToQuestion(question)">Dodaj kolejną odpowiedź</button>
+    <div class="answers" *ngFor="let answer of question.answers; let j = index">
+      <div class="answer">
+        {{(i + 1) + "." + (j + 1) + "."}}<input type="text" [(ngModel)]="answer.content">
+      </div>
+    </div>
+  </div>
+</div>
