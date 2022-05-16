@@ -12,15 +12,30 @@
     <option [ngValue]="'short'">Pisemna odpowiedź</option>
   </select>
 </p>
+
+<button (click)="displayExam()">displayExam</button>
+
 <p style="text-align: center">Lista pytań</p>
-<div *ngFor="let question of examModel.questions; let i = index" class="questionsList">
-  <div class="question">
-    <span>{{(i + 1) + "."}} <input type="text" [(ngModel)]="question.content"></span>
+
+<div *ngFor="let question of examModel.questions; let i = index" class="questions">
+
+  <div class="question {{question.type}}">
+
+    <span>{{(i + 1) + "."}} <input type="text" [(ngModel)]="question.content" placeholder="Wpisz treść pytania"></span>
+
     <button (click)="addNewAnswerToQuestion(question)">Dodaj kolejną odpowiedź</button>
+    <button (click)="deleteThisQuestion(question)">Usuń to pytanie</button>
+
     <div class="answers" *ngFor="let answer of question.answers; let j = index">
+
       <div class="answer">
-        {{(i + 1) + "." + (j + 1) + "."}}<input type="text" [(ngModel)]="answer.content">
+        {{(i + 1) + "." + (j + 1) + "."}} <input type="text" [(ngModel)]="answer.content" placeholder="Wpisz odpowiedź">
+        <input *ngIf="question.type != 'short'" type="checkbox">
       </div>
+
     </div>
+
   </div>
+
 </div>
+
