@@ -1,0 +1,16 @@
+.question {
+  border: 4px solid cadetblue;
+  border-radius: 10px;
+  max-width: 30%;
+  background-color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5%;
+  padding: 10px;
+}
+
+.answers {
+  padding: 10px;
+}
+
