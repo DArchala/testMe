@@ -14,3 +14,14 @@
   padding: 10px;
 }
 
+.single {
+  border: 4px solid red;
+}
+
+.multiple {
+  border: 4px solid green;
+}
+
+.short {
+  border: 4px solid blue;
+}
