@@ -1,12 +1,10 @@
 package pl.archala.testme.models;
 
 public enum ExamDifficultyLevel {
-    VERY_EASY("Very easy"), EASY("Easy"), MEDIUM("Medium"),
-    HARD("Hard"), VERY_HARD("Very hard");
+    VERY_EASY(), EASY(), MEDIUM(),
+    HARD(), VERY_HARD();
 
-    ExamDifficultyLevel(String hardness) {
-        this.hardness = hardness;
+    ExamDifficultyLevel() {
     }
 
-    private String hardness;
 }
