@@ -5,6 +5,7 @@ import {Answer} from "../../models/answer";
 import {Question} from "../../models/question";
 import {SingleChoiceQuestion} from "../../models/questionTypes/single-choice-question";
 import {MultipleChoiceQuestion} from "../../models/questionTypes/multiple-choice-question";
+import {ExamsService} from "../../services/exams.service";
 
 @Component({
   selector: 'app-new-exam',
@@ -13,11 +14,11 @@ import {MultipleChoiceQuestion} from "../../models/questionTypes/multiple-choice
 })
 export class NewExamComponent {
 
-  constructor() {
-    this.examModel = new Exam();
-    let sampleAnswer1 = new Answer("", false);
-    let sampleAnswer2 = new Answer("", false);
-    this.examModel.questions = [new SingleChoiceQuestion("",
+  constructor(private examService: ExamsService) {
+    this.examService.getNewExamData().subscribe(data => this.difficultyLevels = data);
+    let sampleAnswer1 = new Answer(0, "", false);
+    let sampleAnswer2 = new Answer(0, "", false);
+    this.examModel.questions = [new SingleChoiceQuestion(0, "",
       [sampleAnswer1, sampleAnswer2], "single", "")];
     this.examModel.id = 0;
     this.examModel.examName = "examName";
@@ -25,31 +26,32 @@ export class NewExamComponent {
     this.examModel.difficultyLevel = "MEDIUM";
   }
 
-  examModel!: Exam;
+  examModel = new Exam();
   newQuestionType = "single";
+  difficultyLevels: any;
 
   addNewQuestion() {
     let quest: any;
-    let answer = new Answer("", false);
-    let answer2 = new Answer("", false);
+    let answer = new Answer(0, "", false);
+    let answer2 = new Answer(0, "", false);
 
     switch (this.newQuestionType) {
       case "single":
-        quest = new SingleChoiceQuestion("", [answer, answer2], "single", "");
+        quest = new SingleChoiceQuestion(0, "", [answer, answer2], "single", "");
         break;
       case "multiple":
-        quest = new MultipleChoiceQuestion("", [answer, answer2], "multiple", "");
+        quest = new MultipleChoiceQuestion(0, "", [answer, answer2], "multiple", "");
         break;
       case "short":
         answer.correctness = true;
-        quest = new ShortAnswerQuestion("", [answer], "short", "");
+        quest = new ShortAnswerQuestion(0, "", [answer], "short", "");
         break;
     }
     this.examModel.questions.push(quest);
   }
 
   addNewAnswerToQuestion(question: Question) {
-    let answer = new Answer("", false);
+    let answer = new Answer(0, "", false);
     if (question.type === 'short') {
       answer.correctness = true;
     }
@@ -93,54 +95,72 @@ export class NewExamComponent {
   }
 
   postExam() {
-    this.validateExamName();
-    this.validateDifficultyLevel();
-    this.validateExamTime();
-    this.validateExamQuestions();
+    if (this.validateExamName() &&
+      this.validateDifficultyLevel() &&
+      this.validateExamTime() &&
+      this.validateExamQuestions()) {
+      this.examService.postNewExam(this.examModel).subscribe(console.log);
+    } else alert("Dodawanie egzaminu nie powiodło się.");
   }
 
   private validateExamName() {
-    if (this.examModel.examName.length === 0) alert("Nazwa egzaminu nie może być pusta.");
-    else if (this.examModel.examName.length > 60) alert("Nazwa egzaminu nie może być dłuższa niż 60 znaków.");
+    if (this.examModel.examName.length === 0) {
+      alert("Nazwa egzaminu nie może być pusta.");
+      return false;
+    } else if (this.examModel.examName.length > 60) {
+      alert("Nazwa egzaminu nie może być dłuższa niż 60 znaków.");
+      return false;
+    }
+    return true;
   }
 
   private validateDifficultyLevel() {
-    if (this.examModel.difficultyLevel.length === 0) alert("Poziom trudności egzaminu nie może być pusty.");
-    else if (this.examModel.difficultyLevel.length > 60) alert("Poziom trudności egzaminu nie może być dłuższy niż 60 znaków.");
+    if (this.examModel.difficultyLevel.length === 0) {
+      alert("Poziom trudności egzaminu nie może być pusty.");
+      return false;
+    } else if (this.examModel.difficultyLevel.length > 60) {
+      alert("Poziom trudności egzaminu nie może być dłuższy niż 60 znaków.");
+      return false;
+    }
+    return true;
   }
 
   private validateExamTime() {
-    if (this.examModel.timeInSeconds < 60 || this.examModel.timeInSeconds > 86400) alert("Czas egzaminu musi wynosić od 60 do 86400 sekund.");
+    if (this.examModel.timeInSeconds < 60 || this.examModel.timeInSeconds > 86400) {
+      alert("Czas egzaminu musi wynosić od 60 do 86400 sekund.");
+      return false;
+    }
+    return true;
   }
 
   private validateExamQuestions() {
-    let breakAll = false;
-
-    if (this.examModel.questions.length < 1) alert("Egzamin musi zawierać conajmniej jedno pytanie.");
+    if (this.examModel.questions.length < 1) {
+      alert("Egzamin musi zawierać conajmniej jedno pytanie.");
+      return false;
+    }
 
     for (let question of this.examModel.questions) {
 
       if (question.content.length === 0) {
         alert("Każde pytanie musi zawierać treść.");
-        break;
+        return false;
       }
 
       if (question.answers.length === 0) {
         alert("Każde pytanie musi zawierać conajmniej jedną odpowiedź.");
-        break;
+        return false;
       }
 
       if ((question.type === 'single' || question.type === 'multiple') && question.answers.length === 1) {
         alert("Każde pytanie jednokrotnego lub wielokrotnego wyboru musi zawierać conajmniej dwie odpowiedzi.");
-        break;
+        return false;
       }
 
       for (let answer of question.answers) {
 
         if (answer.content.length === 0) {
           alert("Każda odpowiedź musi zawierać treść.");
-          breakAll = true;
-          break;
+          return false;
         }
 
         let amountOfCorrectAnswers = 0;
@@ -149,13 +169,11 @@ export class NewExamComponent {
         });
         if (amountOfCorrectAnswers === 0) {
           alert("Każde pytanie musi zawierać conajmniej jedną prawidłową odpowiedź.");
-          breakAll = true;
-          break;
+          return false;
         }
 
       }
-
-      if (breakAll) break;
     }
+    return true;
   }
 }
