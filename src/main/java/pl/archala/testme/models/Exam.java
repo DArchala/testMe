@@ -21,7 +21,7 @@ import java.util.List;
 @Table(name = "exams")
 public class Exam extends AbstractEntity<Long> {
 
-    @Size(min=1)
+    @Size(min = 1)
     @OneToMany
     private List<Question> questions = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class Exam extends AbstractEntity<Long> {
     public String toString() {
         return "Exam{" +
                 "id='" + getId() + '\'' +
-                "questions=" + questions +
+                ", questions=" + questions +
                 ", examName='" + examName + '\'' +
                 ", difficultyLevel=" + difficultyLevel +
                 ", timeInSeconds=" + timeInSeconds +
