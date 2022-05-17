@@ -29,4 +29,11 @@ export class ExamsService {
     return this.httpClient.post<number>(this.url + `/exams/exam/` + examId, null).pipe(tap(console.log));
   }
 
+  getNewExamData() {
+    return this.httpClient.get<any[]>(this.url + `/new-exam`).pipe(tap(console.log));
+  }
+
+  postNewExam(exam: Exam) {
+    return this.httpClient.post<Exam>(this.url + `/new-exam/save`, exam).pipe(tap(console.log));
+  }
 }
