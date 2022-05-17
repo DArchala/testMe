@@ -3,7 +3,9 @@ export class Answer {
   content!: string;
   correctness!: boolean;
 
-  constructor(content: string, correctness: boolean) {
+
+  constructor(id: any, content: string, correctness: boolean) {
+    this.id = id;
     this.content = content;
     this.correctness = correctness;
   }
