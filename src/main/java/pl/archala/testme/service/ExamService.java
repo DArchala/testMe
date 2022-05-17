@@ -24,17 +24,20 @@ public class ExamService {
 
         for (Question q : userExam.getQuestions())
             points += questionService.countQuestionPoints(q);
-        
+
         return points;
     }
 
     public int getMaxPossibleExamPoints(Long examId) {
         Optional<Exam> exam = examRepo.findById(examId);
         int counter = 0;
-        for(Question q : exam.orElseThrow().getQuestions()) {
+        for (Question q : exam.orElseThrow().getQuestions()) {
             counter += q.countCorrectAnswers();
         }
         return counter;
     }
 
+    public void saveNewExam(Exam exam) {
+
+    }
 }
