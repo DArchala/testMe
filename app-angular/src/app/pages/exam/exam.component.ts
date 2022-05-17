@@ -4,7 +4,6 @@ import {Exam} from "../../models/exam";
 import {ActivatedRoute} from "@angular/router";
 import {Answer} from "../../models/answer";
 import {Question} from "../../models/question";
-import {max} from "rxjs";
 
 @Component({
   selector: 'app-exam',
