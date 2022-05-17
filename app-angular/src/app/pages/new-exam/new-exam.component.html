@@ -2,9 +2,11 @@
   <p>Nazwij egzamin:</p>
   <input type="text" [(ngModel)]="examModel.examName">
   <p>Poziom trudności:</p>
-  <input type="text" [(ngModel)]="examModel.difficultyLevel">
+  <select [(ngModel)]="examModel.difficultyLevel">
+    <option *ngFor="let level of difficultyLevels" [value]="level">{{level}}</option>
+  </select>
   <p>Czas egzaminu:</p>
-  <input type="number" [min]="60" [max]="86400" [(ngModel)]="examModel.timeInSeconds"> sekund
+  <input type="number" [(ngModel)]="examModel.timeInSeconds"> sekund
   <p>Liczba pytań: {{examModel.questions.length}}</p>
   <p>Maksymalna liczba punktów: {{countCorrectAnswers(examModel)}}</p>
   <p>
