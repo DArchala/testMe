@@ -69,8 +69,8 @@ public class ShortAnswerQuestion extends Question {
     public String toString() {
         return "ShortAnswerQuestion{" +
                 "id='" + getId() + '\'' +
-                "content='" + content + '\'' +
-                "userAnswer='" + userAnswer + '\'' +
+                ", content='" + content + '\'' +
+                ", userAnswer='" + userAnswer + '\'' +
                 ", answers=" + answers +
                 '}';
     }

@@ -40,7 +40,7 @@ public class Answer extends AbstractEntity<Long> {
     public String toString() {
         return "Answer{" +
                 "id='" + getId() + '\'' +
-                "content='" + content + '\'' +
+                ", content='" + content + '\'' +
                 ", correctness=" + correctness +
                 '}';
     }

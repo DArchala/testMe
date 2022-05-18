@@ -41,7 +41,7 @@ public class SingleChoiceQuestion extends Question {
     public String toString() {
         return "SingleChoiceQuestion{" +
                 "id='" + getId() + '\'' +
-                "content='" + content + '\'' +
+                ", content='" + content + '\'' +
                 ", answers=" + answers +
                 '}';
     }

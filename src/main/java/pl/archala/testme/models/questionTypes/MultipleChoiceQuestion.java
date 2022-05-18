@@ -47,7 +47,7 @@ public class MultipleChoiceQuestion extends Question {
     public String toString() {
         return "MultipleChoiceQuestion{" +
                 "id='" + getId() + '\'' +
-                "content='" + content + '\'' +
+                ", content='" + content + '\'' +
                 ", answers=" + answers +
                 '}';
     }
