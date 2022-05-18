@@ -43,10 +43,13 @@ class ExamServiceTest {
     @Mock
     private ExamRepository examRepo;
 
+    @Mock
+    private AnswerRepository answerRepo;
+
     @BeforeEach
     void setUp() {
         questionService = new QuestionService(questionRepo);
-        examService = new ExamService(questionService, examRepo);
+        examService = new ExamService(questionService, examRepo, answerRepo, questionRepo);
     }
 
     @Test
