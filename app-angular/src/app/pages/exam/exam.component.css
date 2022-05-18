@@ -1,12 +1,14 @@
 #examSuperContainer {
   font-size: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-#examDivInner {
+#examDataDiv {
   margin: 10px;
 }
 
-#examDivInner p span {
+#examDataDiv p span {
   font-weight: bold;
 }
 
