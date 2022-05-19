@@ -182,6 +182,8 @@ export class NewExamComponent {
   }
 
   private validateExamTimer() {
+    if(this.examHours === null || this.examHours === undefined) this.examHours = 0;
+    if(this.examMinutes === null || this.examMinutes === undefined) this.examMinutes = 0;
     if (this.examHours === 0 && this.examMinutes === 0) {
       alert("Czas egzaminu nie może być zerowy.");
       return false;
