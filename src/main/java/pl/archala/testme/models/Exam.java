@@ -49,7 +49,7 @@ public class Exam extends AbstractEntity<Long> {
     }
 
     public boolean areFieldsCorrect() {
-        return questions.size() > 1
+        return questions.size() >= 1
                 && !examName.isEmpty()
                 && Objects.nonNull(difficultyLevel)
                 && timeInSeconds >= 60
