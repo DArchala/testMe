@@ -2,7 +2,6 @@ package pl.archala.testme.models;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.springframework.data.geo.Circle;
 import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
@@ -59,9 +58,6 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
-
-
-    public abstract String toString();
 
     public abstract int countPoints(Questionable question);
 
