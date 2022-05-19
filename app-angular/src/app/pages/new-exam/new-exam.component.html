@@ -7,7 +7,8 @@
       <option *ngFor="let level of difficultyLevels" [value]="level">{{level}}</option>
     </select>
     <p>Czas egzaminu:</p>
-    <input type="number" [(ngModel)]="examModel.timeInSeconds"> sekund
+    <input type="number" class="timer" min="0" max="23" [(ngModel)]="examHours"> godzin
+    <input type="number" class="timer" min="0" max="59" [(ngModel)]="examMinutes"> minut
     <p>Liczba pytań: {{examModel.questions.length}}</p>
     <p>Maksymalna liczba punktów: {{countCorrectAnswers(examModel)}}</p>
     <p>
