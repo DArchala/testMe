@@ -21,15 +21,15 @@ export class NewExamComponent {
     this.examModel.questions = [new SingleChoiceQuestion(0, "",
       [sampleAnswer1, sampleAnswer2], "single", "")];
     this.examModel.id = 0;
-    this.examModel.examName = "examName";
-    this.examModel.timeInSeconds = 1800;
+    this.examModel.examName = "";
+    this.examModel.timeInSeconds = 0;
     this.examModel.difficultyLevel = "MEDIUM";
   }
 
   examModel = new Exam();
   newQuestionType = "single";
   difficultyLevels: any;
-  examHours = 1;
+  examHours = 0;
   examMinutes = 0;
 
   addNewQuestion() {
@@ -99,9 +99,9 @@ export class NewExamComponent {
   postExam() {
     if (this.validateExamName() &&
       this.validateDifficultyLevel() &&
-      this.validateExamTime() &&
+      this.validateExamTimer() &&
       this.validateExamQuestions() &&
-      this.validateExamTimer()) {
+      this.validateExamTime()) {
       this.examModel.timeInSeconds = this.getExamTime();
       this.examService.postNewExam(this.examModel).subscribe(console.log);
       alert("Egzamin został dodany!");
