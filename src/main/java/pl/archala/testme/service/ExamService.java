@@ -48,14 +48,19 @@ public class ExamService {
         return counter;
     }
 
-    public void saveNewExam(Exam exam) {
+    public boolean saveNewExam(Exam exam) {
         List<Question> questionList = new ArrayList<>();
 
+        if (!exam.areFieldsCorrect()) return false;
+
         for (Question q : exam.getQuestions()) {
+
+            if (!q.areFieldsCorrect()) return false;
 
             List<Answer> answerList = new ArrayList<>();
 
             for (Answer a : q.getAnswers()) {
+                if (!a.areFieldsCorrect()) return false;
                 a.setId(null);
                 answerList.add(a);
             }
@@ -73,5 +78,6 @@ public class ExamService {
         exam.setQuestions(questionList);
 
         examRepo.save(exam);
+        return true;
     }
 }
