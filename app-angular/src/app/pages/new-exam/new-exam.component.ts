@@ -104,6 +104,7 @@ export class NewExamComponent {
       this.validateExamTimer()) {
       this.examModel.timeInSeconds = this.getExamTime();
       this.examService.postNewExam(this.examModel).subscribe(console.log);
+      alert("Egzamin został dodany!");
     } else alert("Dodawanie egzaminu nie powiodło się.");
   }
 
