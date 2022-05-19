@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -211,6 +211,44 @@ class ExamServiceTest {
 
         //then
         assertEquals(5, points);
+    }
+
+    @Test
+    void saveNewExamShouldReturnFalseIfExamContainIncorrectField() {
+        //given
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+
+        newExam.setExamName("");
+
+        assertFalse(examService.saveNewExam(newExam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnFalseIfAnyQuestionContainIncorrectField() {
+        //given
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+
+        newExam.getQuestions().stream().findFirst().get().setContent("");
+
+        assertFalse(examService.saveNewExam(newExam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnFalseIfAnyAnswerContainIncorrectField() {
+        //given
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+
+        newExam.getQuestions().get(0).getAnswers().get(0).setContent("");
+
+        assertFalse(examService.saveNewExam(newExam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnTrueIfExamQuestionsAndAnswersHaveCorrectFields() {
+        //given
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+
+        assertTrue(examService.saveNewExam(newExam));
     }
 
     private Question[] getAnswersFromDB() {
