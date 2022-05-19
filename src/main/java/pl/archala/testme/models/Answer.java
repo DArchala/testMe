@@ -36,6 +36,10 @@ public class Answer extends AbstractEntity<Long> {
         this.correctness = correctness;
     }
 
+    public boolean areFieldsCorrect() {
+        return !content.isEmpty();
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
