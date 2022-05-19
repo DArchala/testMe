@@ -37,7 +37,7 @@ public class Answer extends AbstractEntity<Long> {
     }
 
     public boolean areFieldsCorrect() {
-        return !content.isEmpty();
+        return !content.trim().isEmpty();
     }
 
     @Override
