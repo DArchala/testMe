@@ -5,13 +5,17 @@
 }
 
 #newExamData {
-  width: 20%;
+  min-width: 20%;
   margin-left: 2.5%;
   margin-right: 5%;
 }
 
+#newExamData .timer {
+  max-width: 10%;
+}
+
 #questionsList {
-  width: 40%;
+  min-width: 40%;
 }
 
 .question {
