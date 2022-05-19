@@ -28,7 +28,7 @@ public class NewExamController {
     @PostMapping("/save")
     public ResponseEntity<Exam> saveNewExam(@RequestBody Exam exam) {
         if (examService.saveNewExam(exam)) return new ResponseEntity<>(exam, HttpStatus.OK);
-        else return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }
