@@ -45,8 +45,8 @@ public class MultipleChoiceQuestion extends Question {
 
     @Override
     public boolean areFieldsCorrect() {
-        boolean onlyOneAnswerIsCorrect = answers.stream().filter(Answer::isCorrectness).count() == 1;
-        return onlyOneAnswerIsCorrect && getAnswers().size() >= 2 && !getContent().isEmpty();
+        boolean atLeastOneAnswerIsCorrect = answers.stream().anyMatch(Answer::isCorrectness);
+        return atLeastOneAnswerIsCorrect && getAnswers().size() >= 2 && !getContent().isEmpty();
     }
 
     @Override
