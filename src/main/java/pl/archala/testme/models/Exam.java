@@ -13,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Setter
 @Getter
@@ -45,6 +46,14 @@ public class Exam extends AbstractEntity<Long> {
     public Exam setAllAnswersFalse() {
         questions.forEach(question -> question.getAnswers().forEach(answer -> answer.setCorrectness(false)));
         return this;
+    }
+
+    public boolean areFieldsCorrect() {
+        return questions.size() > 1
+                && !examName.isEmpty()
+                && Objects.nonNull(difficultyLevel)
+                && timeInSeconds >= 60
+                && timeInSeconds <= 86400;
     }
 
     @Override
