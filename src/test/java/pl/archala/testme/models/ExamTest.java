@@ -1,5 +1,6 @@
 package pl.archala.testme.models;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
 
@@ -7,9 +8,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ExamTest {
+
+    private Exam sampleExam;
+
+    @BeforeEach
+    void setUp() {
+        sampleExam = new Exam();
+        sampleExam.setId(1L);
+        sampleExam.setExamName("SampleExamName");
+        sampleExam.setQuestions(new ArrayList<>(List.of(new SingleChoiceQuestion())));
+        sampleExam.setTimeInSeconds(60);
+        sampleExam.setDifficultyLevel(ExamDifficultyLevel.MEDIUM);
+    }
 
     @Test
     void allAnswersCorrectnessShouldBeFalseAfterUseToDoIt() {
@@ -26,13 +39,10 @@ class ExamTest {
                         new Answer("tnoc")
                 )));
 
-        Exam exam = new Exam();
-        exam.setId(1L);
-        exam.setQuestions(questions);
-        exam.setTimeInSeconds(60);
+        sampleExam.setQuestions(questions);
 
         //when
-        exam.setAllAnswersFalse();
+        sampleExam.setAllAnswersFalse();
 
         //then
         for (Question q : questions) {
@@ -41,4 +51,40 @@ class ExamTest {
             }
         }
     }
+
+    @Test
+    void shouldReturnFalseIfExamQuestionsSizeIsLessThanOne() {
+        sampleExam.setQuestions(new ArrayList<>(List.of()));
+        assertFalse(sampleExam.areFieldsCorrect());
+    }
+
+    @Test
+    void shouldReturnFalseIfExamNameIsEmpty() {
+        sampleExam.setExamName("");
+        assertFalse(sampleExam.areFieldsCorrect());
+    }
+
+    @Test
+    void shouldReturnFalseIfExamDifficultyLevelIsNull() {
+        sampleExam.setDifficultyLevel(null);
+        assertFalse(sampleExam.areFieldsCorrect());
+    }
+
+    @Test
+    void shouldReturnFalseIfExamTimeInSecondsIsLessThan60() {
+        sampleExam.setTimeInSeconds(50);
+        assertFalse(sampleExam.areFieldsCorrect());
+    }
+
+    @Test
+    void shouldReturnFalseIfExamTimeInSecondsIsGreaterThan86400() {
+        sampleExam.setTimeInSeconds(90_000);
+        assertFalse(sampleExam.areFieldsCorrect());
+    }
+
+    @Test
+    void shouldReturnTrueIfAllFieldsAreFilledCorrectly() {
+        assertTrue(sampleExam.areFieldsCorrect());
+    }
+
 }
