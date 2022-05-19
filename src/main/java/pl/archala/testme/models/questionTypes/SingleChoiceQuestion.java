@@ -23,7 +23,10 @@ public class SingleChoiceQuestion extends Question {
         if (answers.size() < 2)
             throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
     }
-    public SingleChoiceQuestion() {}
+
+    public SingleChoiceQuestion() {
+    }
+
     public int countPoints(Questionable question) {
         SingleChoiceQuestion questionTemplate = (SingleChoiceQuestion) question;
         int counter = 1;
@@ -35,6 +38,12 @@ public class SingleChoiceQuestion extends Question {
             }
         }
         return counter;
+    }
+
+    @Override
+    public boolean areFieldsCorrect() {
+        boolean onlyOneAnswerIsCorrect = answers.stream().filter(Answer::isCorrectness).count() == 1;
+        return onlyOneAnswerIsCorrect && getAnswers().size() >= 2 && !getContent().isEmpty();
     }
 
     @Override

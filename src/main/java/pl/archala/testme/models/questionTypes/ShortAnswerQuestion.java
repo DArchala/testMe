@@ -3,13 +3,11 @@ package pl.archala.testme.models.questionTypes;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import pl.archala.testme.models.Answer;
 import pl.archala.testme.models.Question;
 import pl.archala.testme.models.Questionable;
 
 import javax.persistence.Entity;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,6 +61,12 @@ public class ShortAnswerQuestion extends Question {
 
     public void setUserAnswer(String userAnswer) {
         this.userAnswer = userAnswer;
+    }
+
+    @Override
+    public boolean areFieldsCorrect() {
+        boolean allAnswersAreCorrect = answers.stream().allMatch(Answer::isCorrectness);
+        return allAnswersAreCorrect && !getAnswers().isEmpty() && !getContent().isEmpty();
     }
 
     @Override
