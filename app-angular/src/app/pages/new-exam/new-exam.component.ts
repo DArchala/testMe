@@ -29,6 +29,8 @@ export class NewExamComponent {
   examModel = new Exam();
   newQuestionType = "single";
   difficultyLevels: any;
+  examHours = 1;
+  examMinutes = 0;
 
   addNewQuestion() {
     let quest: any;
@@ -98,7 +100,9 @@ export class NewExamComponent {
     if (this.validateExamName() &&
       this.validateDifficultyLevel() &&
       this.validateExamTime() &&
-      this.validateExamQuestions()) {
+      this.validateExamQuestions() &&
+      this.validateExamTimer()) {
+      this.examModel.timeInSeconds = this.getExamTime();
       this.examService.postNewExam(this.examModel).subscribe(console.log);
     } else alert("Dodawanie egzaminu nie powiodło się.");
   }
@@ -175,5 +179,25 @@ export class NewExamComponent {
       }
     }
     return true;
+  }
+
+  private validateExamTimer() {
+    if (this.examHours === 0 && this.examMinutes === 0) {
+      alert("Czas egzaminu nie może być zerowy.");
+      return false;
+    }
+    if(this.examHours > 23 || this.examHours < 0) {
+      alert("Czas egzaminu (godziny) nie może być ujemny ani większy od 23.");
+      return false;
+    }
+    if(this.examMinutes > 59 || this.examMinutes < 0) {
+      alert("Czas egzaminu (minuty) nie może być ujemny ani większy od 59.");
+      return false;
+    }
+    return true;
+  }
+
+  private getExamTime() {
+    return (this.examHours * 3600) + (this.examMinutes * 60);
   }
 }
