@@ -2,9 +2,9 @@
   <div *ngFor="let exam of exams" routerLink="exam/{{exam.id}}" id="examDivOuter" >
     <div id="examDivInner">
       <p id="idSpan"><span>ID:</span> {{exam.id}}</p>
-      <p><span>Exam name:</span> {{exam.examName}}</p>
-      <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
-      <p><span>Questions number: </span>{{exam.questions.length}}</p>
+      <p><span>Nazwa:</span> {{exam.examName}}</p>
+      <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
+      <p><span>Liczba pytań: </span>{{exam.questions.length}}</p>
     </div>
   </div>
 </div>
