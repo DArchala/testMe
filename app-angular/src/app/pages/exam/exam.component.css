@@ -30,8 +30,13 @@
   background-color: #f2f2f2;
 }
 
-#examStartButton {
-  margin: 10px
+.examStartFinishButtonDiv {
+  text-align: center;
+}
+
+.examStartFinishButton {
+  margin: 2.5%;
+  transform: scale(2);
 }
 
 #questionContent {
@@ -66,15 +71,7 @@
   clip-path: circle(50% at 50% 50%);
 }
 
-#examFinishButton {
-  margin: 2.5%;
-  transform: scale(2);
-}
 
 .userAnswerTextInput {
   transform: scale(1.5);
-}
-
-#examFinishButtonDiv {
-  text-align: center;
 }
