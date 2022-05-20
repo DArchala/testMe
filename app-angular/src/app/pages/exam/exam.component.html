@@ -1,20 +1,20 @@
 <div id="examSuperContainer">
   <div id="examDataDiv">
     <p><span>ID:</span> {{exam.id}}</p>
-    <p><span>Exam name:</span> {{exam.examName}}</p>
-    <p><span>Hardness level:</span> {{exam.difficultyLevel}}</p>
-    <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
-    <p><span>Questions number: </span>{{exam.questions?.length}}</p>
-    <p><span>Your last exam score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}
+    <p><span>Nazwa:</span> {{exam.examName}}</p>
+    <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
+    <p><span>Czas egzaminu:</span> {{exam.timeInSeconds | examTimer}}</p>
+    <p><span>Liczba pytań: </span>{{exam.questions?.length}}</p>
+    <p><span>Twój ostatni wynik: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}
       = {{getPercentageExamScore(this.responseExamPoints, this.examMaxPoints)}}</p>
-    <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
+    <p><span>Twój ostatni czas egzaminu:</span> {{userLastExamTime | examTimer}}</p>
 
     <div class="examStartFinishButtonDiv" *ngIf="!examStarted">
-      <button class="examStartFinishButton" (click)="startTest()">Start exam!</button>
+      <button class="examStartFinishButton" (click)="startTest()">Rozpocznij egzamin!</button>
     </div>
 
     <div class="examStartFinishButtonDiv" *ngIf="examStarted">
-      <button class="examStartFinishButton" (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">Send exam</button>
+      <button class="examStartFinishButton" (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">Zakończ egzamin</button>
     </div>
   </div>
 
