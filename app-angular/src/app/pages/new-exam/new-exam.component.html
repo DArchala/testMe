@@ -20,8 +20,9 @@
       </select>
     </p>
 
-    <button (click)="displayExam()">Wyświetl w konsoli</button>
     <button (click)="postExam()">Zapisz egzamin</button>
+    <button (click)="openDialog('Podloga jest krzywa')">Show dialog</button>
+
   </div>
 
   <div *ngIf="examModel.questions.length != 0" id="questionsList">
@@ -30,7 +31,7 @@
 
       <div class="question {{question.type}}">
 
-      <span>{{(i + 1) + "."}} <input type="text" [(ngModel)]="question.content"
+      <span>{{(i + 1) + "."}} <input type="text" id="questionContentInput" [(ngModel)]="question.content"
                                      placeholder="Wpisz treść pytania"></span>
 
         <button (click)="addNewAnswerToQuestion(question)">Dodaj odpowiedź</button>

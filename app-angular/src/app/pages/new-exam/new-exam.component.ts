@@ -6,6 +6,8 @@ import {Question} from "../../models/question";
 import {SingleChoiceQuestion} from "../../models/questionTypes/single-choice-question";
 import {MultipleChoiceQuestion} from "../../models/questionTypes/multiple-choice-question";
 import {ExamsService} from "../../services/exams.service";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogComponent} from "../dialog/dialog.component";
 
 @Component({
   selector: 'app-new-exam',
@@ -14,7 +16,7 @@ import {ExamsService} from "../../services/exams.service";
 })
 export class NewExamComponent {
 
-  constructor(private examService: ExamsService) {
+  constructor(private examService: ExamsService, private dialog: MatDialog) {
     this.examService.getNewExamData().subscribe(data => this.difficultyLevels = data);
     let sampleAnswer1 = new Answer(0, "", false);
     let sampleAnswer2 = new Answer(0, "", false);
@@ -60,11 +62,6 @@ export class NewExamComponent {
     question.answers.push(answer);
   }
 
-  displayExam() {
-    console.log(this.examModel.toString());
-    this.examModel.questions.forEach(question => console.log(question));
-  }
-
   deleteThisQuestion(question: Question) {
     let index = this.examModel.questions.indexOf(question, 0);
     if (index > -1) {
@@ -97,15 +94,18 @@ export class NewExamComponent {
   }
 
   postExam() {
+    // let result = this.openDialog("Czy chcesz zapisać egzamin?");
+
+    this.examModel.timeInSeconds = this.getExamTime();
     if (this.validateExamName() &&
       this.validateDifficultyLevel() &&
       this.validateExamTimer() &&
       this.validateExamQuestions() &&
       this.validateExamTime()) {
-      this.examModel.timeInSeconds = this.getExamTime();
       this.examService.postNewExam(this.examModel).subscribe(console.log);
       alert("Egzamin został dodany!");
     } else alert("Dodawanie egzaminu nie powiodło się.");
+
   }
 
   private validateExamName() {
@@ -183,17 +183,17 @@ export class NewExamComponent {
   }
 
   private validateExamTimer() {
-    if(this.examHours === null || this.examHours === undefined) this.examHours = 0;
-    if(this.examMinutes === null || this.examMinutes === undefined) this.examMinutes = 0;
+    if (this.examHours === null || this.examHours === undefined) this.examHours = 0;
+    if (this.examMinutes === null || this.examMinutes === undefined) this.examMinutes = 0;
     if (this.examHours === 0 && this.examMinutes === 0) {
       alert("Czas egzaminu nie może być zerowy.");
       return false;
     }
-    if(this.examHours > 23 || this.examHours < 0) {
+    if (this.examHours > 23 || this.examHours < 0) {
       alert("Czas egzaminu (godziny) nie może być ujemny ani większy od 23.");
       return false;
     }
-    if(this.examMinutes > 59 || this.examMinutes < 0) {
+    if (this.examMinutes > 59 || this.examMinutes < 0) {
       alert("Czas egzaminu (minuty) nie może być ujemny ani większy od 59.");
       return false;
     }
@@ -202,5 +202,17 @@ export class NewExamComponent {
 
   private getExamTime() {
     return (this.examHours * 3600) + (this.examMinutes * 60);
+  }
+
+  openDialog(information: string, myTitle?: string) {
+    let answer = this.dialog.open(DialogComponent, {
+      data: {
+        info: information,
+        title: (myTitle === undefined) ? "Information" : myTitle,
+      }
+    });
+
+    answer.afterClosed().subscribe(result => console.log(result));
+
   }
 }

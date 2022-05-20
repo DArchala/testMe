@@ -33,6 +33,10 @@
   margin-bottom: 10px;
 }
 
+#questionContentInput {
+  width: 60%;
+}
+
 .answers {
   padding: 10px;
 }
