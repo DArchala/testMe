@@ -9,12 +9,12 @@
       = {{getPercentageExamScore(this.responseExamPoints, this.examMaxPoints)}}</p>
     <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
 
-    <div id="examStartButton" *ngIf="!examStarted">
-      <button (click)="startTest()">Start exam!</button>
+    <div class="examStartFinishButtonDiv" *ngIf="!examStarted">
+      <button class="examStartFinishButton" (click)="startTest()">Start exam!</button>
     </div>
 
-    <div id="examFinishButtonDiv" *ngIf="examStarted">
-      <button id="examFinishButton" (click)="finishTest()">Send exam</button>
+    <div class="examStartFinishButtonDiv" *ngIf="examStarted">
+      <button class="examStartFinishButton" (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">Send exam</button>
     </div>
   </div>
 
@@ -57,6 +57,4 @@
 
     </div>
   </div>
-
-
 </div>
