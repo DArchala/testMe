@@ -4,6 +4,7 @@ import {Exam} from "../../models/exam";
 import {ActivatedRoute} from "@angular/router";
 import {Answer} from "../../models/answer";
 import {Question} from "../../models/question";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-exam',
@@ -23,7 +24,7 @@ export class ExamComponent {
   examMaxPoints!: number;
 
   constructor(private examService: ExamsService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute, private dialogService: DialogService) {
     this.examId = this.route.snapshot.paramMap.get('id');
     this.examService.getExamById(this.examId).subscribe(data => {
       this.exam = data;
@@ -65,8 +66,15 @@ export class ExamComponent {
     answer.correctness = true;
   }
 
-  getPercentageExamScore(examScore: number, maxPoints: number){
-    let score = Math.round((examScore / maxPoints) * 100) ;
+  getPercentageExamScore(examScore: number, maxPoints: number) {
+    let score = Math.round((examScore / maxPoints) * 100);
     return score + "%";
+  }
+
+  finishTestByClick(info: string) {
+    const answer = this.dialogService.getDialog(info);
+    answer.afterClosed().subscribe(accept => {
+      if (accept) this.finishTest();
+    });
   }
 }
