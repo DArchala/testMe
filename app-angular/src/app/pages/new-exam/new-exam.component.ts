@@ -6,8 +6,7 @@ import {Question} from "../../models/question";
 import {SingleChoiceQuestion} from "../../models/questionTypes/single-choice-question";
 import {MultipleChoiceQuestion} from "../../models/questionTypes/multiple-choice-question";
 import {ExamsService} from "../../services/exams.service";
-import {MatDialog} from "@angular/material/dialog";
-import {DialogComponent} from "../dialog/dialog.component";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-new-exam',
@@ -16,7 +15,7 @@ import {DialogComponent} from "../dialog/dialog.component";
 })
 export class NewExamComponent {
 
-  constructor(private examService: ExamsService, private dialog: MatDialog) {
+  constructor(private examService: ExamsService, private dialogService: DialogService) {
     this.examService.getNewExamData().subscribe(data => this.difficultyLevels = data);
     let sampleAnswer1 = new Answer(0, "", false);
     let sampleAnswer2 = new Answer(0, "", false);
@@ -94,8 +93,6 @@ export class NewExamComponent {
   }
 
   postExam() {
-    // let result = this.openDialog("Czy chcesz zapisać egzamin?");
-
     this.examModel.timeInSeconds = this.getExamTime();
     if (this.validateExamName() &&
       this.validateDifficultyLevel() &&
@@ -204,15 +201,14 @@ export class NewExamComponent {
     return (this.examHours * 3600) + (this.examMinutes * 60);
   }
 
-  openDialog(information: string, myTitle?: string) {
-    let answer = this.dialog.open(DialogComponent, {
-      data: {
-        info: information,
-        title: (myTitle === undefined) ? "Information" : myTitle,
-      }
+  saveExam(information: string) {
+    const answer = this.dialogService.getDialog(information);
+
+    answer.afterClosed().subscribe(accept => {
+      if (accept) this.postExam();
     });
 
-    answer.afterClosed().subscribe(result => console.log(result));
-
   }
+
+
 }
