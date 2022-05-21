@@ -19,9 +19,9 @@ import java.util.List;
 public class SingleChoiceQuestion extends Question {
 
     public SingleChoiceQuestion(String content, List<Answer> answers) {
-        super(content, answers);
-        if (answers.size() < 2)
-            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
+        super();
+        setContent(content);
+        setAnswers(answers);
     }
 
     public SingleChoiceQuestion() {
@@ -44,6 +44,13 @@ public class SingleChoiceQuestion extends Question {
     public boolean areFieldsCorrect() {
         boolean onlyOneAnswerIsCorrect = answers.stream().filter(Answer::isCorrectness).count() == 1;
         return onlyOneAnswerIsCorrect && getAnswers().size() >= 2 && !getContent().isEmpty();
+    }
+
+    @Override
+    public void setAnswers(List<Answer> answers) {
+        if (answers.size() < 2)
+            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
+        this.answers = answers;
     }
 
     @Override
