@@ -214,36 +214,6 @@ class ExamServiceTest {
     }
 
     @Test
-    void saveNewExamShouldReturnFalseIfExamContainIncorrectField() {
-        //given
-        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
-
-        newExam.setExamName("");
-
-        assertFalse(examService.saveNewExam(newExam));
-    }
-
-    @Test
-    void saveNewExamShouldReturnFalseIfAnyQuestionContainIncorrectField() {
-        //given
-        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
-
-        newExam.getQuestions().stream().findFirst().get().setContent("");
-
-        assertFalse(examService.saveNewExam(newExam));
-    }
-
-    @Test
-    void saveNewExamShouldReturnFalseIfAnyAnswerContainIncorrectField() {
-        //given
-        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
-
-        newExam.getQuestions().get(0).getAnswers().get(0).setContent("");
-
-        assertFalse(examService.saveNewExam(newExam));
-    }
-
-    @Test
     void saveNewExamShouldReturnTrueIfExamQuestionsAndAnswersHaveCorrectFields() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
