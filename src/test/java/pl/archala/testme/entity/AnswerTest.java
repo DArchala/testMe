@@ -2,17 +2,14 @@ package pl.archala.testme.entity;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AnswerTest {
 
     @Test
     void shouldReturnFalseIfContentIsEmptyOrBlank() {
-        Answer answer = new Answer("   ", true);
-        assertFalse(answer.areFieldsCorrect());
+        assertThrows(IllegalArgumentException.class, () -> new Answer("   ", true));
     }
-
     @Test
     void shouldReturTrueIfAllFieldsAreCorrect() {
         Answer answer = new Answer("Przykład", true);
