@@ -10,6 +10,7 @@ import pl.archala.testme.entity.Questionable;
 import javax.persistence.Entity;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -70,11 +71,25 @@ public class ShortAnswerQuestion extends Question {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ShortAnswerQuestion that = (ShortAnswerQuestion) o;
+        return Objects.equals(userAnswer, that.userAnswer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), userAnswer);
+    }
+
+    @Override
     public String toString() {
         return "ShortAnswerQuestion{" +
                 "id='" + getId() + '\'' +
-                ", content='" + content + '\'' +
                 ", userAnswer='" + userAnswer + '\'' +
+                ", content='" + content + '\'' +
                 ", answers=" + answers +
                 '}';
     }
