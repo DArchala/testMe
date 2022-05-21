@@ -13,12 +13,12 @@ public class Answer extends AbstractEntity<Long> {
     }
 
     public Answer(String content) {
-        this.content = content;
+        setContent(content);
     }
 
     public Answer(String content, boolean correctness) {
-        this.content = content;
-        this.correctness = correctness;
+        setContent(content);
+        setCorrectness(correctness);
     }
 
     public String getContent() {
@@ -26,6 +26,8 @@ public class Answer extends AbstractEntity<Long> {
     }
 
     public void setContent(String content) {
+        if (content.trim().isEmpty())
+            throw new IllegalArgumentException("Answer content cannot be empty.");
         this.content = content;
     }
 
