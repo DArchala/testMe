@@ -29,12 +29,10 @@ public class ShortAnswerQuestion extends Question {
     }
 
     public ShortAnswerQuestion(String content, List<Answer> answers, String userAnswer) {
-        super(content, answers);
+        super();
+        setContent(content);
+        setAnswers(answers);
         this.userAnswer = userAnswer;
-        if (answers.size() < 1)
-            throw new IllegalArgumentException("Number of answers in ShortAnswerQuestion has to be greater than 0.");
-        if (answers.stream().anyMatch(answer -> !answer.isCorrectness()))
-            throw new IllegalArgumentException("Number of incorrect answers in ShortAnswerQuestion has to be equal to 0.");
     }
 
     public int countPoints(Questionable question) {
@@ -68,6 +66,15 @@ public class ShortAnswerQuestion extends Question {
     public boolean areFieldsCorrect() {
         boolean allAnswersAreCorrect = answers.stream().allMatch(Answer::isCorrectness);
         return allAnswersAreCorrect && !getAnswers().isEmpty() && !getContent().isEmpty();
+    }
+
+    @Override
+    public void setAnswers(List<Answer> answers) {
+        if (answers.size() < 1)
+            throw new IllegalArgumentException("Number of answers in ShortAnswerQuestion has to be greater or equal to 1.");
+        if (answers.stream().anyMatch(answer -> !answer.isCorrectness()))
+            throw new IllegalArgumentException("Number of incorrect answers in ShortAnswerQuestion has to be equal to 0.");
+        this.answers = answers;
     }
 
     @Override
