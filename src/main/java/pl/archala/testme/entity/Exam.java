@@ -1,8 +1,6 @@
 package pl.archala.testme.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -15,9 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Setter
-@Getter
-@NoArgsConstructor
 @Entity
 @Table(name = "exams")
 public class Exam extends AbstractEntity<Long> {
@@ -35,6 +30,9 @@ public class Exam extends AbstractEntity<Long> {
     @Min(60)        // 60s
     @Max(86_400)    // 24h * 60min * 60s
     private long timeInSeconds = 3600;
+
+    public Exam() {
+    }
 
     public Exam(List<Question> questions, String examName, ExamDifficultyLevel difficultyLevel, long timeInSeconds) {
         this.questions = questions;
@@ -54,6 +52,52 @@ public class Exam extends AbstractEntity<Long> {
                 && Objects.nonNull(difficultyLevel)
                 && timeInSeconds >= 60
                 && timeInSeconds <= 86400;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public String getExamName() {
+        return examName;
+    }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
+    }
+
+    public ExamDifficultyLevel getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(ExamDifficultyLevel difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
+
+    public long getTimeInSeconds() {
+        return timeInSeconds;
+    }
+
+    public void setTimeInSeconds(long timeInSeconds) {
+        this.timeInSeconds = timeInSeconds;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Exam exam = (Exam) o;
+        return timeInSeconds == exam.timeInSeconds && Objects.equals(questions, exam.questions) && Objects.equals(examName, exam.examName) && difficultyLevel == exam.difficultyLevel;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(questions, examName, difficultyLevel, timeInSeconds);
     }
 
     @Override
