@@ -22,11 +22,9 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     public MultipleChoiceQuestion(String content, List<Answer> answers) {
-        super(content, answers);
-        if (answers.size() < 2)
-            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
-        if (answers.stream().noneMatch(Answer::isCorrectness))
-            throw new IllegalArgumentException("Number of correct answers should be greater or equal to 1.");
+        super();
+        setContent(content);
+        setAnswers(answers);
     }
 
     public int countPoints(Questionable question) {
@@ -50,11 +48,20 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
+    public void setAnswers(List<Answer> answers) {
+        if (answers.size() < 2)
+            throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
+        if (answers.stream().noneMatch(Answer::isCorrectness))
+            throw new IllegalArgumentException("Number of correct answers should be greater or equal to 1.");
+        this.answers = answers;
+    }
+
+    @Override
     public String toString() {
         return "MultipleChoiceQuestion{" +
-                "content='" + content + '\'' +
+                "id='" + getId() + '\'' +
+                ", content='" + content + '\'' +
                 ", answers=" + answers +
-                ", id=" + getId() +
                 '}';
     }
 }
