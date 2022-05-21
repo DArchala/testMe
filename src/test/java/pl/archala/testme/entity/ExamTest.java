@@ -2,6 +2,8 @@ package pl.archala.testme.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
 
 import java.util.ArrayList;
@@ -54,37 +56,67 @@ class ExamTest {
 
     @Test
     void shouldReturnFalseIfExamQuestionsSizeIsLessThanOne() {
-        sampleExam.setQuestions(new ArrayList<>(List.of()));
-        assertFalse(sampleExam.areFieldsCorrect());
+        assertThrows(IllegalArgumentException.class, () -> sampleExam.setQuestions(new ArrayList<>(List.of())));
+
     }
 
     @Test
     void shouldReturnFalseIfExamNameIsEmpty() {
-        sampleExam.setExamName("");
-        assertFalse(sampleExam.areFieldsCorrect());
+        assertThrows(IllegalArgumentException.class, () -> sampleExam.setExamName(""));
     }
 
     @Test
     void shouldReturnFalseIfExamDifficultyLevelIsNull() {
-        sampleExam.setDifficultyLevel(null);
-        assertFalse(sampleExam.areFieldsCorrect());
+        assertThrows(IllegalArgumentException.class, () -> sampleExam.setDifficultyLevel(null));
     }
 
     @Test
     void shouldReturnFalseIfExamTimeInSecondsIsLessThan60() {
-        sampleExam.setTimeInSeconds(50);
-        assertFalse(sampleExam.areFieldsCorrect());
+        assertThrows(IllegalArgumentException.class, () -> sampleExam.setTimeInSeconds(50));
     }
 
     @Test
     void shouldReturnFalseIfExamTimeInSecondsIsGreaterThan86400() {
-        sampleExam.setTimeInSeconds(90_000);
-        assertFalse(sampleExam.areFieldsCorrect());
+        assertThrows(IllegalArgumentException.class, () -> sampleExam.setTimeInSeconds(90_000));
     }
 
     @Test
-    void shouldReturnTrueIfAllFieldsAreFilledCorrectly() {
-        assertTrue(sampleExam.areFieldsCorrect());
+    void theSameObjectsShouldBeEqual() {
+        Exam exam1 = new Exam(List.of(new SingleChoiceQuestion(), new MultipleChoiceQuestion()), "examName", ExamDifficultyLevel.MEDIUM, 1000);
+
+        Exam exam2 = new Exam(List.of(new SingleChoiceQuestion(), new MultipleChoiceQuestion()), "examName", ExamDifficultyLevel.MEDIUM, 1000);
+
+        assertTrue(exam1.equals(exam2));
+        assertTrue(exam2.equals(exam1));
+        assertEquals(exam1.hashCode(), exam2.hashCode());
+
     }
 
+    @Test
+    void differentObjectsShouldNotBeEqual() {
+        Exam exam1 = new Exam(List.of(new SingleChoiceQuestion()), "examName", ExamDifficultyLevel.MEDIUM, 1000);
+
+        Exam exam2 = new Exam(List.of(new MultipleChoiceQuestion()), "examName", ExamDifficultyLevel.MEDIUM, 1000);
+
+        Exam exam3 = new Exam(List.of(new ShortAnswerQuestion()), "examName", ExamDifficultyLevel.MEDIUM, 1000);
+
+        Exam exam4 = new Exam(List.of(new SingleChoiceQuestion()), "examName", ExamDifficultyLevel.HARD, 1000);
+
+        Exam exam5 = new Exam(List.of(new SingleChoiceQuestion()), "examName", ExamDifficultyLevel.MEDIUM, 500);
+
+        Exam exam6 = new Exam(List.of(new SingleChoiceQuestion()), "examName1", ExamDifficultyLevel.MEDIUM, 1000);
+
+        assertFalse(exam1.equals(exam2));
+        assertFalse(exam1.equals(exam3));
+        assertFalse(exam1.equals(exam4));
+        assertFalse(exam1.equals(exam5));
+        assertFalse(exam1.equals(exam6));
+
+        assertNotEquals(exam1.hashCode(), exam2.hashCode());
+        assertNotEquals(exam1.hashCode(), exam3.hashCode());
+        assertNotEquals(exam1.hashCode(), exam4.hashCode());
+        assertNotEquals(exam1.hashCode(), exam5.hashCode());
+        assertNotEquals(exam1.hashCode(), exam6.hashCode());
+
+    }
 }
