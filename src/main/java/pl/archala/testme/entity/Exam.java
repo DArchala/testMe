@@ -1,14 +1,8 @@
 package pl.archala.testme.entity;
 
-import lombok.EqualsAndHashCode;
-
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,28 +11,31 @@ import java.util.Objects;
 @Table(name = "exams")
 public class Exam extends AbstractEntity<Long> {
 
-    @Size(min = 1)
     @OneToMany
     private List<Question> questions = new ArrayList<>();
 
-    @NotEmpty
     private String examName;
 
-    @NotEmpty
     private ExamDifficultyLevel difficultyLevel = ExamDifficultyLevel.MEDIUM;
 
-    @Min(60)        // 60s
-    @Max(86_400)    // 24h * 60min * 60s
     private long timeInSeconds = 3600;
 
     public Exam() {
+
+    }
+
+    public Exam(Exam newExam) {
+        setQuestions(newExam.getQuestions());
+        setExamName(newExam.getExamName());
+        setDifficultyLevel(newExam.getDifficultyLevel());
+        setTimeInSeconds(newExam.getTimeInSeconds());
     }
 
     public Exam(List<Question> questions, String examName, ExamDifficultyLevel difficultyLevel, long timeInSeconds) {
-        this.questions = questions;
-        this.examName = examName;
-        this.difficultyLevel = difficultyLevel;
-        this.timeInSeconds = timeInSeconds;
+        setQuestions(questions);
+        setExamName(examName);
+        setDifficultyLevel(difficultyLevel);
+        setTimeInSeconds(timeInSeconds);
     }
 
     public Exam setAllAnswersFalse() {
@@ -46,19 +43,13 @@ public class Exam extends AbstractEntity<Long> {
         return this;
     }
 
-    public boolean areFieldsCorrect() {
-        return questions.size() >= 1
-                && !examName.isEmpty()
-                && Objects.nonNull(difficultyLevel)
-                && timeInSeconds >= 60
-                && timeInSeconds <= 86400;
-    }
-
     public List<Question> getQuestions() {
         return questions;
     }
 
     public void setQuestions(List<Question> questions) {
+        if (questions.size() < 1)
+            throw new IllegalArgumentException("Number of questions in exam has to be greater or equal to 1.");
         this.questions = questions;
     }
 
@@ -67,6 +58,8 @@ public class Exam extends AbstractEntity<Long> {
     }
 
     public void setExamName(String examName) {
+        if (examName.trim().isEmpty())
+            throw new IllegalArgumentException("Exam name cannot be empty.");
         this.examName = examName;
     }
 
@@ -75,6 +68,8 @@ public class Exam extends AbstractEntity<Long> {
     }
 
     public void setDifficultyLevel(ExamDifficultyLevel difficultyLevel) {
+        if (Objects.isNull(difficultyLevel))
+            throw new IllegalArgumentException("Exam difficulty level cannot be null.");
         this.difficultyLevel = difficultyLevel;
     }
 
@@ -83,6 +78,8 @@ public class Exam extends AbstractEntity<Long> {
     }
 
     public void setTimeInSeconds(long timeInSeconds) {
+        if (timeInSeconds < 60 || timeInSeconds > 86_400)
+            throw new IllegalArgumentException("Exam time in seconds has to be greater than 60 and less than 86400.");
         this.timeInSeconds = timeInSeconds;
     }
 
