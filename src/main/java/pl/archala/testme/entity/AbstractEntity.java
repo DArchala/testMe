@@ -29,11 +29,6 @@ public abstract class AbstractEntity<ID extends Serializable> implements Persist
     }
 
     @Override
-    public String toString() {
-        return String.format("Entity of type %s with id: %s", this.getClass().getName(), getId());
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -45,4 +40,5 @@ public abstract class AbstractEntity<ID extends Serializable> implements Persist
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
