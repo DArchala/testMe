@@ -48,10 +48,10 @@ public class ExamService {
         return counter;
     }
 
-    public boolean saveNewExam(Exam exam) {
-        List<Question> questionList = new ArrayList<>();
+    public boolean saveNewExam(Exam newExam) {
+        Exam exam = new Exam(newExam);
 
-        if (!exam.areFieldsCorrect()) return false;
+        List<Question> questionList = new ArrayList<>();
 
         for (Question q : exam.getQuestions()) {
 
