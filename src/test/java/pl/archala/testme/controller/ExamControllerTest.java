@@ -81,12 +81,12 @@ class ExamControllerTest {
     }
 
     @Test
-    void getExamByIdShouldReturnResponseEntityWithExamIfItExists() {
+    void getExamByIdShouldReturnResponseEntityWithExamWithAllAnswersSetToFalseIfItExists() {
         //when
         when(examRepo.findById(1L)).thenReturn(Optional.of(getSampleExam()));
 
         //then
-        assertThat(examController.getExamById(1L), equalTo(new ResponseEntity<>(getSampleExam(), HttpStatus.OK)));
+        assertThat(examController.getExamById(1L), equalTo(new ResponseEntity<>(getSampleExam().setAllAnswersFalse(), HttpStatus.OK)));
     }
 
     @Test
