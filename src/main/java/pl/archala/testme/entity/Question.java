@@ -26,11 +26,11 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
 
     protected String content;
 
-    protected Question() {
-    }
-
     @OneToMany
     protected List<Answer> answers;
+
+    protected Question() {
+    }
 
     protected Question(String content, List<Answer> answers) {
         this.content = content;
@@ -77,5 +77,14 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), content, answers);
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "content='" + content + '\'' +
+                ", answers=" + answers +
+                ", id=" + getId() +
+                '}';
     }
 }
