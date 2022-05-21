@@ -32,11 +32,6 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
     protected Question() {
     }
 
-    protected Question(String content, List<Answer> answers) {
-        this.content = content;
-        this.answers = answers;
-    }
-
     public Answer getAnswerById(long id) {
         return this.getAnswers().stream()
                 .filter(answer -> Objects.equals(answer.getId(), id))
@@ -52,6 +47,8 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
     }
 
     public void setContent(String content) {
+        if (content.trim().isEmpty())
+            throw new IllegalArgumentException("Question content cannot be empty.");
         this.content = content;
     }
 
@@ -76,7 +73,7 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), content, answers);
+        return Objects.hash(super.hashCode(), content, answers, Objects.hash(getClass()));
     }
 
     @Override
