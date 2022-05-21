@@ -1,4 +1,4 @@
-package pl.archala.testme.models;
+package pl.archala.testme.entity;
 
 import javax.persistence.Entity;
 

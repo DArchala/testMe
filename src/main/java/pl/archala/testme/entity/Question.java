@@ -1,10 +1,10 @@
-package pl.archala.testme.models;
+package pl.archala.testme.entity;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
-import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
-import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
+import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
+import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
 
 import javax.persistence.*;
 import java.io.Serializable;

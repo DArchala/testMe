@@ -1,8 +1,8 @@
 package pl.archala.testme.service;
 
 import org.springframework.stereotype.Service;
-import pl.archala.testme.models.Questionable;
-import pl.archala.testme.repositories.QuestionRepository;
+import pl.archala.testme.entity.Questionable;
+import pl.archala.testme.repository.QuestionRepository;
 
 import java.util.NoSuchElementException;
 

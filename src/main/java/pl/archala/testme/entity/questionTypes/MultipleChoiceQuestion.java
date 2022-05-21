@@ -1,9 +1,9 @@
-package pl.archala.testme.models.questionTypes;
+package pl.archala.testme.entity.questionTypes;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import pl.archala.testme.models.Answer;
-import pl.archala.testme.models.Question;
-import pl.archala.testme.models.Questionable;
+import pl.archala.testme.entity.Answer;
+import pl.archala.testme.entity.Question;
+import pl.archala.testme.entity.Questionable;
 
 import javax.persistence.Entity;
 import java.util.List;

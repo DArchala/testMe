@@ -1,4 +1,4 @@
-package pl.archala.testme.models;
+package pl.archala.testme.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

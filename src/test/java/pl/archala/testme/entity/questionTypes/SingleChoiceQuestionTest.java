@@ -1,9 +1,8 @@
-package pl.archala.testme.models.questionTypes;
+package pl.archala.testme.entity.questionTypes;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.archala.testme.models.Answer;
+import pl.archala.testme.entity.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;

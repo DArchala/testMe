@@ -8,12 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import pl.archala.testme.models.Answer;
-import pl.archala.testme.models.Questionable;
-import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
-import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
-import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
-import pl.archala.testme.repositories.QuestionRepository;
+import pl.archala.testme.entity.Answer;
+import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
+import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
+import pl.archala.testme.repository.QuestionRepository;
 
 import java.util.*;
 

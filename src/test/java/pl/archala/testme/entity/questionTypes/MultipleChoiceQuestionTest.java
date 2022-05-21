@@ -1,7 +1,7 @@
-package pl.archala.testme.models.questionTypes;
+package pl.archala.testme.entity.questionTypes;
 
 import org.junit.jupiter.api.Test;
-import pl.archala.testme.models.Answer;
+import pl.archala.testme.entity.Answer;
 
 import java.util.Arrays;
 

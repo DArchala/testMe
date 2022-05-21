@@ -1,4 +1,4 @@
-package pl.archala.testme.controllers;
+package pl.archala.testme.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,14 +8,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.archala.testme.models.Answer;
-import pl.archala.testme.models.Exam;
-import pl.archala.testme.models.ExamDifficultyLevel;
-import pl.archala.testme.models.Question;
-import pl.archala.testme.models.questionTypes.MultipleChoiceQuestion;
-import pl.archala.testme.models.questionTypes.ShortAnswerQuestion;
-import pl.archala.testme.models.questionTypes.SingleChoiceQuestion;
-import pl.archala.testme.repositories.ExamRepository;
+import pl.archala.testme.entity.Answer;
+import pl.archala.testme.entity.Exam;
+import pl.archala.testme.entity.ExamDifficultyLevel;
+import pl.archala.testme.entity.Question;
+import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
+import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
+import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
+import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.service.ExamService;
 
 import java.util.ArrayList;

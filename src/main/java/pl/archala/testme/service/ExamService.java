@@ -1,12 +1,12 @@
 package pl.archala.testme.service;
 
 import org.springframework.stereotype.Service;
-import pl.archala.testme.models.Answer;
-import pl.archala.testme.models.Exam;
-import pl.archala.testme.models.Question;
-import pl.archala.testme.repositories.AnswerRepository;
-import pl.archala.testme.repositories.ExamRepository;
-import pl.archala.testme.repositories.QuestionRepository;
+import pl.archala.testme.entity.Answer;
+import pl.archala.testme.entity.Exam;
+import pl.archala.testme.entity.Question;
+import pl.archala.testme.repository.AnswerRepository;
+import pl.archala.testme.repository.ExamRepository;
+import pl.archala.testme.repository.QuestionRepository;
 
 import java.util.ArrayList;
 import java.util.List;

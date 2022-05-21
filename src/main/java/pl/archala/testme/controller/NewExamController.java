@@ -1,11 +1,11 @@
-package pl.archala.testme.controllers;
+package pl.archala.testme.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.archala.testme.models.Exam;
-import pl.archala.testme.models.ExamDifficultyLevel;
+import pl.archala.testme.entity.Exam;
+import pl.archala.testme.entity.ExamDifficultyLevel;
 import pl.archala.testme.service.ExamService;
 
 @Slf4j
