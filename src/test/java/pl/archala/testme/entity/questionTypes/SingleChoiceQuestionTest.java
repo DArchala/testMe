@@ -107,4 +107,11 @@ class SingleChoiceQuestionTest {
         assertEquals(0, points);
     }
 
+    @Test
+    void setAnswerShouldThrowExceptionIfAnswersSizeIsLessThanTwo() {
+        var s = new SingleChoiceQuestion();
+        assertThrows(IllegalArgumentException.class, () -> s.setAnswers(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> s.setAnswers(List.of(new Answer())));
+    }
+
 }
