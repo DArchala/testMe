@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import pl.archala.testme.entity.Answer;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,5 +78,76 @@ class MultipleChoiceQuestionTest {
         )));
     }
 
+    @Test
+    void theSameObjectsShouldBeEqual() {
+        var question1 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question1.setId(1L);
 
+        var question2 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question2.setId(1L);
+
+        assertTrue(question1.equals(question2));
+        assertTrue(question2.equals(question1));
+
+    }
+
+    @Test
+    void differentObjectsShouldNotBeEqual() {
+        var question1 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question1.setId(1L);
+
+        var question2 = new SingleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question2.setId(2L);
+
+        var question3 = new MultipleChoiceQuestion("content", List.of(
+                new Answer(), new Answer("answer", true)));
+        question1.setId(1L);
+
+        assertFalse(question1.equals(question2));
+        assertFalse(question1.equals(question3));
+        assertFalse(question2.equals(question1));
+        assertFalse(question2.equals(question3));
+        assertFalse(question3.equals(question1));
+        assertFalse(question3.equals(question2));
+    }
+
+    @Test
+    void sameObjectsShouldHaveSameHashCodes1() {
+        var question1 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question1.setId(1L);
+
+        var question2 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question2.setId(1L);
+
+        assertEquals(question1.hashCode(), question2.hashCode());
+    }
+
+    @Test
+    void differentObjectsShouldHaveDifferentHashCodes1() {
+        // different answers size
+        var question1 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer(), new Answer()));
+        question1.setId(1L);
+
+        // different question content
+        var question2 = new MultipleChoiceQuestion("content2", List.of(
+                new Answer("answer", true), new Answer()));
+        question2.setId(1L);
+
+        // different id
+        var question3 = new MultipleChoiceQuestion("content", List.of(
+                new Answer("answer", true), new Answer()));
+        question2.setId(2L);
+
+        assertNotEquals(question1.hashCode(), question2.hashCode());
+        assertNotEquals(question1.hashCode(), question3.hashCode());
+        assertNotEquals(question2.hashCode(), question3.hashCode());
+
+    }
 }
