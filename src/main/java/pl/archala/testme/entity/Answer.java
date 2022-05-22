@@ -1,10 +1,13 @@
 package pl.archala.testme.entity;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Answer extends AbstractEntity<Long> {
+public class Answer extends AbstractEntity<Long> implements Serializable {
+
+    private static final long serialVersionUID = 6L;
 
     private String content;
     private boolean correctness = false;
