@@ -27,7 +27,8 @@ public class ExamController {
 
     @GetMapping
     public ResponseEntity<List<Exam>> getExams() {
-        List<Exam> exams = (List<Exam>) examRepo.findAll();
+        List<Exam> exams = examService.getAllExams();
+        if (exams.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
@@ -44,7 +45,7 @@ public class ExamController {
     @GetMapping("/exam/{id}")
     public ResponseEntity<Exam> getExamById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
-        if (exam.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        if (exam.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(exam.get().setAllAnswersFalse(), HttpStatus.OK);
     }
 
