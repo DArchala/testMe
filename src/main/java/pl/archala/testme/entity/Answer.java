@@ -1,10 +1,12 @@
 package pl.archala.testme.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Table(name = "answers")
 public class Answer extends AbstractEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 6L;
