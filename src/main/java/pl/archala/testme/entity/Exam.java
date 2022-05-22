@@ -24,14 +24,6 @@ public class Exam extends AbstractEntity<Long> implements Serializable {
     private long timeInSeconds = 3600;
 
     public Exam() {
-
-    }
-
-    public Exam(Exam newExam) {
-        setQuestions(newExam.getQuestions());
-        setExamName(newExam.getExamName());
-        setDifficultyLevel(newExam.getDifficultyLevel());
-        setTimeInSeconds(newExam.getTimeInSeconds());
     }
 
     public Exam(List<Question> questions, String examName, ExamDifficultyLevel difficultyLevel, long timeInSeconds) {
