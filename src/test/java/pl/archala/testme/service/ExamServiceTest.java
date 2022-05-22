@@ -19,10 +19,7 @@ import pl.archala.testme.repository.AnswerRepository;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.repository.QuestionRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -219,6 +216,31 @@ class ExamServiceTest {
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
 
         assertTrue(examService.saveNewExam(newExam));
+    }
+
+
+    @Test
+    void saveNewExamShouldThrowExceptionIfAllAnswersCorrectnessAreFalse() {
+        //given
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+        newExam.setAllAnswersFalse();
+
+        assertThrows(IllegalArgumentException.class, () -> examService.saveNewExam(newExam));
+    }
+
+    @Test
+    void getAllExamsShouldReturnIterableDataAsList() {
+        //given
+        List<Exam> examList = new ArrayList<>(
+                Arrays.asList(
+                        new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600)));
+
+        //when
+        when(examRepo.findAll()).thenReturn(examList);
+
+        //then
+        assertEquals(examList, examService.getAllExams());
+
     }
 
     private Question[] getAnswersFromDB() {
