@@ -25,9 +25,13 @@ public class ExamService {
 
     public ExamService(QuestionService questionService, ExamRepository examRepo, AnswerRepository answerRepo, QuestionRepository questionRepo) {
         this.questionService = questionService;
+        this.questionRepo = questionRepo;
         this.examRepo = examRepo;
         this.answerRepo = answerRepo;
-        this.questionRepo = questionRepo;
+    }
+
+    public List<Exam> getAllExams() {
+        return (List<Exam>) examRepo.findAll();
     }
 
     public int countUserExamPoints(Exam userExam) {
@@ -48,19 +52,15 @@ public class ExamService {
         return counter;
     }
 
-    public boolean saveNewExam(Exam newExam) {
-        Exam exam = new Exam(newExam);
+    public boolean saveNewExam(Exam exam) {
 
         List<Question> questionList = new ArrayList<>();
 
         for (Question q : exam.getQuestions()) {
 
-            if (!q.areFieldsCorrect()) return false;
-
             List<Answer> answerList = new ArrayList<>();
 
             for (Answer a : q.getAnswers()) {
-                if (!a.areFieldsCorrect()) return false;
                 a.setId(null);
                 answerList.add(a);
             }
@@ -69,6 +69,8 @@ public class ExamService {
 
             q.setId(null);
             q.setAnswers(answerList);
+            if (q.countCorrectAnswers() == 0)
+                throw new IllegalArgumentException("Number of correct answer in any question cannot be less than 1.");
             questionList.add(q);
         }
 
