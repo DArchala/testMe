@@ -1,8 +1,6 @@
 package pl.archala.testme.entity.questionTypes;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.entity.Question;
 import pl.archala.testme.entity.Questionable;
@@ -17,8 +15,7 @@ import java.util.Set;
  * Question which cointains user answer/s
  * for every correct user answer, user gets one point
  */
-@Getter
-@AllArgsConstructor
+
 @Entity
 @JsonTypeName("short")
 public class ShortAnswerQuestion extends Question {
@@ -62,6 +59,10 @@ public class ShortAnswerQuestion extends Question {
 
     public void setUserAnswer(String userAnswer) {
         this.userAnswer = userAnswer;
+    }
+
+    public String getUserAnswer() {
+        return userAnswer;
     }
 
     @Override
