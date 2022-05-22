@@ -1,5 +1,6 @@
 package pl.archala.testme.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,6 +22,7 @@ public class Exam extends AbstractEntity<Long> implements Serializable {
 
     private ExamDifficultyLevel difficultyLevel = ExamDifficultyLevel.MEDIUM;
 
+    @Column(name = "exam_time")
     private long timeInSeconds = 3600;
 
     public Exam() {
