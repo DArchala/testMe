@@ -71,10 +71,7 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
         return Objects.equals(content, question.content) && Objects.equals(answers, question.answers);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), content, answers, Objects.hash(getClass()));
-    }
+    public abstract int hashCode();
 
     @Override
     public String toString() {
