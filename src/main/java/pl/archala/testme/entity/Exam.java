@@ -3,13 +3,16 @@ package pl.archala.testme.entity;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "exams")
-public class Exam extends AbstractEntity<Long> {
+public class Exam extends AbstractEntity<Long> implements Serializable {
+
+    private static final long serialVersionUID = 2L;
 
     @OneToMany
     private List<Question> questions = new ArrayList<>();
