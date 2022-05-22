@@ -49,12 +49,6 @@ public class SingleChoiceQuestion extends Question {
     }
 
     @Override
-    public boolean areFieldsCorrect() {
-        boolean onlyOneAnswerIsCorrect = answers.stream().filter(Answer::isCorrectness).count() == 1;
-        return onlyOneAnswerIsCorrect && getAnswers().size() >= 2 && !getContent().isEmpty();
-    }
-
-    @Override
     public void setAnswers(List<Answer> answers) {
         if (answers.size() < 2)
             throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
