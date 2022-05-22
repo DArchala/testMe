@@ -65,17 +65,9 @@ public class ShortAnswerQuestion extends Question {
     }
 
     @Override
-    public boolean areFieldsCorrect() {
-        boolean allAnswersAreCorrect = answers.stream().allMatch(Answer::isCorrectness);
-        return allAnswersAreCorrect && !getAnswers().isEmpty() && !getContent().isEmpty();
-    }
-
-    @Override
     public void setAnswers(List<Answer> answers) {
         if (answers.size() < 1)
             throw new IllegalArgumentException("Number of answers in ShortAnswerQuestion has to be greater or equal to 1.");
-        if (answers.stream().anyMatch(answer -> !answer.isCorrectness()))
-            throw new IllegalArgumentException("Number of incorrect answers in ShortAnswerQuestion has to be equal to 0.");
         this.answers = answers;
     }
 
