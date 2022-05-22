@@ -46,7 +46,7 @@ class ExamControllerTest {
     }
 
     @Test
-    void getExamsShouldReturnResponseEntityWithExamsList() {
+    void getExamsShouldReturnResponseEntityWithExamsListIfDBContainAnyExam() {
         //given
         Exam exam = getSampleExam();
 
@@ -55,7 +55,7 @@ class ExamControllerTest {
         ResponseEntity<List<Exam>> assertResponse = new ResponseEntity<>(examsFromDB, HttpStatus.OK);
 
         //when
-        when(examRepo.findAll()).thenReturn(examsFromDB);
+        when(examService.getAllExams()).thenReturn(examsFromDB);
 
         //then
         assertThat(assertResponse, equalTo(examController.getExams()));
@@ -63,12 +63,16 @@ class ExamControllerTest {
     }
 
     @Test
-    void checkExamCorrectnessShouldReturnEqualNumberOfUserPoints() {
+    void getExamsShouldReturnResponseEntityWithNotFoundStatusIfThereIsNotAnyExam() {
+        //given
+        ResponseEntity<List<Exam>> assertResponse = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         //when
-        when(examController.checkExamCorrectness(getSampleExam())).thenReturn(12);
+        when(examService.getAllExams()).thenReturn(List.of());
 
         //then
-        assertEquals(12, examController.checkExamCorrectness(getSampleExam()));
+        assertThat(assertResponse, equalTo(examController.getExams()));
+
     }
 
     @Test
@@ -95,7 +99,7 @@ class ExamControllerTest {
         when(examRepo.findById(1L)).thenReturn(Optional.empty());
 
         //then
-        assertThat(examController.getExamById(1L), equalTo(new ResponseEntity<>(null, HttpStatus.NOT_FOUND)));
+        assertThat(examController.getExamById(1L), equalTo(new ResponseEntity<>(HttpStatus.NOT_FOUND)));
     }
 
     private Exam getSampleExam() {

@@ -71,14 +71,6 @@ class MultipleChoiceQuestionTest {
     }
 
     @Test
-    void multipleChoiceQuestionShouldThrowExceptionIfNotContainAnyCorrectAnswer() {
-        assertThrows(IllegalArgumentException.class, () -> new MultipleChoiceQuestion("content", Arrays.asList(
-                new Answer("answ1", false),
-                new Answer("answ2", false)
-        )));
-    }
-
-    @Test
     void theSameObjectsShouldBeEqual() {
         var question1 = new MultipleChoiceQuestion("content", List.of(
                 new Answer("answer", true), new Answer()));

@@ -20,14 +20,6 @@ class ShortAnswerQuestionTest {
     }
 
     @Test
-    void creatingShortAnswerQuestionWithAnyIncorrectAnswerShouldThrowException() {
-        Answer answer = new Answer("content", true);
-        Answer answer2 = new Answer("content", false);
-        assertThrows(IllegalArgumentException.class,
-                () -> new ShortAnswerQuestion("content", Arrays.asList(answer, answer2), "userAnswer"));
-    }
-
-    @Test
     void oneCorrectUserAnswersShouldReturnOnePoint() {
         //given
         var answerQuestion = new ShortAnswerQuestion("Aplikacje do podróżowania to:", Arrays.asList(
