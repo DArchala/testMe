@@ -45,17 +45,9 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
-    public boolean areFieldsCorrect() {
-        boolean atLeastOneAnswerIsCorrect = answers.stream().anyMatch(Answer::isCorrectness);
-        return atLeastOneAnswerIsCorrect && getAnswers().size() >= 2 && !getContent().isEmpty();
-    }
-
-    @Override
     public void setAnswers(List<Answer> answers) {
         if (answers.size() < 2)
             throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
-        if (answers.stream().noneMatch(Answer::isCorrectness))
-            throw new IllegalArgumentException("Number of correct answers should be greater or equal to 1.");
         this.answers = answers;
     }
 
