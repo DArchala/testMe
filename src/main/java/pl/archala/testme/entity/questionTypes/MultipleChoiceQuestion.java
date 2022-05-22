@@ -7,6 +7,7 @@ import pl.archala.testme.entity.Questionable;
 
 import javax.persistence.Entity;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class representing a question, which may has multiple correct or wrong answers.
@@ -17,6 +18,8 @@ import java.util.List;
 @Entity
 @JsonTypeName("multiple")
 public class MultipleChoiceQuestion extends Question {
+
+    private static final long serialVersionUID = 3L;
 
     public MultipleChoiceQuestion() {
     }
@@ -54,6 +57,11 @@ public class MultipleChoiceQuestion extends Question {
         if (answers.stream().noneMatch(Answer::isCorrectness))
             throw new IllegalArgumentException("Number of correct answers should be greater or equal to 1.");
         this.answers = answers;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(content, answers, serialVersionUID);
     }
 
     @Override

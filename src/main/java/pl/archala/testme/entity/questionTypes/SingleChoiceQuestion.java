@@ -7,6 +7,7 @@ import pl.archala.testme.entity.Questionable;
 
 import javax.persistence.Entity;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class representing a question, which has only one correct answer
@@ -17,6 +18,8 @@ import java.util.List;
 @Entity
 @JsonTypeName("single")
 public class SingleChoiceQuestion extends Question {
+
+    private static final long serialVersionUID = 5L;
 
     public SingleChoiceQuestion(String content, List<Answer> answers) {
         super();
@@ -38,6 +41,11 @@ public class SingleChoiceQuestion extends Question {
             }
         }
         return counter;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(content, answers, serialVersionUID);
     }
 
     @Override

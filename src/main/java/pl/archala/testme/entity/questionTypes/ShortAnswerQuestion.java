@@ -23,6 +23,8 @@ import java.util.Set;
 @JsonTypeName("short")
 public class ShortAnswerQuestion extends Question {
 
+    private static final long serialVersionUID = 4L;
+
     private String userAnswer = "";
 
     public ShortAnswerQuestion() {
@@ -88,7 +90,7 @@ public class ShortAnswerQuestion extends Question {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), userAnswer);
+        return Objects.hash(content, answers, userAnswer, serialVersionUID);
     }
 
     @Override
