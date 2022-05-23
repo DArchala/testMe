@@ -45,4 +45,8 @@ export class ExamsService {
     return this.httpClient.put<Exam>(this.url + `/exams/edit`, exam).pipe(tap(console.log));
   }
 
+  deleteExam(examId: any) {
+    return this.httpClient.delete<any>(this.url + `/exams/delete/` + examId).subscribe(console.log);
+  }
+
 }
