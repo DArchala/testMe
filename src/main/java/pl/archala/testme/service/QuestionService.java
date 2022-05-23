@@ -6,7 +6,7 @@ import pl.archala.testme.entity.Question;
 import pl.archala.testme.entity.Questionable;
 import pl.archala.testme.repository.QuestionRepository;
 
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class QuestionService {
@@ -21,30 +21,17 @@ public class QuestionService {
     }
 
     public int countQuestionPoints(Questionable userQuestion) {
-        // getting question template from DB
-        var templateQuest = questionRepo.findById(userQuestion.getId())
-                .orElseThrow(
-                        () -> new NoSuchElementException("Question finding by id=\'" + userQuestion.getId() + "\' failed"));
+        var templateQuest = findQuestionById(userQuestion.getId());
         return userQuestion.countPoints(templateQuest);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public boolean putQuestion(Question question) {
+    Question findQuestionById(Long id) {
+        return questionRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found."));
+    }
 
-        if (question.isNew()) throw new NoSuchElementException("Question not contain id.");
-
-        Question questionToUpdate = questionRepo.findById(question.getId())
-                .orElseThrow(() -> new NoSuchElementException("Question not found."));
-
-        for (Answer a : question.getAnswers()) {
-            answerService.putAnswer(a);
-        }
-
-        questionToUpdate.setContent(question.getContent());
-        questionToUpdate.setAnswers(question.getAnswers());
-
-        questionRepo.save(questionToUpdate);
-
-        return true;
+    public void putQuestion(Question question) {
+        for (Answer a : question.getAnswers()) answerService.putAnswer(a);
+        questionRepo.save(question);
     }
 }
