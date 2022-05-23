@@ -36,4 +36,13 @@ export class ExamsService {
   postNewExam(exam: Exam) {
     return this.httpClient.post<Exam>(this.url + `/new-exam/save`, exam).pipe(tap(console.log));
   }
+
+  getExamToEditById(examId: string | any) {
+    return this.httpClient.get<Exam>(this.url + `/exams/edit/` + examId).pipe(tap(console.log));
+  }
+
+  putExam(exam: Exam) {
+    return this.httpClient.put<Exam>(this.url + `/exams/edit`, exam).pipe(tap(console.log));
+  }
+
 }
