@@ -139,6 +139,71 @@ class ExamControllerTest {
         assertEquals(examController.saveNewExam(exam), examResponse);
     }
 
+    @Test
+    void getExamToEditByIdShouldReturnResponseEntityWithNotFoundStatusIfExamNotExists() {
+        //given
+        ResponseEntity<Exam> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        //when
+        when(examRepo.findById(1L)).thenReturn(Optional.empty());
+
+        //then
+        assertEquals(response, examController.getExamToEditById(1L));
+    }
+
+    @Test
+    void getExamToEditByIdShouldReturnResponseEntityWithExamAndOKStatusIfExamExists() {
+        //given
+        Exam exam = new Exam();
+        exam.setId(1L);
+
+        ResponseEntity<Exam> response = new ResponseEntity<>(exam, HttpStatus.OK);
+
+        //when
+        when(examRepo.findById(exam.getId())).thenReturn(Optional.of(exam));
+
+        //then
+        assertEquals(response, examController.getExamToEditById(exam.getId()));
+    }
+
+    @Test
+    void putExamShouldReturnResponseEntityWithOKStatusIfExamServiceSaveItSuccessfully() {
+        //given
+        Exam exam = new Exam();
+        exam.setId(1L);
+
+        ResponseEntity<Exam> response = new ResponseEntity<>(HttpStatus.OK);
+
+        //when
+        when(examService.putExam(exam)).thenReturn(true);
+
+        //then
+        assertEquals(response, examController.putExam(exam));
+    }
+
+    @Test
+    void putExamShouldReturnResponseEntityWithNotModifiedStatusIfExamServiceCannotPutExam() {
+        //given
+        Exam exam = new Exam();
+        exam.setId(1L);
+
+        ResponseEntity<Exam> response = new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+
+        //when
+        when(examService.putExam(exam)).thenReturn(false);
+
+        //then
+        assertEquals(response, examController.putExam(exam));
+    }
+
+    @Test
+    void checkExamCorrectnessShouldReturnValueFromExamService() {
+        Exam exam = new Exam();
+        when(examService.countUserExamPoints(exam)).thenReturn(1);
+        assertEquals(1, examController.checkExamCorrectness(exam));
+    }
+
+
     private Exam getSampleExam() {
         {
             Answer single1 = new Answer("Database", true);

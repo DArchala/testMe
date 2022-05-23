@@ -70,7 +70,6 @@ public class ExamController {
 
     @PutMapping("/exams/edit")
     public ResponseEntity<?> putExam(@RequestBody Exam exam) {
-        log.info(exam.toString());
         if(examService.putExam(exam)) return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
