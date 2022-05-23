@@ -1,5 +1,6 @@
 <div id="newExamContainer">
   <div id="newExamData">
+    <h1>TRYB EDYTOWANIA</h1>
     <p>Nazwa egzaminu:</p>
     <input type="text" placeholder="Wpisz nazwę egzaminu" [(ngModel)]="examModel.examName">
     <p>Poziom trudności:</p>
@@ -20,7 +21,7 @@
       </select>
     </p>
 
-    <button (click)="saveExam('Czy chcesz zapisać zmiany w egzaminie?')">Zapisz egzamin</button>
+    <button (click)="saveExam('Czy chcesz zapisać zmiany w egzaminie?')">Zapisz zmiany</button>
 
   </div>
 
@@ -30,8 +31,10 @@
 
       <div class="question {{question.type}}">
 
-      <span>{{(i + 1) + "."}} <input type="text" id="questionContentInput" [(ngModel)]="question.content"
-                                     placeholder="Wpisz treść pytania"></span>
+      <span>{{(i + 1) + "."}}
+        <input type="text" id="questionContentInput" [(ngModel)]="question.content"
+               placeholder="Wpisz treść pytania">
+      </span>
 
         <button (click)="addNewAnswerToQuestion(question)">Dodaj odpowiedź</button>
         <button (click)="deleteThisQuestion(question)">Usuń pytanie</button>
@@ -39,8 +42,8 @@
         <div class="answers" *ngFor="let answer of question.answers; let j = index">
 
           <div class="answer">
-            {{(i + 1) + "." + (j + 1) + "."}} <input type="text" [(ngModel)]="answer.content"
-                                                     placeholder="Wpisz odpowiedź">
+            {{(i + 1) + "." + (j + 1) + "."}}
+            <input type="text" [(ngModel)]="answer.content" placeholder="Wpisz odpowiedź">
             <input type="checkbox" [(ngModel)]="answer.correctness" [value]="true" name="{{question.id}}"
                    [disabled]="question.type === 'short'"
                    (change)="uncheckOtherAnswers(answer, question)">
