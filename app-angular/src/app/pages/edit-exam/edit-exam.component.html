@@ -1,0 +1,60 @@
+<div id="newExamContainer">
+  <div id="newExamData">
+    <p>Nazwa egzaminu:</p>
+    <input type="text" placeholder="Wpisz nazwę egzaminu" [(ngModel)]="examModel.examName">
+    <p>Poziom trudności:</p>
+    <select [(ngModel)]="examModel.difficultyLevel">
+      <option *ngFor="let level of difficultyLevels" [value]="level">{{level}}</option>
+    </select>
+    <p>Czas egzaminu:</p>
+    <input type="number" class="timer" min="0" max="23" onKeyDown="return false" [(ngModel)]="examHours"> godzin
+    <input type="number" class="timer" min="0" max="59" onKeyDown="return false" [(ngModel)]="examMinutes"> minut
+    <p>Liczba pytań: {{examModel.questions?.length}}</p>
+    <p>Maksymalna liczba punktów: {{countCorrectAnswers(examModel)}}</p>
+    <p>
+      <button (click)="addNewQuestion()">Dodaj pytanie</button>
+      <select [(ngModel)]="newQuestionType">
+        <option [ngValue]="'single'">Jednokrotny wybór</option>
+        <option [ngValue]="'multiple'">Wielokrotny wybór</option>
+        <option [ngValue]="'short'">Pisemna odpowiedź</option>
+      </select>
+    </p>
+
+    <button (click)="saveExam('Czy chcesz zapisać zmiany w egzaminie?')">Zapisz egzamin</button>
+
+  </div>
+
+  <div *ngIf="examModel.questions?.length != 0" id="questionsList">
+    <p style="text-align: center">Lista pytań</p>
+    <div *ngFor="let question of examModel.questions; let i = index" class="questions">
+
+      <div class="question {{question.type}}">
+
+      <span>{{(i + 1) + "."}} <input type="text" id="questionContentInput" [(ngModel)]="question.content"
+                                     placeholder="Wpisz treść pytania"></span>
+
+        <button (click)="addNewAnswerToQuestion(question)">Dodaj odpowiedź</button>
+        <button (click)="deleteThisQuestion(question)">Usuń pytanie</button>
+
+        <div class="answers" *ngFor="let answer of question.answers; let j = index">
+
+          <div class="answer">
+            {{(i + 1) + "." + (j + 1) + "."}} <input type="text" [(ngModel)]="answer.content"
+                                                     placeholder="Wpisz odpowiedź">
+            <input type="checkbox" [(ngModel)]="answer.correctness" [value]="true" name="{{question.id}}"
+                   [disabled]="question.type === 'short'"
+                   (change)="uncheckOtherAnswers(answer, question)">
+            <button (click)="deleteThisAnswer(question, answer)">Usuń</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div *ngIf="examModel.questions?.length === 0" id="emptyExamListInfo">
+    <p> Egzamin nie posiada żadnych pytań! Dodaj je :)</p>
+  </div>
+
+</div>
