@@ -101,6 +101,7 @@ export class NewExamComponent {
       this.validateExamTime()) {
       this.examService.postNewExam(this.examModel).subscribe(console.log);
       alert("Egzamin został dodany!");
+      window.location.reload();
     } else alert("Dodawanie egzaminu nie powiodło się.");
 
   }
