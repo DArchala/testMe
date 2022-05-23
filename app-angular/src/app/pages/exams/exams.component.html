@@ -1,11 +1,15 @@
 <div id="examsContainer">
 
+  <div *ngIf="exams === null" id="emptyExamsListInfo">
+    <p>Brak egzaminów. Kliknij <a id="tutajText" [routerLink]="['/new-exam']"><u>tutaj</u></a>, aby dodać własny.</p>
+  </div>
+
   <div *ngFor="let exam of exams" id="examDiv">
 
     <div id="examDivOptions">
 
       <span routerLink="edit/{{exam.id}}">Edytuj</span>
-      <span>Usuń</span>
+      <span (click)="deleteExam('Czy chcesz usunąć ten egzamin?', exam.id)">Usuń</span>
 
     </div>
 
