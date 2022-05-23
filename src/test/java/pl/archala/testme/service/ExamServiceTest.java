@@ -19,6 +19,7 @@ import pl.archala.testme.repository.AnswerRepository;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.repository.QuestionRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -253,7 +254,7 @@ class ExamServiceTest {
         //given
         Exam exam = new Exam();
 
-        assertThrows(NoSuchElementException.class, () -> examService.putExam(exam));
+        assertThrows(EntityNotFoundException.class, () -> examService.putExam(exam));
     }
 
     @Test
@@ -265,24 +266,17 @@ class ExamServiceTest {
         //when
         when(examRepo.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> examService.putExam(exam));
+        assertThrows(EntityNotFoundException.class, () -> examService.putExam(exam));
     }
 
     @Test
     void putExamShouldReturnTrueIfExamIsCreatedCorrectly() {
         //given
-        Exam exam = new Exam();
+        Exam exam = new Exam(List.of(getAnswersFromDB()), "name", ExamDifficultyLevel.MEDIUM, 3600);
         exam.setId(1L);
-        exam.setExamName("name");
-        exam.setQuestions(new ArrayList<>(List.of(getAnswersFromDB())));
-        exam.setDifficultyLevel(ExamDifficultyLevel.MEDIUM);
-        exam.setTimeInSeconds(3600);
 
         //when
-        when(examRepo.findById(1L)).thenReturn(Optional.of(exam));
-        when(questionRepo.findById(1L)).thenReturn(Optional.of(exam.getQuestions().get(0)));
-        when(questionRepo.findById(2L)).thenReturn(Optional.of(exam.getQuestions().get(1)));
-        when(questionRepo.findById(3L)).thenReturn(Optional.of(exam.getQuestions().get(2)));
+        when(examRepo.findById(exam.getId())).thenReturn(Optional.of(exam));
 
         //then
         assertTrue(examService.putExam(exam));
@@ -290,7 +284,7 @@ class ExamServiceTest {
 
     @Test
     void deleteExamShouldThrowExceptionIfExamRepoCannotFindExamById() {
-        assertThrows(NoSuchElementException.class, () -> examService.deleteExam(anyLong()));
+        assertThrows(EntityNotFoundException.class, () -> examService.deleteExam(anyLong()));
     }
 
     @Test

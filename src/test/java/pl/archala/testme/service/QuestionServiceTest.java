@@ -16,10 +16,12 @@ import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repository.QuestionRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -233,20 +235,18 @@ class QuestionServiceTest {
         when(questionRepo.findById(1L)).thenReturn(Optional.empty());
 
         //then
-        assertThrows(NoSuchElementException.class, () -> questionService.countQuestionPoints(question));
+        assertThrows(EntityNotFoundException.class, () -> questionService.countQuestionPoints(question));
     }
 
     @Test
     void putQuestionShouldThrowExceptionIfQuestionIsNew() {
-        assertThrows(NoSuchElementException.class, () -> questionService.putQuestion(new SingleChoiceQuestion()));
+        var single = new SingleChoiceQuestion("content", List.of(new Answer(), new Answer()));
+        assertDoesNotThrow(() -> questionService.putQuestion(single));
     }
 
     @Test
-    void putQuestionShouldThrowExceptionIfRepositoryCannotFindQuestionById() {
-        var question = new SingleChoiceQuestion();
-        question.setId(1L);
-
-        assertThrows(NoSuchElementException.class, () -> questionService.putQuestion(question));
+    void findQuestionByIdShouldThrowExceptionIfQuestionNotFound() {
+        assertThrows(EntityNotFoundException.class, () -> questionService.findQuestionById(anyLong()));
     }
 
     private List<Answer> getSampleShortAnswers() {

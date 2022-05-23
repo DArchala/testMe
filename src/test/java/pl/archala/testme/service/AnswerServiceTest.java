@@ -10,11 +10,13 @@ import org.mockito.quality.Strictness;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.repository.AnswerRepository;
 
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,14 +31,7 @@ class AnswerServiceTest {
 
     @Test
     void putAnswerShouldThrowExceptionIfAnswerIsNew() {
-        assertThrows(NoSuchElementException.class, () -> answerService.putAnswer(new Answer()));
-    }
-
-    @Test
-    void putAnswerShouldThrowExceptionIfAnswerRepositoryCannotFindAnswerById() {
-        Answer answer = new Answer();
-        answer.setId(1L);
-        assertThrows(NoSuchElementException.class, () -> answerService.putAnswer(answer));
+        assertDoesNotThrow(() -> answerService.putAnswer(new Answer()));
     }
 
     @Test
@@ -49,7 +44,13 @@ class AnswerServiceTest {
         when(answerRepo.findById(answer.getId())).thenReturn(Optional.of(answer));
 
         //then
-        assertTrue(answerService.putAnswer(answer));
+        assertDoesNotThrow(() -> answerService.putAnswer(answer));
+    }
+
+    @Test
+    void findAnswerByIdShouldThrowExceptionIfAnswerDoesNotExist() {
+        when(answerRepo.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> answerService.findAnswerById(anyLong()));
     }
 
 }
