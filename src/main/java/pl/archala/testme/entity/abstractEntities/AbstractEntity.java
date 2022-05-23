@@ -1,4 +1,4 @@
-package pl.archala.testme.entity;
+package pl.archala.testme.entity.abstractEntities;
 
 import org.springframework.data.domain.Persistable;
 

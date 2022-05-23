@@ -2,9 +2,11 @@ package pl.archala.testme.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
+import pl.archala.testme.enums.ExamDifficultyLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +50,7 @@ class ExamTest {
 
         //then
         for (Question q : questions) {
-            for (Answer a : q.answers) {
+            for (Answer a : q.getAnswers()) {
                 assertFalse(a.isCorrectness());
             }
         }

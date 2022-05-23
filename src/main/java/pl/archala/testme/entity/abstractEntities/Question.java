@@ -1,7 +1,9 @@
-package pl.archala.testme.entity;
+package pl.archala.testme.entity.abstractEntities;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import pl.archala.testme.entity.Answer;
+import pl.archala.testme.interfaces.Questionable;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
@@ -29,7 +31,7 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
     @OneToMany
     protected List<Answer> answers;
 
-    protected Question() {
+    public Question() {
     }
 
     public Answer getAnswerById(long id) {

@@ -1,4 +1,4 @@
-package pl.archala.testme.entity;
+package pl.archala.testme.interfaces;
 
 public interface Questionable {
     int countPoints(Questionable question);

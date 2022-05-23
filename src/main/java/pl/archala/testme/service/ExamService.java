@@ -3,7 +3,7 @@ package pl.archala.testme.service;
 import org.springframework.stereotype.Service;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.entity.Exam;
-import pl.archala.testme.entity.Question;
+import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.repository.AnswerRepository;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.repository.QuestionRepository;

@@ -2,8 +2,8 @@ package pl.archala.testme.service;
 
 import org.springframework.stereotype.Service;
 import pl.archala.testme.entity.Answer;
-import pl.archala.testme.entity.Question;
-import pl.archala.testme.entity.Questionable;
+import pl.archala.testme.entity.abstractEntities.Question;
+import pl.archala.testme.interfaces.Questionable;
 import pl.archala.testme.repository.QuestionRepository;
 
 import javax.persistence.EntityNotFoundException;

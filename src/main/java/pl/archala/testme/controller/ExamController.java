@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.archala.testme.entity.Exam;
-import pl.archala.testme.entity.ExamDifficultyLevel;
+import pl.archala.testme.enums.ExamDifficultyLevel;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.service.ExamService;
 

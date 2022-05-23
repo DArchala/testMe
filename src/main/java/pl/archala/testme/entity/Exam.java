@@ -1,5 +1,9 @@
 package pl.archala.testme.entity;
 
+import pl.archala.testme.entity.abstractEntities.AbstractEntity;
+import pl.archala.testme.entity.abstractEntities.Question;
+import pl.archala.testme.enums.ExamDifficultyLevel;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
