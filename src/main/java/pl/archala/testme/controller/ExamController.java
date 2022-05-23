@@ -29,7 +29,7 @@ public class ExamController {
     @GetMapping("/exams")
     public ResponseEntity<List<Exam>> getExams() {
         List<Exam> exams = examService.getAllExams();
-        if (exams.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (exams.isEmpty()) return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(exams, HttpStatus.OK);
     }
 
@@ -70,8 +70,14 @@ public class ExamController {
 
     @PutMapping("/exams/edit")
     public ResponseEntity<?> putExam(@RequestBody Exam exam) {
-        if(examService.putExam(exam)) return new ResponseEntity<>(HttpStatus.OK);
+        if (examService.putExam(exam)) return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    @DeleteMapping("/exams/delete/{id}")
+    public ResponseEntity<?> deleteExam(@PathVariable("id") Long id) {
+        if (examService.deleteExam(id)) return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
