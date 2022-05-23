@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.repository.AnswerRepository;
 
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class AnswerService {
@@ -15,17 +15,18 @@ public class AnswerService {
         this.answerRepo = answerRepo;
     }
 
+    Answer findAnswerById(Long id) {
+        return answerRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Answer not found."));
+    }
 
-    @SuppressWarnings("ConstantConditions")
-    public boolean putAnswer(Answer answer) {
-        if (answer.isNew()) throw new NoSuchElementException("Answer not contain id.");
-        Answer answerToUpdate = answerRepo.findById(answer.getId())
-                .orElseThrow(() -> new NoSuchElementException("Answer not found."));
-
-        answerToUpdate.setCorrectness(answer.isCorrectness());
-        answerToUpdate.setContent(answer.getContent());
-
-        answerRepo.save(answerToUpdate);
-        return true;
+    public void putAnswer(Answer answer) {
+        if (answer.isNew()) answerRepo.save(answer);
+        else {
+            Answer newAnswerVersion = findAnswerById(answer.getId());
+            newAnswerVersion.setContent(answer.getContent());
+            newAnswerVersion.setCorrectness(answer.isCorrectness());
+            answerRepo.save(newAnswerVersion);
+        }
     }
 }
