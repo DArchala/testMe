@@ -102,6 +102,43 @@ class ExamControllerTest {
         assertThat(examController.getExamById(1L), equalTo(new ResponseEntity<>(HttpStatus.NOT_FOUND)));
     }
 
+    @Test
+    void getNewExamDataShouldReturnExamDifficultyLevelValues() {
+        //given
+        ExamDifficultyLevel[] values = ExamDifficultyLevel.values();
+
+        ResponseEntity<ExamDifficultyLevel[]> response = new ResponseEntity<>(values, HttpStatus.OK);
+
+        //then
+        assertEquals(examController.getNewExamData(), response);
+    }
+
+    @Test
+    void saveNewExamShouldReturnExamTheSameExamAndStatusOKIfItIsCorrect() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<Exam> examResponse = new ResponseEntity<>(exam, HttpStatus.OK);
+
+        //when
+        when(examService.saveNewExam(exam)).thenReturn(true);
+
+        //then
+        assertEquals(examController.saveNewExam(exam), examResponse);
+    }
+
+    @Test
+    void saveNewExamShouldReturnBadRequestStatusIfItIsIncorrect() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<Exam> examResponse = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        //when
+        when(examService.saveNewExam(exam)).thenReturn(false);
+
+        //then
+        assertEquals(examController.saveNewExam(exam), examResponse);
+    }
+
     private Exam getSampleExam() {
         {
             Answer single1 = new Answer("Database", true);

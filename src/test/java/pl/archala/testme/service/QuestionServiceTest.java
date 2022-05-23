@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import pl.archala.testme.entity.Answer;
+import pl.archala.testme.entity.Question;
+import pl.archala.testme.entity.Questionable;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
@@ -30,9 +32,13 @@ class QuestionServiceTest {
     @Mock
     private QuestionRepository questionRepo;
 
+    @Mock
+    private AnswerService answerService;
+
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionRepo);
+        questionService = new QuestionService(questionRepo, answerService);
+
     }
 
     @Test
@@ -228,6 +234,19 @@ class QuestionServiceTest {
 
         //then
         assertThrows(NoSuchElementException.class, () -> questionService.countQuestionPoints(question));
+    }
+
+    @Test
+    void putQuestionShouldThrowExceptionIfQuestionIsNew() {
+        assertThrows(NoSuchElementException.class, () -> questionService.putQuestion(new SingleChoiceQuestion()));
+    }
+
+    @Test
+    void putQuestionShouldThrowExceptionIfRepositoryCannotFindQuestionById() {
+        var question = new SingleChoiceQuestion();
+        question.setId(1L);
+
+        assertThrows(NoSuchElementException.class, () -> questionService.putQuestion(question));
     }
 
     private List<Answer> getSampleShortAnswers() {

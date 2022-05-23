@@ -22,6 +22,8 @@ import pl.archala.testme.repository.QuestionRepository;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -43,9 +45,12 @@ class ExamServiceTest {
     @Mock
     private AnswerRepository answerRepo;
 
+    @Mock
+    private AnswerService answerService;
+
     @BeforeEach
     void setUp() {
-        questionService = new QuestionService(questionRepo);
+        questionService = new QuestionService(questionRepo, answerService);
         examService = new ExamService(questionService, examRepo, answerRepo, questionRepo);
     }
 
@@ -241,6 +246,46 @@ class ExamServiceTest {
         //then
         assertEquals(examList, examService.getAllExams());
 
+    }
+
+    @Test
+    void putExamShouldThrowExceptionIfExamNotContainId() {
+        //given
+        Exam exam = new Exam();
+
+        assertThrows(NoSuchElementException.class, () -> examService.putExam(exam));
+    }
+
+    @Test
+    void putExamShouldThrowExceptionIfRepositoryCannotFindExamById() {
+        //given
+        Exam exam = new Exam();
+        exam.setId(1L);
+
+        //when
+        when(examRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> examService.putExam(exam));
+    }
+
+    @Test
+    void putExamShouldReturnTrueIfExamIsCreatedCorrectly() {
+        //given
+        Exam exam = new Exam();
+        exam.setId(1L);
+        exam.setExamName("name");
+        exam.setQuestions(new ArrayList<>(List.of(getAnswersFromDB())));
+        exam.setDifficultyLevel(ExamDifficultyLevel.MEDIUM);
+        exam.setTimeInSeconds(3600);
+
+        //when
+        when(examRepo.findById(1L)).thenReturn(Optional.of(exam));
+        when(questionRepo.findById(1L)).thenReturn(Optional.of(exam.getQuestions().get(0)));
+        when(questionRepo.findById(2L)).thenReturn(Optional.of(exam.getQuestions().get(1)));
+        when(questionRepo.findById(3L)).thenReturn(Optional.of(exam.getQuestions().get(2)));
+
+        //then
+        assertTrue(examService.putExam(exam));
     }
 
     private Question[] getAnswersFromDB() {

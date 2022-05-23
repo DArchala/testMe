@@ -22,13 +22,14 @@ public class QuestionService {
 
     public int countQuestionPoints(Questionable userQuestion) {
         // getting question template from DB
-        var templateQuest = questionRepo.findById(userQuestion.getId()).orElseThrow(
-                () -> new NoSuchElementException("Question finding by id=" + userQuestion.getId() + " failed"));
+        var templateQuest = questionRepo.findById(userQuestion.getId())
+                .orElseThrow(
+                        () -> new NoSuchElementException("Question finding by id=\'" + userQuestion.getId() + "\' failed"));
         return userQuestion.countPoints(templateQuest);
     }
 
     @SuppressWarnings("ConstantConditions")
-        public boolean putQuestion(Question question) {
+    public boolean putQuestion(Question question) {
 
         if (question.isNew()) throw new NoSuchElementException("Question not contain id.");
 
