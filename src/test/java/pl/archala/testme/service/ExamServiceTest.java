@@ -288,6 +288,17 @@ class ExamServiceTest {
         assertTrue(examService.putExam(exam));
     }
 
+    @Test
+    void deleteExamShouldThrowExceptionIfExamRepoCannotFindExamById() {
+        assertThrows(NoSuchElementException.class, () -> examService.deleteExam(anyLong()));
+    }
+
+    @Test
+    void deleteExamShouldReturnTrueIfExamWasFoundByRepo() {
+        when(examRepo.findById(anyLong())).thenReturn(Optional.of(new Exam()));
+        assertTrue(examService.deleteExam(anyLong()));
+    }
+
     private Question[] getAnswersFromDB() {
         Answer single1DB = new Answer("Database", true);
         Answer single2DB = new Answer("DuaLipa");

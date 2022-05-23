@@ -26,6 +26,8 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,9 +65,9 @@ class ExamControllerTest {
     }
 
     @Test
-    void getExamsShouldReturnResponseEntityWithNotFoundStatusIfThereIsNotAnyExam() {
+    void getExamsShouldReturnResponseEntityWithOKStatusIfThereIsNotAnyExam() {
         //given
-        ResponseEntity<List<Exam>> assertResponse = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ResponseEntity<List<Exam>> assertResponse = new ResponseEntity<>(HttpStatus.OK);
 
         //when
         when(examService.getAllExams()).thenReturn(List.of());
@@ -198,11 +200,39 @@ class ExamControllerTest {
 
     @Test
     void checkExamCorrectnessShouldReturnValueFromExamService() {
+        //given
         Exam exam = new Exam();
+
+        //when
         when(examService.countUserExamPoints(exam)).thenReturn(1);
+
+        //then
         assertEquals(1, examController.checkExamCorrectness(exam));
     }
 
+    @Test
+    void deleteExamShouldReturnStatusOKResponseIfExamServiceDeleteIt() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>(HttpStatus.OK);
+
+        //when
+        when(examService.deleteExam(anyLong())).thenReturn(true);
+
+        //then
+        assertEquals(response, examController.deleteExam(anyLong()));
+    }
+
+    @Test
+    void deleteExamShouldReturnStatusNotFoundResponseIfExamServiceCannotDeleteIt() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        //when
+        when(examService.deleteExam(anyLong())).thenReturn(false);
+
+        //then
+        assertEquals(response, examController.deleteExam(anyLong()));
+    }
 
     private Exam getSampleExam() {
         {
