@@ -8,9 +8,9 @@ import pl.archala.testme.repository.AnswerRepository;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.repository.QuestionRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -84,13 +84,16 @@ public class ExamService {
         return true;
     }
 
-    @SuppressWarnings("ConstantConditions")
+    Exam findExamById(Long id) {
+        return examRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Exam not found."));
+    }
+
     public boolean putExam(Exam exam) {
 
-        if (exam.isNew()) throw new NoSuchElementException("Exam not contain id.");
+        if (exam.isNew()) throw new EntityNotFoundException("Exam not contain id.");
 
-        Exam examToUpdate = examRepo.findById(exam.getId())
-                .orElseThrow(() -> new NoSuchElementException("Exam not found."));
+        Exam examToUpdate = findExamById(exam.getId());
 
         for (Question q : exam.getQuestions()) {
             questionService.putQuestion(q);
@@ -102,12 +105,11 @@ public class ExamService {
         examToUpdate.setQuestions(exam.getQuestions());
 
         examRepo.save(examToUpdate);
-
         return true;
     }
 
     public boolean deleteExam(Long id) {
-        examRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Exam not found."));
+        findExamById(id);
         examRepo.deleteById(id);
         return true;
     }
