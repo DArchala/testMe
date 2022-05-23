@@ -4,9 +4,10 @@
   flex-wrap: wrap;
   justify-content: center;;
   margin: 10px;
+  font-size: 20px;
 }
 
-#examDivOuter {
+#examDiv {
   border: 4px solid cadetblue;
   border-radius: 10px;
   margin: 10px;
@@ -15,18 +16,36 @@
   background-color: white;
 }
 
-#examDivOuter:hover {
-  background-color: #b4ffd3;
+#examDivOptions {
+  display: inline-flex;
+  padding: 10px;
+}
+
+#examDivOptions span {
+  margin-right: 10px;
+}
+
+#examDivOptions span:hover {
   cursor: pointer;
-  box-shadow: 5px 5px 5px #b4f6ff;
-}
-
-#examDivInner {
-  margin: 10px;
-}
-
-#examDivInner p span {
   font-weight: bold;
+}
+
+#examDivData {
+  border-top: 4px solid cadetblue;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+#examDivData p span {
+  font-weight: bold;
+}
+
+#examDivData:hover {
+  background-color: #b4ffd3;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  cursor: pointer;
 }
 
 #idSpan {

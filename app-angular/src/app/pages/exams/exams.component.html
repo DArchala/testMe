@@ -1,10 +1,23 @@
 <div id="examsContainer">
-  <div *ngFor="let exam of exams" routerLink="exam/{{exam.id}}" id="examDivOuter" >
-    <div id="examDivInner">
+
+  <div *ngFor="let exam of exams" id="examDiv">
+
+    <div id="examDivOptions">
+
+      <span routerLink="edit/{{exam.id}}">Edytuj</span>
+      <span>Usuń</span>
+
+    </div>
+
+    <div id="examDivData" routerLink="exam/{{exam.id}}">
+
       <p id="idSpan"><span>ID:</span> {{exam.id}}</p>
       <p><span>Nazwa:</span> {{exam.examName}}</p>
       <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
       <p><span>Liczba pytań: </span>{{exam.questions.length}}</p>
+
     </div>
+
   </div>
+
 </div>
