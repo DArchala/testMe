@@ -38,19 +38,19 @@ export class EditExamComponent {
 
   addNewQuestion() {
     let quest: any;
-    let answer = new Answer(0, "", false);
-    let answer2 = new Answer(0, "", false);
+    let answer = new Answer(null, "", false);
+    let answer2 = new Answer(null, "", false);
 
     switch (this.newQuestionType) {
       case "single":
-        quest = new SingleChoiceQuestion(0, "", [answer, answer2], "single", "");
+        quest = new SingleChoiceQuestion(null, "", [answer, answer2], "single", "");
         break;
       case "multiple":
-        quest = new MultipleChoiceQuestion(0, "", [answer, answer2], "multiple", "");
+        quest = new MultipleChoiceQuestion(null, "", [answer, answer2], "multiple", "");
         break;
       case "short":
         answer.correctness = true;
-        quest = new ShortAnswerQuestion(0, "", [answer], "short", "");
+        quest = new ShortAnswerQuestion(null, "", [answer], "short", "");
         break;
     }
     this.examModel.questions.push(quest);
