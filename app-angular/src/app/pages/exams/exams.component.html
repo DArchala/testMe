@@ -4,7 +4,7 @@
     <p>Brak egzaminów. Kliknij <a id="tutajText" [routerLink]="['/new-exam']"><u>tutaj</u></a>, aby dodać własny.</p>
   </div>
 
-  <div *ngFor="let exam of exams" id="examDiv">
+  <div *ngFor="let exam of exams; let i = index" id="examDiv">
 
     <div id="examDivOptions">
 
@@ -15,7 +15,7 @@
 
     <div id="examDivData" routerLink="exam/{{exam.id}}">
 
-      <p id="idSpan"><span>ID:</span> {{exam.id}}</p>
+      <p id="idSpan"><span>Nr: </span>{{i+1}}</p>
       <p><span>Nazwa:</span> {{exam.examName}}</p>
       <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
       <p><span>Liczba pytań: </span>{{exam.questions.length}}</p>
