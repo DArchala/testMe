@@ -105,4 +105,10 @@ public class ExamService {
 
         return true;
     }
+
+    public boolean deleteExam(Long id) {
+        examRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Exam not found."));
+        examRepo.deleteById(id);
+        return true;
+    }
 }
