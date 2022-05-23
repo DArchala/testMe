@@ -5,12 +5,14 @@ import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.compo
 import {ExamsComponent} from "./pages/exams/exams.component";
 import {ExamComponent} from "./pages/exam/exam.component";
 import {NewExamComponent} from "./pages/new-exam/new-exam.component";
+import {EditExamComponent} from "./pages/edit-exam/edit-exam.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
   {path: 'exams', component: ExamsComponent},
   {path: 'exams/exam/:id', component: ExamComponent},
+  {path: 'exams/edit/:id', component: EditExamComponent},
   {path: 'new-exam', component: NewExamComponent},
   {path: '**', component: PageNotFoundComponent},
 ]

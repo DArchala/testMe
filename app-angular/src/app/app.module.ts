@@ -15,6 +15,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { DialogComponent } from './pages/dialog/dialog.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
+import { EditExamComponent } from './pages/edit-exam/edit-exam.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {MatButtonModule} from "@angular/material/button";
     ExamComponent,
     ExamTimerPipe,
     NewExamComponent,
-    DialogComponent
+    DialogComponent,
+    EditExamComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
