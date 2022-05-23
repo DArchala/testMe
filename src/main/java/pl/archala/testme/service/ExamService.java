@@ -10,6 +10,7 @@ import pl.archala.testme.repository.QuestionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -80,6 +81,28 @@ public class ExamService {
         exam.setQuestions(questionList);
 
         examRepo.save(exam);
+        return true;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public boolean putExam(Exam exam) {
+
+        if (exam.isNew()) throw new NoSuchElementException("Exam not contain id.");
+
+        Exam examToUpdate = examRepo.findById(exam.getId())
+                .orElseThrow(() -> new NoSuchElementException("Exam not found."));
+
+        for (Question q : exam.getQuestions()) {
+            questionService.putQuestion(q);
+        }
+
+        examToUpdate.setExamName(exam.getExamName());
+        examToUpdate.setTimeInSeconds(exam.getTimeInSeconds());
+        examToUpdate.setDifficultyLevel(exam.getDifficultyLevel());
+        examToUpdate.setQuestions(exam.getQuestions());
+
+        examRepo.save(examToUpdate);
+
         return true;
     }
 }
