@@ -12,7 +12,7 @@ import {ShortAnswerQuestion} from "../models/questionTypes/short-answer-question
 })
 export class ExamsService {
 
-  private url = "http://localhost:8080";
+  private url = "http://localhost:8080/api";
 
   constructor(private httpClient: HttpClient) {
   }

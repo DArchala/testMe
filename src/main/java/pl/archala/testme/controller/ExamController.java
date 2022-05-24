@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(produces = "application/json")
+@RequestMapping(path = "/api", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class ExamController {
 
