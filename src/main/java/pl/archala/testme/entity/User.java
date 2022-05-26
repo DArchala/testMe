@@ -1,16 +1,14 @@
 package pl.archala.testme.entity;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -18,26 +16,47 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class User extends AbstractEntity<Long> implements Serializable {
 
-    private String userId;
-    private String firstName;
-    private String lastName;
+@Entity
+@Table(name = "users")
+public class User extends AbstractEntity<Long> implements UserDetails {
+
     private String username;
     private String password;
-    private String email;
-    private LocalDateTime lastLoginDate;
-    private LocalDateTime lastLoginDateDisplay;
-    private LocalDateTime joinDate;
+    private String role;
 
-    @ElementCollection
-    private Set<String> roles;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(role));
+    }
 
-    @ElementCollection
-    private Set<String> authorities;
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-    private boolean isActive;
-    private boolean isNotLocked;
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
