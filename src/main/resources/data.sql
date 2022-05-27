@@ -1,6 +1,6 @@
-insert into users (id, username, password, role)
-values (1, 'user', 'user', 'USER'),
-       (2, 'admin', 'admin', 'ADMIN');
+/*insert into users (id, username, password, email, role, is_enabled)
+values (1, 'user', 'user', 'damianarchala@gmail.com', 'USER', false),
+       (2, 'admin', 'admin', 'damianarchala2@gmail.com', 'ADMIN', false);*/
 
 insert into answers (id, content, correctness)
 values (1, 'Database', true),
@@ -25,7 +25,13 @@ values (1, 'Database', true),
        (20, 'byte', true),
        (21, 'short', true),
        (22, 'int', true),
-       (23, 'long', true);
+       (23, 'long', true),
+       (24, 'Usuwa co drugi znak w łańcuchu znaków', false),
+       (25, 'Tworzy tablicę w której przechowywany jest osobno każdy znak w łańcuchu znaków', true),
+       (26, 'Sprawdza czy łańcuch znaków zawiera cyfry, a następnie usuwa je.', false),
+       (27, 'Usuwa białe znaki na początku i końcu łańcucha', true),
+       (28, 'Odwraca kolejność znaków w łańcuchu', false),
+       (29, 'Odwraca wielkość znaków w ciągu', false);
 
 insert into questions (id, content, user_answer, dtype)
 values (1, 'Co to jest DB?', '', 'SingleChoiceQuestion'),
@@ -33,7 +39,9 @@ values (1, 'Co to jest DB?', '', 'SingleChoiceQuestion'),
        (3, 'Wybierz słowa kluczowe:', '', 'MultipleChoiceQuestion'),
        (4, 'Zaznacz klasy opakowujące:', '', 'MultipleChoiceQuestion'),
        (5, 'Wymień typy zmiennych przechowujących wartości liczb zmiennoprzecinkowych.', '', 'ShortAnswerQuestion'),
-       (6, 'Wymień typy zmiennych przechowujących wartości liczb całkowitych.', '', 'ShortAnswerQuestion');
+       (6, 'Wymień typy zmiennych przechowujących wartości liczb całkowitych.', '', 'ShortAnswerQuestion'),
+       (7, 'Co robi metoda split klasy String?', '', 'SingleChoiceQuestion'),
+       (8, 'Co robi metoda trim klasy String?', '', 'SingleChoiceQuestion');
 
 insert into exams (id, difficulty_level, exam_name, exam_time)
 values (1, 'MEDIUM', 'Java knowledge', 3600);
@@ -61,7 +69,13 @@ values (1, 1),
        (6, 20),
        (6, 21),
        (6, 22),
-       (6, 23);
+       (6, 23),
+       (7, 24),
+       (7, 25),
+       (7, 26),
+       (8, 27),
+       (8, 28),
+       (8, 29);
 
 insert into exams_questions (exam_id, questions_id)
 values (1, 1),
@@ -69,4 +83,6 @@ values (1, 1),
        (1, 3),
        (1, 4),
        (1, 5),
-       (1, 6);
+       (1, 6),
+       (1, 7),
+       (1, 8);
