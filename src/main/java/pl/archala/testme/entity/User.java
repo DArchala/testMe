@@ -5,8 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
+import pl.archala.testme.enums.RoleEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -21,13 +26,57 @@ import java.util.Collections;
 @Table(name = "users")
 public class User extends AbstractEntity<Long> implements UserDetails {
 
+    public static final long serialVersionUID = 7L;
+
+    @NotBlank
+    @Min(3)
     private String username;
+
+    @NotBlank
+    @Min(6)
     private String password;
-    private String role;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @NotNull
+    private RoleEnum role;
+
+    @NotNull
+    private boolean isEnabled;
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role));
+        return Collections.singleton(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -57,6 +106,6 @@ public class User extends AbstractEntity<Long> implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }
