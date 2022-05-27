@@ -32,7 +32,7 @@ public class ExamService {
     }
 
     public List<Exam> getAllExams() {
-        return (List<Exam>) examRepo.findAll();
+        return examRepo.findAll();
     }
 
     public int countUserExamPoints(Exam userExam) {
