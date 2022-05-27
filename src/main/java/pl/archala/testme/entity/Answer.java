@@ -14,7 +14,7 @@ public class Answer extends AbstractEntity<Long> implements Serializable {
     private static final long serialVersionUID = 6L;
 
     private String content;
-    private boolean correctness = false;
+    private boolean correctness;
 
     public Answer() {
     }
