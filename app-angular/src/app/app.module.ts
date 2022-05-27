@@ -16,6 +16,9 @@ import { DialogComponent } from './pages/dialog/dialog.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
 import { EditExamComponent } from './pages/edit-exam/edit-exam.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { LogoutComponent } from './pages/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { EditExamComponent } from './pages/edit-exam/edit-exam.component';
     ExamTimerPipe,
     NewExamComponent,
     DialogComponent,
-    EditExamComponent
+    EditExamComponent,
+    LoginComponent,
+    RegisterComponent,
+    LogoutComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
