@@ -10,6 +10,6 @@ form {
   flex-direction: column;
 }
 
-form *{
+form * {
   padding-bottom: 5%;
 }

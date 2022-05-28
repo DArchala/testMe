@@ -9,16 +9,18 @@ import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.compo
 import {HttpClientModule} from "@angular/common/http";
 import {ExamComponent} from './pages/exam/exam.component';
 import {ExamTimerPipe} from './pipes/exam-timer.pipe';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NewExamComponent} from './pages/new-exam/new-exam.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { DialogComponent } from './pages/dialog/dialog.component';
+import {DialogComponent} from './pages/dialog/dialog.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
-import { EditExamComponent } from './pages/edit-exam/edit-exam.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { LogoutComponent } from './pages/logout/logout.component';
+import {EditExamComponent} from './pages/edit-exam/edit-exam.component';
+import {LoginComponent} from './pages/login/login.component';
+import {RegisterComponent} from './pages/register/register.component';
+import {LogoutComponent} from './pages/logout/logout.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -43,7 +45,10 @@ import { LogoutComponent } from './pages/logout/logout.component';
     FormsModule,
     MatDialogModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],

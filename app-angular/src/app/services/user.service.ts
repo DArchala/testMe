@@ -13,7 +13,7 @@ export class UserService {
   constructor(private httpClient: HttpClient) {
   }
 
-  register(user: User) {
+  registerNewUser(user: User) {
     return this.httpClient.post<User>(this.url + `/register`, user).pipe(tap(console.log));
   }
 
