@@ -1,18 +1,18 @@
-#examSuperContainer {
+#exam-super-container {
   font-size: 20px;
   display: flex;
   flex-wrap: wrap;
 }
 
-#examDataDiv {
+#exam-data-div {
   margin: 10px;
 }
 
-#examDataDiv p span {
+#exam-data-div p span {
   font-weight: bold;
 }
 
-#examQuestions {
+#exam-questions {
   border: 4px solid cadetblue;
   border-radius: 10px;
   max-width: 50%;
@@ -23,7 +23,7 @@
   margin-left: 10%;
 }
 
-#examQuestion {
+#exam-question {
   border: 2px solid cadetblue;
   border-radius: 5px;
   margin: 5px;
@@ -31,16 +31,16 @@
   background-color: #f2f2f2;
 }
 
-.examStartFinishButtonDiv {
+.exam-start-finish-button-div {
   text-align: center;
 }
 
-.examStartFinishButton {
+.exam-start-finish-button {
   margin: 2.5%;
   transform: scale(2);
 }
 
-#questionContent {
+#question-content {
   font-weight: bold;
   margin-left: 3%;
   margin-right: 3%;
@@ -61,18 +61,17 @@
   margin-bottom: 5px;
 }
 
-.answerCheckBox {
+.answer-checkbox {
   transform: scale(1.5);
   margin-right: 10px;
 }
 
-.answerRadio {
+.answer-radio {
   transform: scale(1.5);
   margin-right: 10px;
   clip-path: circle(50% at 50% 50%);
 }
 
-
-.userAnswerTextInput {
+.user-answer-text-input {
   transform: scale(1.5);
 }

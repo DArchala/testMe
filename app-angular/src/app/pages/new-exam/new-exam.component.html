@@ -1,5 +1,5 @@
-<div id="newExamContainer">
-  <div id="newExamData">
+<div id="new-exam-container">
+  <div id="new-exam-data">
     <p>Nazwa egzaminu:</p>
     <input type="text" placeholder="Wpisz nazwę egzaminu" [(ngModel)]="examModel.examName">
     <p>Poziom trudności:</p>
@@ -24,21 +24,21 @@
 
   </div>
 
-  <div *ngIf="examModel.questions.length != 0" id="questionsList">
+  <div *ngIf="examModel.questions.length != 0" id="questions-list">
     <p style="text-align: center">Lista pytań</p>
-    <div *ngFor="let question of examModel.questions; let i = index" class="questions">
+    <div *ngFor="let question of examModel.questions; let i = index">
 
       <div class="question {{question.type}}">
 
-      <span>{{(i + 1) + "."}} <input type="text" id="questionContentInput" [(ngModel)]="question.content"
+      <span>{{(i + 1) + "."}} <input id="question-content-input" type="text" [(ngModel)]="question.content"
                                      placeholder="Wpisz treść pytania"></span>
 
         <button (click)="addNewAnswerToQuestion(question)">Dodaj odpowiedź</button>
         <button (click)="deleteThisQuestion(question)">Usuń pytanie</button>
 
-        <div class="answers" *ngFor="let answer of question.answers; let j = index">
+        <div id="answers" *ngFor="let answer of question.answers; let j = index">
 
-          <div class="answer">
+          <div id="answer">
             {{(i + 1) + "." + (j + 1) + "."}} <input type="text" [(ngModel)]="answer.content"
                                                      placeholder="Wpisz odpowiedź">
             <input type="checkbox" [(ngModel)]="answer.correctness" [value]="true" name="{{question.id}}"
@@ -53,7 +53,7 @@
 
     </div>
   </div>
-  <div *ngIf="examModel.questions.length === 0" id="emptyExamListInfo">
+  <div *ngIf="examModel.questions.length === 0" id="empty-exam-list-info">
     <p> Egzamin nie posiada żadnych pytań! Dodaj je :)</p>
   </div>
 

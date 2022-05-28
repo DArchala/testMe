@@ -1,5 +1,5 @@
-<div id="examSuperContainer">
-  <div id="examDataDiv">
+<div id="exam-super-container">
+  <div id="exam-data-div">
     <p><span>ID:</span> {{exam.id}}</p>
     <p><span>Nazwa:</span> {{exam.examName}}</p>
     <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
@@ -9,28 +9,30 @@
       = {{getPercentageExamScore(this.responseExamPoints, this.examMaxPoints)}}</p>
     <p><span>Twój ostatni czas egzaminu:</span> {{userLastExamTime | examTimer}}</p>
 
-    <div class="examStartFinishButtonDiv" *ngIf="!examStarted">
-      <button class="examStartFinishButton" (click)="startTest()">Rozpocznij egzamin!</button>
+    <div class="exam-start-finish-button-div" *ngIf="!examStarted">
+      <button class="exam-start-finish-button" (click)="startTest()">Rozpocznij egzamin!</button>
     </div>
 
-    <div class="examStartFinishButtonDiv" *ngIf="examStarted">
-      <button class="examStartFinishButton" (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">Zakończ egzamin</button>
+    <div class="exam-start-finish-button-div" *ngIf="examStarted">
+      <button class="exam-start-finish-button"
+              (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">
+        Zakończ egzamin</button>
     </div>
   </div>
 
-  <div id="examQuestions" *ngIf="examStarted">
+  <div id="exam-questions" *ngIf="examStarted">
     <div id="timer">
       {{examTimeLeft | examTimer}}
     </div>
-    <div id="examQuestion" *ngFor="let question of exam.questions; let i = index">
+    <div id="exam-question" *ngFor="let question of exam.questions; let i = index">
 
-      <p id="questionContent">{{i + 1 + '. ' + question.content}}</p>
+      <p id="question-content">{{i + 1 + '. ' + question.content}}</p>
 
       <ng-container [ngSwitch]="question.type">
 
         <div *ngSwitchCase="'single'">
           <div class="answers" *ngFor="let answer of question.answers">
-            <input type="checkbox" class="answerRadio"
+            <input type="checkbox" class="answer-radio"
                    (change)="uncheckOtherAnswers(answer, question)"
                    [(ngModel)]="answer.correctness" [value]="true"
                    name="{{question.id}}">
@@ -40,7 +42,7 @@
 
         <div *ngSwitchCase="'multiple'">
           <div class="answers" *ngFor="let answer of question.answers">
-            <input type="checkbox" class="answerCheckBox"
+            <input type="checkbox" class="answer-checkbox"
                    [(ngModel)]="answer.correctness" [value]="true"
                    name="{{question.id}}">
             <span>{{answer.content}}</span>
@@ -48,7 +50,7 @@
         </div>
 
         <div *ngSwitchCase="'short'">
-          <input type="text" class="userAnswerTextInput"
+          <input type="text" class="user-answer-text-input"
                  [(ngModel)]="question.userAnswer"
                  name="{{question.id}}">
         </div>

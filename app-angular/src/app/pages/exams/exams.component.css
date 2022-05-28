@@ -1,4 +1,4 @@
-#examsContainer {
+#exams-container {
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
@@ -8,7 +8,7 @@
   text-decoration-color: black;
 }
 
-#examDiv {
+#exam-div {
   border: 4px solid cadetblue;
   border-radius: 10px;
   margin: 10px;
@@ -17,53 +17,53 @@
   background-color: white;
 }
 
-#emptyExamsListInfo {
+#empty-exams-list-info {
   text-align: center;
   font-size: 40px;
   margin-top: 5%;
 }
 
-#tutajText:hover {
+#tutaj-text:hover {
   font-weight: bolder;
   cursor: pointer;
 }
 
-#tutajText:visited {
+#tutaj-text:visited {
   color: black;
 }
 
-#examDivOptions {
+#exam-div-options {
   display: inline-flex;
   padding: 10px;
 }
 
-#examDivOptions span {
+#exam-div-options span {
   margin-right: 10px;
 }
 
-#examDivOptions span:hover {
+#exam-div-options span:hover {
   cursor: pointer;
   font-weight: bold;
 }
 
-#examDivData {
+#exam-div-data {
   border-top: 4px solid cadetblue;
   padding-bottom: 10px;
   padding-right: 10px;
   padding-left: 10px;
 }
 
-#examDivData p span {
+#exam-div-data p span {
   font-weight: bold;
 }
 
-#examDivData:hover {
+#exam-div-data:hover {
   background-color: #b4ffd3;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   cursor: pointer;
 }
 
-#idSpan {
+#id-span {
   border-bottom: 2px solid cadetblue;
 }

@@ -1,21 +1,21 @@
-<div id="examsContainer">
+<div id="exams-container">
 
-  <div *ngIf="exams === null" id="emptyExamsListInfo">
-    <p>Brak egzaminów. Kliknij <a id="tutajText" [routerLink]="['/new-exam']"><u>tutaj</u></a>, aby dodać własny.</p>
+  <div *ngIf="exams === null" id="empty-exams-list-info">
+    <p>Brak egzaminów. Kliknij <a id="tutaj-text" [routerLink]="['/new-exam']"><u>tutaj</u></a>, aby dodać własny.</p>
   </div>
 
-  <div *ngFor="let exam of exams; let i = index" id="examDiv">
+  <div *ngFor="let exam of exams; let i = index" id="exam-div">
 
-    <div id="examDivOptions">
+    <div id="exam-div-options">
 
       <span routerLink="edit/{{exam.id}}">Edytuj</span>
       <span (click)="deleteExam('Czy chcesz usunąć ten egzamin?', exam.id)">Usuń</span>
 
     </div>
 
-    <div id="examDivData" routerLink="exam/{{exam.id}}">
+    <div id="exam-div-data" routerLink="exam/{{exam.id}}">
 
-      <p id="idSpan"><span>Nr: </span>{{i+1}}</p>
+      <p id="id-span"><span>Nr: </span>{{i+1}}</p>
       <p><span>Nazwa:</span> {{exam.examName}}</p>
       <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
       <p><span>Liczba pytań: </span>{{exam.questions.length}}</p>
