@@ -1,8 +1,63 @@
-<h1>REGISTER</h1>
-username:
-<input type="text" [(ngModel)]="userModel.username">
-email:
-<input type="text" [(ngModel)]="userModel.email">
-password:
-<input type="password" [(ngModel)]="userModel.password">
-<button (click)="registerUser()">REGISTER</button>
+<div id="form-container">
+  <h1 align="center">Formularz rejestracji</h1>
+  <form (ngSubmit)="registerUser()" [formGroup]="userRegisterForm">
+
+    <mat-form-field appearance="outline">
+    <mat-label>Nazwa użytkownika</mat-label>
+
+      <input type="text" matInput [formControl]="usernameControl">
+
+      <mat-error *ngIf="usernameControl.hasError('required')">
+        Nazwa użytkownika jest wymagana
+      </mat-error>
+      <mat-error *ngIf="usernameControl.hasError('minlength')
+              || usernameControl.hasError('maxlength')">
+        Nazwa użytkownika musi zawierać od 3 do 60 znaków
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+
+      <input type="text" matInput [formControl]="emailControl">
+
+      <mat-error *ngIf="emailControl.hasError('required')">
+        Adres e-mail jest wymagany
+      </mat-error>
+      <mat-error *ngIf="emailControl.hasError('pattern')">
+        Nieprawidłowy wzór adresu e-mail
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasło</mat-label>
+
+      <input type="text" matInput [formControl]="passwordControl">
+
+      <mat-error *ngIf="passwordControl.hasError('required')">
+        Hasło jest wymagane
+      </mat-error>
+      <mat-error *ngIf="passwordControl.hasError('minlength')
+              || passwordControl.hasError('maxlength')">
+        Hasło musi zawierać od 6 do 30 znaków
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Powtórz hasło</mat-label>
+      <input type="password" matInput [formControl]="passwordRepeatControl">
+
+      <mat-error *ngIf="passwordRepeatControl.hasError('required')">
+        Powtórzenie hasła jest wymagane
+      </mat-error>
+
+      <mat-error *ngIf="passwordControl.value != passwordRepeatControl.value">
+        Hasła nie są zgodne
+      </mat-error>
+
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary">Zarejestruj się</button>
+  </form>
+
+</div>
