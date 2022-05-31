@@ -1,4 +1,4 @@
-import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
@@ -9,7 +9,7 @@ import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.compo
 import {HttpClientModule} from "@angular/common/http";
 import {ExamComponent} from './pages/exam/exam.component';
 import {ExamTimerPipe} from './pipes/exam-timer.pipe';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
 import {NewExamComponent} from './pages/new-exam/new-exam.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {DialogComponent} from './pages/dialog/dialog.component';
@@ -21,6 +21,10 @@ import {RegisterComponent} from './pages/register/register.component';
 import {LogoutComponent} from './pages/logout/logout.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -48,7 +52,11 @@ import {MatInputModule} from "@angular/material/input";
     MatButtonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatTooltipModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
