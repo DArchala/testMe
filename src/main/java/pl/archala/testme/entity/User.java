@@ -8,10 +8,7 @@ import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 import pl.archala.testme.enums.RoleEnum;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -36,12 +33,12 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @Min(6)
     private String password;
 
-    @Email
+    @Pattern(regexp = "^$|^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
     @NotBlank
     private String email;
 
     @NotNull
-    private RoleEnum role;
+    private RoleEnum role = RoleEnum.USER;
 
     @NotNull
     private boolean isEnabled;
