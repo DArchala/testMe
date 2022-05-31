@@ -12,7 +12,7 @@ import pl.archala.testme.service.UserService;
 @Slf4j
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final UserService userService;
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<?> registerUser(@RequestParam String value) {
+    public ResponseEntity<?> sendToken(@RequestParam String value) {
         Token token = tokenService.findByValue(value);
         User user = token.getUser();
         user.setEnabled(true);

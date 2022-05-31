@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ExamController {
 
     private final ExamRepository examRepo;
