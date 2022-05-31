@@ -1,11 +1,11 @@
-import {AfterContentInit, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {Exam} from "../../models/exam";
 import {Answer} from "../../models/answer";
 import {Question} from "../../models/question";
 import {SingleChoiceQuestion} from "../../models/questionTypes/single-choice-question";
 import {ExamsService} from "../../services/exams.service";
 import {DialogService} from "../../services/dialog.service";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-new-exam',
@@ -125,7 +125,7 @@ export class NewExamComponent {
   doQuestionsContainMinimalAnswersNumber() {
     let count = 0;
     this.examModel.questions.forEach(question => {
-      if (question.type != 'short') {
+      if (question.type == 'short') {
         if (question.answers.length < 1) count++;
       } else {
         if (question.answers.length < 2) count++;
