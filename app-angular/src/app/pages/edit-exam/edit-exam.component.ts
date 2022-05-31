@@ -19,6 +19,7 @@ export class EditExamComponent {
     this.examId = this.route.snapshot.paramMap.get('id');
     this.examService.getNewExamData().subscribe(data => this.difficultyLevels = data);
     this.examService.getExamToEditById(this.examId).subscribe(data => {
+      this.examModel.id = this.examId;
       this.examNameControl.patchValue(data.examName);
       this.difficultyLevelControl.patchValue(data.difficultyLevel);
       this.examTimeControl.patchValue(this.getExamTimeStringFromNumber(data.timeInSeconds));
@@ -89,7 +90,7 @@ export class EditExamComponent {
       this.examModel.examName = this.examNameControl.value;
       this.examModel.difficultyLevel = this.difficultyLevelControl.value;
       this.examModel.timeInSeconds = this.examTimeCalc();
-      this.examService.postNewExam(this.examModel).subscribe(console.log);
+      this.examService.putExam(this.examModel).subscribe(console.log);
       alert("Egzamin został zapisany.");
       window.location.reload();
     } else {
@@ -98,11 +99,11 @@ export class EditExamComponent {
       else if (!this.doAllQuestionsContainContent())
         alert("Wszystkie pytania muszą zawierać odpowiedź.")
       else if (!this.doQuestionsContainMinimalAnswersNumber())
-        alert("Pytania z pisemną odpowiedzią muszą zawierać conajmniej jedną odpowiedź, pozostałe conajmniej dwie.");
+        alert("Pytania z pisemną odpowiedzią muszą zawierać co najmniej jedną odpowiedź, pozostałe co najmniej dwie.");
       else if (this.examTimeCalc() === 0)
         alert("Czas egzaminu nie może być zerowy.");
       else if (!this.doQuestionsContainMinimalCorrectAnswersNumber())
-        alert("Każde pytanie musi zawierać conajmniej jedną prawidłową odpowiedź.");
+        alert("Każde pytanie musi zawierać co najmniej jedną prawidłową odpowiedź.");
       else
         alert("Sprawdź poprawność wprowadzonych danych.");
     }
@@ -129,7 +130,7 @@ export class EditExamComponent {
   doQuestionsContainMinimalAnswersNumber() {
     let count = 0;
     this.examModel.questions.forEach(question => {
-      if (question.type != 'short') {
+      if (question.type == 'short') {
         if (question.answers.length < 1) count++;
       } else {
         if (question.answers.length < 2) count++;
