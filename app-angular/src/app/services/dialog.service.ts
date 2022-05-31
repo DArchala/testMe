@@ -15,8 +15,8 @@ export class DialogService {
       minHeight: '200px',
       minWidth: '200px',
       width: '15%',
-      height: '30%',
-      maxHeight: '200px',
+      height: 'auto',
+      maxHeight: '300px',
       data: {
         accept: false,
         info: information,
