@@ -52,26 +52,11 @@
   margin-bottom: 2%;
 }
 
-.answers input:hover {
-  cursor: pointer;
-}
-
 #timer {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-.answer-checkbox {
-  transform: scale(1.5);
-  margin-right: 10px;
-}
-
-.answer-radio {
-  transform: scale(1.5);
-  margin-right: 10px;
-  clip-path: circle(50% at 50% 50%);
-}
-
-.user-answer-text-input {
-  transform: scale(1.5);
+mat-checkbox {
+  padding-right: 10px;
 }

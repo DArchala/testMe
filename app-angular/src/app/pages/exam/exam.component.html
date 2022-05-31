@@ -10,11 +10,11 @@
     <p><span>Twój ostatni czas egzaminu:</span> {{userLastExamTime | examTimer}}</p>
 
     <div class="exam-start-finish-button-div" *ngIf="!examStarted">
-      <button class="exam-start-finish-button" (click)="startTest()">Rozpocznij egzamin!</button>
+      <button mat-raised-button color="primary"(click)="startTest()">Rozpocznij egzamin!</button>
     </div>
 
     <div class="exam-start-finish-button-div" *ngIf="examStarted">
-      <button class="exam-start-finish-button"
+      <button mat-raised-button color="primary"
               (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">
         Zakończ egzamin</button>
     </div>
@@ -29,32 +29,30 @@
       <p id="question-content">{{i + 1 + '. ' + question.content}}</p>
 
       <ng-container [ngSwitch]="question.type">
-
         <div *ngSwitchCase="'single'">
           <div class="answers" *ngFor="let answer of question.answers">
-            <input type="checkbox" class="answer-radio"
-                   (change)="uncheckOtherAnswers(answer, question)"
-                   [(ngModel)]="answer.correctness" [value]="true"
-                   name="{{question.id}}">
+            <mat-checkbox [(ngModel)]="answer.correctness" style="padding-top: 10px" (change)="selectAnswer(answer, question)"
+                          [ngModelOptions]="{standalone: true}" color="warn">
+            </mat-checkbox>
             <span>{{answer.content}}</span>
           </div>
         </div>
 
         <div *ngSwitchCase="'multiple'">
           <div class="answers" *ngFor="let answer of question.answers">
-            <input type="checkbox" class="answer-checkbox"
-                   [(ngModel)]="answer.correctness" [value]="true"
-                   name="{{question.id}}">
+            <mat-checkbox [(ngModel)]="answer.correctness" style="padding-top: 10px"
+                          [ngModelOptions]="{standalone: true}" color="primary">
+            </mat-checkbox>
             <span>{{answer.content}}</span>
           </div>
         </div>
 
         <div *ngSwitchCase="'short'">
-          <input type="text" class="user-answer-text-input"
-                 [(ngModel)]="question.userAnswer"
-                 name="{{question.id}}">
+          <mat-form-field appearance="outline">
+            <mat-label>Twoja odpowiedź</mat-label>
+            <input type="text" matInput required [(ngModel)]="question.userAnswer">
+          </mat-form-field>
         </div>
-
       </ng-container>
 
     </div>

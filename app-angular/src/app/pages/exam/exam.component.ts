@@ -61,9 +61,10 @@ export class ExamComponent {
     this.examService.getExamById(this.examId).subscribe(data => this.examTimeLeft = data.timeInSeconds);
   }
 
-  uncheckOtherAnswers(answer: Answer, question: Question) {
-    question.answers.forEach(answer => answer.correctness = false);
-    answer.correctness = true;
+  selectAnswer(answer: Answer, question: Question) {
+    if(question.type === 'single') {
+      question.answers.filter(a => a.id != answer.id).forEach(answer => answer.correctness = false);
+    }
   }
 
   getPercentageExamScore(examScore: number, maxPoints: number) {
@@ -72,9 +73,21 @@ export class ExamComponent {
   }
 
   finishTestByClick(info: string) {
+    if (!this.doUserFillAllAnswers()) info = "W egzaminie nadal istnieją pytania pozostawione bez odpowiedzi. Czy napewno chcesz zakończyć egzamin?";
     const answer = this.dialogService.getDialog(info);
     answer.afterClosed().subscribe(accept => {
       if (accept) this.finishTest();
     });
+  }
+
+  doUserFillAllAnswers() {
+    let count = 0;
+    this.exam.questions.forEach(question => {
+      console.log(question);
+      if (question.type != 'short' && question.answers.filter(answer => answer.correctness).length < 1) count++;
+      if (question.type === 'short' && question.userAnswer.trim() === '') count++;
+    });
+    console.log("count = " + count);
+    return count === 0;
   }
 }
