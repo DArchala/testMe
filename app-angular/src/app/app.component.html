@@ -1,9 +1,9 @@
 <div id="header">
-  <a routerLink="/home">Strona główna</a>
-  <a routerLink="/exams">Egzaminy</a>
-  <a routerLink="/new-exam">Nowy egzamin</a>
-  <a routerLink="/login">Zaloguj się</a>
-  <a routerLink="/logout">Wyloguj się</a>
-  <a routerLink="/register">Rejestracja</a>
+  <a routerLink="/home" *ngIf="authService.isUserLoggedIn()">Strona główna</a>
+  <a routerLink="/exams" *ngIf="authService.isUserLoggedIn()">Egzaminy</a>
+  <a routerLink="/new-exam" *ngIf="authService.isUserLoggedIn()">Nowy egzamin</a>
+  <a routerLink="/login" *ngIf="!authService.isUserLoggedIn()">Zaloguj się</a>
+  <a routerLink="/register" *ngIf="!authService.isUserLoggedIn()">Rejestracja</a>
+  <a routerLink="/logout" *ngIf="authService.isUserLoggedIn()">Wyloguj się</a>
 </div>
 <router-outlet></router-outlet>
