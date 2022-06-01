@@ -50,7 +50,16 @@ export class ExamsService {
   }
 
   deleteExam(examId: any) {
-    return this.httpClient.delete<any>(this.url + `/exams/delete/` + examId).subscribe(console.log);
+    return this.httpClient.delete<any>(this.url + `/exams/delete/` + examId).subscribe(
+      next => {
+      }, error => {
+        if (error.status === 200) {
+          alert("Egzamin usunięto pomyślnie.");
+          window.location.reload();
+        } else if (error.status === 403) alert("Brak uprawnień.");
+        else return;
+      },
+    );
   }
 
   getNewQuestion(questionType: string) {
@@ -73,98 +82,6 @@ export class ExamsService {
     return quest;
   }
 
-  validateExamTimer(examHours: number, examMinutes: number) {
-    if (examHours === null || examHours === undefined) examHours = 0;
-    if (examMinutes === null || examMinutes === undefined) examMinutes = 0;
-    if (examMinutes === 0 && examMinutes === 0) {
-      alert("Czas egzaminu nie może być zerowy.");
-      return false;
-    }
-    if (examHours > 23 || examHours < 0) {
-      alert("Czas egzaminu (godziny) nie może być ujemny ani większy od 23.");
-      return false;
-    }
-    if (examMinutes > 59 || examMinutes < 0) {
-      alert("Czas egzaminu (minuty) nie może być ujemny ani większy od 59.");
-      return false;
-    }
-    return true;
-  }
-
-  validateExamQuestions(examModel: Exam) {
-    if (examModel.questions.length < 1) {
-      alert("Egzamin musi zawierać conajmniej jedno pytanie.");
-      return false;
-    }
-
-    for (let question of examModel.questions) {
-
-      if (question.content.length === 0) {
-        alert("Każde pytanie musi zawierać treść.");
-        return false;
-      }
-
-      if (question.answers.length === 0) {
-        alert("Każde pytanie musi zawierać conajmniej jedną odpowiedź.");
-        return false;
-      }
-
-      if ((question.type === 'single' || question.type === 'multiple') && question.answers.length === 1) {
-        alert("Każde pytanie jednokrotnego lub wielokrotnego wyboru musi zawierać conajmniej dwie odpowiedzi.");
-        return false;
-      }
-
-      for (let answer of question.answers) {
-
-        if (answer.content.length === 0) {
-          alert("Każda odpowiedź musi zawierać treść.");
-          return false;
-        }
-
-        let amountOfCorrectAnswers = 0;
-        question.answers.forEach(answer => {
-          if (answer.correctness) amountOfCorrectAnswers++;
-        });
-        if (amountOfCorrectAnswers === 0) {
-          alert("Każde pytanie musi zawierać conajmniej jedną prawidłową odpowiedź.");
-          return false;
-        }
-
-      }
-    }
-    return true;
-  }
-
-  validateExamName(examModel: Exam) {
-    if (examModel.examName.length === 0) {
-      alert("Nazwa egzaminu nie może być pusta.");
-      return false;
-    } else if (examModel.examName.length > 60) {
-      alert("Nazwa egzaminu nie może być dłuższa niż 60 znaków.");
-      return false;
-    }
-    return true;
-  }
-
-  validateDifficultyLevel(examModel: Exam) {
-    if (examModel.difficultyLevel.length === 0) {
-      alert("Poziom trudności egzaminu nie może być pusty.");
-      return false;
-    } else if (examModel.difficultyLevel.length > 60) {
-      alert("Poziom trudności egzaminu nie może być dłuższy niż 60 znaków.");
-      return false;
-    }
-    return true;
-  }
-
-  validateExamTime(examModel: Exam) {
-    if (examModel.timeInSeconds < 60 || examModel.timeInSeconds > 86400) {
-      alert("Czas egzaminu musi wynosić od 60 do 86400 sekund.");
-      return false;
-    }
-    return true;
-  }
-
   countCorrectAnswers(exam: Exam) {
     let counter = 0;
     exam.questions?.forEach(question => {
@@ -174,6 +91,5 @@ export class ExamsService {
     });
     return counter;
   }
-
 
 }
