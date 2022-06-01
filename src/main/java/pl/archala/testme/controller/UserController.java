@@ -30,7 +30,7 @@ public class UserController {
         else return new ResponseEntity<>("User not saved", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/token")
+    @GetMapping("/token")
     public ResponseEntity<?> sendToken(@RequestParam String value) {
         Token token = tokenService.findByValue(value);
         User user = token.getUser();

@@ -1,6 +1,10 @@
-/*insert into users (id, username, password, email, role, is_enabled)
-values (1, 'user', 'user', 'damianarchala@gmail.com', 'USER', false),
-       (2, 'admin', 'admin', 'damianarchala2@gmail.com', 'ADMIN', false);*/
+insert into users (id, username, password, email, role, is_enabled)
+values (1, 'dexter-user', '$2a$12$s7GnHP2rlMAI0GnMdhhr9.Izu1VFUVYPrrJCaj8hogk9h4JloRH3i',
+        'damianarchala@gmail.com', 'USER', true),
+       (2, 'dexter-admin', '$2a$12$SnohOQj1m5EImc84QdIFCOEQ3dW/6Qs7wbtcUBNSkEOvrsOLgYupi',
+        'damianarchala2@gmail.com', 'ADMIN', true);
+-- dexter-user password = user123
+-- dexter-admin password = admin123
 
 insert into answers (id, content, correctness)
 values (1, 'Database', true),
