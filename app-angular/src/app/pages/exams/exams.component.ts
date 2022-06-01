@@ -24,11 +24,7 @@ export class ExamsComponent implements OnInit {
     const answer = this.dialogService.getDialog(information);
 
     answer.afterClosed().subscribe(accept => {
-      if (accept) {
-        this.examService.deleteExam(id);
-        alert("Egzamin usunięto pomyślnie.")
-        window.location.reload();
-      }
+      if (accept) this.examService.deleteExam(id);
     });
 
   }
