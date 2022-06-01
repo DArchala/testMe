@@ -1,4 +1,4 @@
-import {CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
@@ -6,10 +6,10 @@ import {HomeComponent} from './pages/home/home.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {ExamsComponent} from './pages/exams/exams.component';
 import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ExamComponent} from './pages/exam/exam.component';
 import {ExamTimerPipe} from './pipes/exam-timer.pipe';
-import {FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NewExamComponent} from './pages/new-exam/new-exam.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {DialogComponent} from './pages/dialog/dialog.component';
@@ -25,6 +25,9 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {AuthGuard} from "./support/auth.guard";
+import {AuthenticationService} from "./services/authentication.service";
+import {HttpRequestInterceptor} from "./services/http-request.interceptor";
 
 @NgModule({
   declarations: [
@@ -59,7 +62,9 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatTooltipModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [AuthGuard, AuthenticationService, [
+    {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true}
+  ]],
   bootstrap: [AppComponent]
 })
 export class AppModule {
