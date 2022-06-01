@@ -1,4 +1,4 @@
-import {Injectable, Input} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
 
@@ -7,9 +7,10 @@ import {map, Observable, tap} from "rxjs";
 })
 export class AuthenticationService {
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {
+  }
 
-  authenticate(username: string, password: string) : Observable<void> {
+  authenticate(username: string, password: string): Observable<void> {
     const formData = new FormData();
     formData.append('username', username);
     formData.append('password', password);
@@ -35,9 +36,16 @@ export class AuthenticationService {
     sessionStorage.removeItem('username');
   }
 
-  logOut() : Observable<void> {
+  logOut(): Observable<void> {
     sessionStorage.removeItem('username');
     return this.httpClient.post<any>(`http://localhost:8080/logout`, null).pipe(tap(console.log));
+  }
+
+  getUsername() {
+    const username = sessionStorage.getItem('username');
+    if (username !== null)
+      return sessionStorage.getItem('username');
+    else return '';
   }
 
 }
