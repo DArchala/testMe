@@ -1,27 +1,43 @@
 #header {
   margin-bottom: 20px;
   border-bottom: 1px solid #63B4D1;
+  display: flex;
+  justify-content: space-around;
 }
 
-#header a {
+#header-pages {
+  flex-grow: 1add;
+}
+
+#header-logout {
+  text-align: right;
+  flex-grow: 1;
+}
+
+.page {
   font-weight: bold;
   font-size: 25px;
-  display: inline;
   margin-right: 2%;
   padding-bottom: 5px;
   color: #9448BC;
 }
 
-#header a:hover {
+#header-username {
+  font-weight: bold;
+  font-size: 25px;
+  padding-bottom: 5px;
+}
+
+.page:hover {
   color: #7699D4;
   cursor: pointer;
 }
 
-#header a:link {
+.page:link {
   text-decoration: none;
 }
 
-#header a:active {
+.page:active {
   color: #63B4D1;
 }
 
