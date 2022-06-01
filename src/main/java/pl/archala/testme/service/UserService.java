@@ -3,7 +3,6 @@ package pl.archala.testme.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.archala.testme.entity.User;
-import pl.archala.testme.enums.RoleEnum;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.security.Token;
@@ -30,7 +29,6 @@ public class UserService {
     }
 
     public boolean saveUser(User user) {
-        user.setRole(RoleEnum.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         sendToken(user);
@@ -45,14 +43,13 @@ public class UserService {
         token.setUser(user);
         tokenRepo.save(token);
 
-        String url = "http://localhost:8080/api/token?value="+tokenValue;
+        String url = "http://localhost:8080/api/token?value=" + tokenValue;
 
         try {
-            mailService.sendMail(user.getEmail(), "token", url, false);
+            mailService.sendMail(user.getEmail(), "Link aktywacyjny", url, false);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
 
     }
 }
