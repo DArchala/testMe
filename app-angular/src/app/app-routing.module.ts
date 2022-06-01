@@ -9,22 +9,23 @@ import {EditExamComponent} from "./pages/edit-exam/edit-exam.component";
 import {LoginComponent} from "./pages/login/login.component";
 import {RegisterComponent} from "./pages/register/register.component";
 import {LogoutComponent} from "./pages/logout/logout.component";
+import {AuthGuard} from "./support/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'logout', component: LogoutComponent},
-  {path: 'exams', component: ExamsComponent},
-  {path: 'exams/exam/:id', component: ExamComponent},
-  {path: 'exams/edit/:id', component: EditExamComponent},
-  {path: 'new-exam', component: NewExamComponent},
+  {path: 'logout', component: LogoutComponent, canActivate: [AuthGuard]},
+  {path: 'exams', component: ExamsComponent, canActivate: [AuthGuard]},
+  {path: 'exams/exam/:id', component: ExamComponent, canActivate: [AuthGuard]},
+  {path: 'exams/edit/:id', component: EditExamComponent, canActivate: [AuthGuard]},
+  {path: 'new-exam', component: NewExamComponent, canActivate: [AuthGuard]},
   {path: '**', component: PageNotFoundComponent},
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule],
 })
 
