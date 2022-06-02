@@ -8,6 +8,7 @@ import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.security.Token;
 
 import javax.mail.MessagingException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -51,5 +52,10 @@ public class UserService {
             e.printStackTrace();
         }
 
+    }
+
+    public User findByUsername(String username) {
+        Optional<User> user = userRepo.findByUsername(username);
+        return user.orElse(null);
     }
 }
