@@ -9,6 +9,8 @@ import pl.archala.testme.security.Token;
 import pl.archala.testme.service.TokenService;
 import pl.archala.testme.service.UserService;
 
+import java.util.Objects;
+
 @Slf4j
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
@@ -37,6 +39,13 @@ public class UserController {
         user.setEnabled(true);
         userService.saveUser(user);
         return null;
+    }
+
+    @PostMapping("/findByUsername")
+    public ResponseEntity<?> findUserByUsername(@RequestBody String username) {
+        User user = userService.findByUsername(username);
+        if (user != null) return new ResponseEntity<>(user, HttpStatus.OK);
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
