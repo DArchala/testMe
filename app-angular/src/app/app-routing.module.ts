@@ -10,6 +10,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {RegisterComponent} from "./pages/register/register.component";
 import {LogoutComponent} from "./pages/logout/logout.component";
 import {AuthGuard} from "./support/auth.guard";
+import {MyAccountComponent} from "./pages/my-account/my-account.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'logout', component: LogoutComponent, canActivate: [AuthGuard]},
+  {path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuard]},
   {path: 'exams', component: ExamsComponent, canActivate: [AuthGuard]},
   {path: 'exams/exam/:id', component: ExamComponent, canActivate: [AuthGuard]},
   {path: 'exams/edit/:id', component: EditExamComponent, canActivate: [AuthGuard]},
