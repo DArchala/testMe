@@ -17,4 +17,12 @@ export class UserService {
     return this.httpClient.post<User>(this.url + `/register`, user).pipe(tap(console.log));
   }
 
+  findUserByUsername(username: any) {
+    return this.httpClient.post<User>(this.url + `/findByUsername`, username).pipe(tap(console.log));
+  }
+
+  updateUser(user: User) {
+    return this.httpClient.put<User>(this.url + `/saveUserChanges`, user).pipe(tap(console.log));
+  }
+
 }
