@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-register',
@@ -52,8 +53,13 @@ export class RegisterComponent {
       this.userModel.username = this.usernameControl.value;
       this.userModel.email = this.emailControl.value;
       this.userModel.password = this.passwordControl.value;
-      this.userService.registerNewUser(this.userModel).subscribe(console.log);
-      alert("Wiadomość e-mail z linkiem potwierdzającym został wysłany. Sprawdź skrzynkę pocztową.");
+      this.userService.registerNewUser(this.userModel).subscribe(
+        () => {
+        }, (error: HttpErrorResponse) => {
+          if(error.status === 400) alert(error.error);
+          else alert(error.error.text);
+        }
+      );
     }
   }
 }
