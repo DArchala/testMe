@@ -27,10 +27,12 @@ public class User extends AbstractEntity<Long> implements UserDetails {
 
     @NotBlank
     @Min(3)
+    @Max(60)
     private String username;
 
     @NotBlank
     @Min(6)
+    @Max(30)
     private String password;
 
     @Pattern(regexp = "^$|^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
