@@ -5,8 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.archala.testme.entity.User;
+import pl.archala.testme.repository.TokenRepository;
+import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.security.Token;
-import pl.archala.testme.service.TokenService;
 import pl.archala.testme.service.UserService;
 
 @Slf4j
@@ -17,11 +18,14 @@ public class UserController {
 
     private final UserService userService;
 
-    private final TokenService tokenService;
+    private final UserRepository userRepo;
 
-    public UserController(UserService userService, TokenService tokenService) {
+    private final TokenRepository tokenRepo;
+
+    public UserController(UserService userService, UserRepository userRepo, TokenRepository tokenRepo) {
         this.userService = userService;
-        this.tokenService = tokenService;
+        this.userRepo = userRepo;
+        this.tokenRepo = tokenRepo;
     }
 
     @PostMapping("/register")
@@ -40,16 +44,20 @@ public class UserController {
 
     @GetMapping("/token")
     public ResponseEntity<?> sendToken(@RequestParam String value) {
-        Token token = tokenService.findByValue(value);
+        Token token = tokenRepo.findByValue(value).orElse(null);
+        if (token == null) return new ResponseEntity<>("Token does not exist", HttpStatus.NOT_FOUND);
+
         User user = token.getUser();
+        if (user == null) return new ResponseEntity<>("Token has no user", HttpStatus.NOT_FOUND);
+
         user.setEnabled(true);
-        userService.saveUser(user);
+        userRepo.save(user);
         return new ResponseEntity<>("User account is now enable.", HttpStatus.OK);
     }
 
     @PostMapping("/findByUsername")
     public ResponseEntity<?> findUserByUsername(@RequestBody String username) {
-        User user = userService.findByUsername(username);
+        User user = userRepo.findByUsername(username).orElse(null);
         if (user != null) return new ResponseEntity<>(user, HttpStatus.OK);
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
