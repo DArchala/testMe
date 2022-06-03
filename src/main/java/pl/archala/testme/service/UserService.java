@@ -29,11 +29,13 @@ public class UserService {
         this.mailService = mailService;
     }
 
-    public boolean saveUser(User user) {
+    public int registerUser(User user) {
+        if (userRepo.findByUsername(user.getUsername()).isPresent()) return 0;
+        if (userRepo.findByEmail(user.getEmail()).isPresent()) return -1;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         sendToken(user);
-        return true;
+        return 1;
     }
 
     private void sendToken(User user) {
@@ -46,12 +48,21 @@ public class UserService {
 
         String url = "http://localhost:8080/api/token?value=" + tokenValue;
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("Kliknij w poniższy link, aby aktywować Twoje konto:\n\n");
+        sb.append(url);
+        sb.append("\n\nAutor aplikacji: Damian Archała");
+
         try {
-            mailService.sendMail(user.getEmail(), "Link aktywacyjny", url, false);
+            mailService.sendMail(user.getEmail(), "Link aktywacyjny", sb.toString(), false);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public User saveUser(User user) {
+        return userRepo.save(user);
     }
 
     public User findByUsername(String username) {
