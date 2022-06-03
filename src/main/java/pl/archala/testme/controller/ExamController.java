@@ -41,7 +41,7 @@ public class ExamController {
     @GetMapping("/exams/exam/{id}")
     public ResponseEntity<?> getExamById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
-        if (exam.isEmpty()) return new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+        if (exam.isEmpty()) return new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(exam.get().setAllAnswersFalse(), HttpStatus.OK);
     }
 
@@ -49,7 +49,7 @@ public class ExamController {
     public ResponseEntity<?> getExamMaxPoints(@PathVariable("id") Long id) {
         int examMaxPoints = examService.getMaxPossibleExamPoints(id);
         if (examMaxPoints == -1)
-            return new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(examMaxPoints, HttpStatus.OK);
     }
 
@@ -67,7 +67,7 @@ public class ExamController {
     @GetMapping("/exams/edit/{id}")
     public ResponseEntity<?> getExamToEditById(@PathVariable("id") Long id) {
         Optional<Exam> exam = examRepo.findById(id);
-        if (exam.isEmpty()) return new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+        if (exam.isEmpty()) return new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(exam.get(), HttpStatus.OK);
     }
 
