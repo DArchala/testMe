@@ -9,8 +9,6 @@ import pl.archala.testme.security.Token;
 import pl.archala.testme.service.TokenService;
 import pl.archala.testme.service.UserService;
 
-import java.util.Objects;
-
 @Slf4j
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
@@ -28,8 +26,16 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userService.saveUser(user)) return new ResponseEntity<>("User saved", HttpStatus.CREATED);
-        else return new ResponseEntity<>("User not saved", HttpStatus.BAD_REQUEST);
+        switch (userService.registerUser(user)) {
+            case 1:
+                return new ResponseEntity<>("User registered, but still not active. Check your mailbox.", HttpStatus.CREATED);
+            case 0:
+                return new ResponseEntity<>("This username is already taken", HttpStatus.BAD_REQUEST);
+            case -1:
+                return new ResponseEntity<>("This email is already taken", HttpStatus.BAD_REQUEST);
+            default:
+                return new ResponseEntity<>("Undefined error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/token")
@@ -38,7 +44,7 @@ public class UserController {
         User user = token.getUser();
         user.setEnabled(true);
         userService.saveUser(user);
-        return null;
+        return new ResponseEntity<>("User account is now enable.", HttpStatus.OK);
     }
 
     @PostMapping("/findByUsername")
