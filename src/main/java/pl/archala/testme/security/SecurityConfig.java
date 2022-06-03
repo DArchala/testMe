@@ -46,7 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/token").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/exams/delete/**").hasAuthority("ADMIN")
 
                 .and()
