@@ -47,9 +47,9 @@ public class ExamController {
 
     @PostMapping("/exams/exam/{id}")
     public ResponseEntity<?> getExamMaxPoints(@PathVariable("id") Long id) {
-        int examMaxPoints = examService.getMaxPossibleExamPoints(id);
-        if (examMaxPoints == -1)
+        if(examRepo.findById(id).isEmpty())
             return new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        int examMaxPoints = examService.getMaxPossibleExamPoints(id);
         return new ResponseEntity<>(examMaxPoints, HttpStatus.OK);
     }
 
