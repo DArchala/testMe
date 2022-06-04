@@ -25,4 +25,8 @@ export class UserService {
     return this.httpClient.put<User>(this.url + `/saveUserChanges`, user).pipe(tap(console.log));
   }
 
+  confirmToken(tokenValue: string) {
+    return this.httpClient.get<any>(this.url + `/token?value=` + tokenValue).pipe(tap(console.log));
+  }
+
 }
