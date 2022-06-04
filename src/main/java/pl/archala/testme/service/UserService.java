@@ -45,7 +45,7 @@ public class UserService {
         token.setUser(user);
         tokenRepo.save(token);
 
-        String url = "http://localhost:8080/api/token?value=" + tokenValue;
+        String url = "http://localhost:4200/#/activate-account/" + tokenValue;
 
         StringBuilder sb = new StringBuilder();
         sb.append("Kliknij w poniższy link, aby aktywować Twoje konto:\n\n");
