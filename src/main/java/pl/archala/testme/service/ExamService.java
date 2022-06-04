@@ -46,7 +46,6 @@ public class ExamService {
 
     public int getMaxPossibleExamPoints(Long examId) {
         Optional<Exam> exam = examRepo.findById(examId);
-        if (exam.isEmpty()) return -1;
         int counter = 0;
         for (Question q : exam.orElseThrow().getQuestions()) {
             counter += q.countCorrectAnswers();
