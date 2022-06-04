@@ -32,27 +32,27 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         switch (userService.registerUser(user)) {
             case 1:
-                return new ResponseEntity<>("User registered, but still not active. Check your mailbox.", HttpStatus.CREATED);
+                return new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.CREATED);
             case 0:
-                return new ResponseEntity<>("This username is already taken", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("This username is already taken.", HttpStatus.BAD_REQUEST);
             case -1:
-                return new ResponseEntity<>("This email is already taken", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("This e-mail is already taken.", HttpStatus.BAD_REQUEST);
             default:
-                return new ResponseEntity<>("Undefined error", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/token")
     public ResponseEntity<?> sendToken(@RequestParam String value) {
         Token token = tokenRepo.findByValue(value).orElse(null);
-        if (token == null) return new ResponseEntity<>("Token does not exist", HttpStatus.NOT_FOUND);
+        if (token == null) return new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
 
         User user = token.getUser();
-        if (user == null) return new ResponseEntity<>("Token has no user", HttpStatus.NOT_FOUND);
+        if (user == null) return new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
 
         user.setEnabled(true);
         userRepo.save(user);
-        return new ResponseEntity<>("User account is now enable.", HttpStatus.OK);
+        return new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
     }
 
     @PostMapping("/findByUsername")
