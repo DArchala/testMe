@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.archala.testme.entity.Answer;
@@ -31,6 +33,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.STRICT_STUBS)
 class ExamControllerTest {
 
     @InjectMocks
@@ -78,15 +81,28 @@ class ExamControllerTest {
     }
 
     @Test
-    void getExamMaxPointsShouldReturn() {
+    void getExamMaxPointsShouldReturnMaxPointsForExam() {
         //given
         ResponseEntity<?> response = new ResponseEntity<>(12, HttpStatus.OK);
 
         //when
+        when(examRepo.findById(anyLong())).thenReturn(Optional.of(new Exam()));
         when(examService.getMaxPossibleExamPoints(1L)).thenReturn(12);
 
         //then
         assertEquals(response, examController.getExamMaxPoints(1L));
+    }
+
+    @Test
+    void getExamMaxPointsShouldReturnExamNotExistAndNotFoundStatusIfExamDoesNotExist() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+
+        //when
+        when(examRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        //then
+        assertEquals(response, examController.getExamMaxPoints(anyLong()));
     }
 
     @Test
@@ -101,7 +117,7 @@ class ExamControllerTest {
     @Test
     void getExamByIdShouldReturnNullAndNotFoundHttpStatusIfExamNotExists() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
 
         //when
         when(examRepo.findById(1L)).thenReturn(Optional.empty());
@@ -150,7 +166,7 @@ class ExamControllerTest {
     @Test
     void getExamToEditByIdShouldReturnResponseEntityWithNotFoundStatusIfExamNotExists() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
 
         //when
         when(examRepo.findById(1L)).thenReturn(Optional.empty());
@@ -181,7 +197,7 @@ class ExamControllerTest {
         exam.setId(1L);
 
         ResponseEntity<?> response = new ResponseEntity<>("Exam saved", HttpStatus.OK);
-        ;
+
 
         //when
         when(examService.putExam(exam)).thenReturn(true);
