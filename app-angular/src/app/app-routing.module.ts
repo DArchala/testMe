@@ -11,6 +11,7 @@ import {RegisterComponent} from "./pages/register/register.component";
 import {LogoutComponent} from "./pages/logout/logout.component";
 import {AuthGuard} from "./support/auth.guard";
 import {MyAccountComponent} from "./pages/my-account/my-account.component";
+import {ActivateAccountComponent} from "./pages/activate-account/activate-account.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path: 'exams/exam/:id', component: ExamComponent, canActivate: [AuthGuard]},
   {path: 'exams/edit/:id', component: EditExamComponent, canActivate: [AuthGuard]},
   {path: 'new-exam', component: NewExamComponent, canActivate: [AuthGuard]},
+  {path: 'activate-account/:token', component: ActivateAccountComponent},
   {path: '**', component: PageNotFoundComponent},
 ]
 

@@ -28,7 +28,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {AuthGuard} from "./support/auth.guard";
 import {AuthenticationService} from "./services/authentication.service";
 import {HttpRequestInterceptor} from "./services/http-request.interceptor";
-import { MyAccountComponent } from './pages/my-account/my-account.component';
+import {MyAccountComponent} from './pages/my-account/my-account.component';
+import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MyAccountComponent } from './pages/my-account/my-account.component';
     LoginComponent,
     RegisterComponent,
     LogoutComponent,
-    MyAccountComponent
+    MyAccountComponent,
+    ActivateAccountComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
