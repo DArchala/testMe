@@ -42,7 +42,7 @@ class UserControllerTest {
     @Test
     void registerUserShouldReturnCorrectMessageAndStatusCreatedIfServiceReturnOne() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active. Check your mailbox.",
+        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active - check your mailbox.",
                 HttpStatus.CREATED);
         User sampleUser = new User();
 
@@ -56,7 +56,7 @@ class UserControllerTest {
     @Test
     void registerUserShouldReturnUsernameIsTakenMessageAndStatusBadRequestIfUserServiceReturnZero() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("This username is already taken",
+        ResponseEntity<?> response = new ResponseEntity<>("This username is already taken.",
                 HttpStatus.BAD_REQUEST);
         User sampleUser = new User();
 
@@ -70,7 +70,7 @@ class UserControllerTest {
     @Test
     void registerUserShouldReturnEmailIsTakenMessageAndStatusBadRequestIfUserServiceReturnMinusOne() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("This email is already taken",
+        ResponseEntity<?> response = new ResponseEntity<>("This e-mail is already taken.",
                 HttpStatus.BAD_REQUEST);
         User sampleUser = new User();
 
@@ -84,7 +84,7 @@ class UserControllerTest {
     @Test
     void registerUserShouldReturnUndefinedErrorAndInternalErrorStatusAsDefaultValue() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error",
+        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.",
                 HttpStatus.INTERNAL_SERVER_ERROR);
         User sampleUser = new User();
 
@@ -99,7 +99,7 @@ class UserControllerTest {
     void sendTokenShouldReturnNotFoundIfTokenDoesNotExist() {
         //given
         String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
 
         //when
         when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.empty());
@@ -113,7 +113,7 @@ class UserControllerTest {
         //given
         Token token = new Token();
         String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("Token has no user", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
 
         //when
         when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));
@@ -128,7 +128,7 @@ class UserControllerTest {
         Token token = new Token();
         token.setUser(new User());
         String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("User account is now enable.", HttpStatus.OK);
+        ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
 
         //when
         when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));

@@ -15,9 +15,7 @@ import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
-import pl.archala.testme.repository.AnswerRepository;
-import pl.archala.testme.repository.ExamRepository;
-import pl.archala.testme.repository.QuestionRepository;
+import pl.archala.testme.repository.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -49,10 +47,16 @@ class ExamServiceTest {
     @Mock
     private AnswerService answerService;
 
+    @Mock
+    private UserRepository userRepo;
+
+    @Mock
+    private ExamAttemptRepository examAttemptRepo;
+
     @BeforeEach
     void setUp() {
         questionService = new QuestionService(questionRepo, answerService);
-        examService = new ExamService(questionService, examRepo, answerRepo, questionRepo);
+        examService = new ExamService(questionService, examRepo, answerRepo, questionRepo, userRepo, examAttemptRepo);
     }
 
     @Test

@@ -23,8 +23,8 @@ class UserTest {
     @Test
     void hashCodeShouldBeEqualForTheSameUsers() {
         //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
-        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
+        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         //when
         int hash = user.hashCode();
@@ -37,8 +37,8 @@ class UserTest {
     @Test
     void hashCodeShouldNotBeEqualForDifferentUsers() {
         //given
-        User user = new User("user2", "password", "email@gmail.com", RoleEnum.USER, true);
-        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user2", "password", "email@gmail.com", RoleEnum.USER, true, null);
+        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         //when
         int hash = user.hashCode();
@@ -51,8 +51,8 @@ class UserTest {
     @Test
     void usersShouldNotBeEqualIfFieldsAreDifferrent() {
 
-        User user = new User("user2", "password", "email@gmail.com", RoleEnum.USER, true);
-        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user2", "password", "email@gmail.com", RoleEnum.USER, true, null);
+        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         assertFalse(user.equals(user2));
         assertFalse(user2.equals(user));
@@ -62,8 +62,8 @@ class UserTest {
     @Test
     void usersShouldNotEqualIfFieldsAreTheSame() {
 
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
-        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
+        User user2 = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         assertTrue(user.equals(user2));
         assertTrue(user2.equals(user));

@@ -1,6 +1,5 @@
 package pl.archala.testme.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,14 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.entity.Exam;
-import pl.archala.testme.enums.ExamDifficultyLevel;
+import pl.archala.testme.entity.ExamForm;
 import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
+import pl.archala.testme.enums.ExamDifficultyLevel;
 import pl.archala.testme.repository.ExamRepository;
+import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.service.ExamService;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +30,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -45,10 +46,11 @@ class ExamControllerTest {
     @Mock
     private ExamService examService;
 
-    @BeforeEach
-    void setUp() {
-        examController = new ExamController(examRepo, examService);
-    }
+    @Mock
+    private UserRepository userRepo;
+
+    @Mock
+    private Principal principal;
 
     @Test
     void getExamsShouldReturnResponseEntityWithExamsListIfDBContainAnyExam() {
@@ -224,13 +226,14 @@ class ExamControllerTest {
     @Test
     void checkExamCorrectnessShouldReturnValueFromExamService() {
         //given
-        Exam exam = new Exam();
+        ExamForm examform = new ExamForm();
+        ResponseEntity<?> response = new ResponseEntity<>(1, HttpStatus.OK);
 
         //when
-        when(examService.countUserExamPoints(exam)).thenReturn(1);
+        when(examService.countUserExamPoints(examform.getExam())).thenReturn(1);
 
         //then
-        assertEquals(1, examController.checkExamCorrectness(exam));
+        assertEquals(response, examController.checkExamCorrectness(examform, principal));
     }
 
     @Test
@@ -248,7 +251,7 @@ class ExamControllerTest {
     @Test
     void deleteExamShouldReturnStatusNotFoundResponseIfExamServiceCannotDeleteIt() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
 
         //when
         when(examService.deleteExam(anyLong())).thenReturn(false);

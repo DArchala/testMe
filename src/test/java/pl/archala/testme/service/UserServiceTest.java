@@ -40,7 +40,7 @@ class UserServiceTest {
     @Test
     void registerUserShouldReturnZeroIfExistUserFoundByUsername() {
         //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         //when
         when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
@@ -52,7 +52,7 @@ class UserServiceTest {
     @Test
     void registerUserShouldReturnMinusOneIfExistUserFoundByEmail() {
         //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         //when
         when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
@@ -65,7 +65,7 @@ class UserServiceTest {
     @Test
     void registerUserShouldReturnOneIfUserNotExist() {
         //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true);
+        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
         //when
         when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
