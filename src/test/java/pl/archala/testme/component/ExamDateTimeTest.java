@@ -33,9 +33,8 @@ class ExamDateTimeTest {
 
     @Test
     void hashCodeShouldBeEqualIfObjectsAreNotSame() {
-        long userExamTime = 100;
-        ExamDateTime examDateTime1 = new ExamDateTime(LocalDateTime.now(), LocalDateTime.now().plusMinutes(10), userExamTime);
-        ExamDateTime examDateTime2 = new ExamDateTime(LocalDateTime.now(), LocalDateTime.now().plusMinutes(10), userExamTime);
+        ExamDateTime examDateTime1 = new ExamDateTime(LocalDateTime.now(), LocalDateTime.now().plusMinutes(10), 50);
+        ExamDateTime examDateTime2 = new ExamDateTime(LocalDateTime.now(), LocalDateTime.now().plusMinutes(10), 100);
 
         assertNotEquals(examDateTime1.hashCode(), examDateTime2.hashCode());
     }
