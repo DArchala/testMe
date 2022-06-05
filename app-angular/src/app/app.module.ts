@@ -33,6 +33,7 @@ import { ActivateAccountComponent } from './pages/activate-account/activate-acco
 import { MyExamAttemptsComponent } from './pages/my-exam-attempts/my-exam-attempts.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
+import { ExamAttemptConverterPipe } from './pipes/exam-attempt-converter.pipe';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {MatSortModule} from "@angular/material/sort";
     LogoutComponent,
     MyAccountComponent,
     ActivateAccountComponent,
-    MyExamAttemptsComponent
+    MyExamAttemptsComponent,
+    ExamAttemptConverterPipe
   ],
   entryComponents: [DialogComponent],
   imports: [
