@@ -18,8 +18,8 @@ class ExamAttemptTest {
     void setUp() {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(10);
-        examAttempt1 = new ExamAttempt(null, "examname", 1, 1, 1, 1, start, end, ExamDifficultyLevel.MEDIUM);
-        examAttempt2 = new ExamAttempt(null, "examname", 1, 1, 1, 1, start, end, ExamDifficultyLevel.MEDIUM);
+        examAttempt1 = new ExamAttempt("examname", 1, 1, 1, 1, start, end, ExamDifficultyLevel.MEDIUM);
+        examAttempt2 = new ExamAttempt("examname", 1, 1, 1, 1, start, end, ExamDifficultyLevel.MEDIUM);
     }
 
     @Test
