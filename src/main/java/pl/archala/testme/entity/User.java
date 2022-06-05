@@ -9,8 +9,7 @@ import pl.archala.testme.enums.RoleEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 @Getter
 @Setter
@@ -44,6 +43,14 @@ public class User extends AbstractEntity<Long> implements UserDetails {
 
     @NotNull
     private boolean isEnabled;
+
+    @OneToMany
+    @JoinTable(
+            name = "users_exam_attempts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "exam_attempts_id")
+    )
+    private List<ExamAttempt> examAttempts = new ArrayList<>();
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
