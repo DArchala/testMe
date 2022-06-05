@@ -1,13 +1,14 @@
 package pl.archala.testme.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,10 +20,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "exam_attempts")
-public class ExamAttempt extends AbstractEntity<Long> {
-
-    @ManyToOne
-    private User user;
+public class ExamAttempt extends AbstractEntity<Long> implements Serializable {
 
     private String examName;
     private long examTime;
