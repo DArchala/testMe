@@ -1,62 +1,68 @@
-<div id="form-container">
-  <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="userOverwriteDataForm">
+<div id="my-account-container">
+  <div id="form-container">
+    <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="userOverwriteDataForm">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Nazwa użytkownika</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Nazwa użytkownika</mat-label>
 
-      <input type="text" matInput readonly [formControl]="usernameControl">
+        <input type="text" matInput readonly [formControl]="usernameControl">
 
-      <mat-error *ngIf="usernameControl.hasError('required')">
-        Nazwa użytkownika jest wymagana
-      </mat-error>
-      <mat-error *ngIf="usernameControl.hasError('minlength')
+        <mat-error *ngIf="usernameControl.hasError('required')">
+          Nazwa użytkownika jest wymagana
+        </mat-error>
+        <mat-error *ngIf="usernameControl.hasError('minlength')
               || usernameControl.hasError('maxlength')">
-        Nazwa użytkownika musi zawierać od 3 do 60 znaków
-      </mat-error>
-    </mat-form-field>
+          Nazwa użytkownika musi zawierać od 3 do 60 znaków
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>E-mail</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
 
-      <input type="text" matInput readonly [formControl]="emailControl">
+        <input type="text" matInput readonly [formControl]="emailControl">
 
-      <mat-error *ngIf="emailControl.hasError('required')">
-        Adres e-mail jest wymagany
-      </mat-error>
-      <mat-error *ngIf="emailControl.hasError('pattern')">
-        Nieprawidłowy wzór adresu e-mail
-      </mat-error>
-    </mat-form-field>
+        <mat-error *ngIf="emailControl.hasError('required')">
+          Adres e-mail jest wymagany
+        </mat-error>
+        <mat-error *ngIf="emailControl.hasError('pattern')">
+          Nieprawidłowy wzór adresu e-mail
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Hasło</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>Hasło</mat-label>
 
-      <input type="password" matInput [formControl]="passwordControl">
+        <input type="password" matInput [formControl]="passwordControl">
 
-      <mat-error *ngIf="passwordControl.hasError('required')">
-        Hasło jest wymagane
-      </mat-error>
-      <mat-error *ngIf="passwordControl.hasError('minlength')
+        <mat-error *ngIf="passwordControl.hasError('required')">
+          Hasło jest wymagane
+        </mat-error>
+        <mat-error *ngIf="passwordControl.hasError('minlength')
               || passwordControl.hasError('maxlength')">
-        Hasło musi zawierać od 6 do 30 znaków
-      </mat-error>
-    </mat-form-field>
+          Hasło musi zawierać od 6 do 30 znaków
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Powtórz hasło</mat-label>
-      <input type="password" matInput [formControl]="passwordRepeatControl">
+      <mat-form-field appearance="outline">
+        <mat-label>Powtórz hasło</mat-label>
+        <input type="password" matInput [formControl]="passwordRepeatControl">
 
-      <mat-error *ngIf="passwordRepeatControl.hasError('required')">
-        Powtórzenie hasła jest wymagane
-      </mat-error>
+        <mat-error *ngIf="passwordRepeatControl.hasError('required')">
+          Powtórzenie hasła jest wymagane
+        </mat-error>
 
-      <mat-error *ngIf="passwordControl.value != passwordRepeatControl.value">
-        Hasła nie są zgodne
-      </mat-error>
+        <mat-error *ngIf="passwordControl.value != passwordRepeatControl.value">
+          Hasła nie są zgodne
+        </mat-error>
 
-    </mat-form-field>
+      </mat-form-field>
 
-    <button type="submit" mat-raised-button color="primary">Zapisz zmiany</button>
-  </form>
+      <button type="submit" mat-raised-button color="primary">Zapisz zmiany</button>
+    </form>
+
+  </div>
+  <div id="my-exams">
+    <h2 routerLink="/my-exam-attempts">Przeglądaj historię egzaminów</h2>
+  </div>
 
 </div>

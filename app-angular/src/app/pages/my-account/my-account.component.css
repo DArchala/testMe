@@ -1,8 +1,18 @@
+#my-account-container {
+  display: flex;
+  flex-direction: initial;
+}
+
 #form-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   align-content: center;
+  flex-grow: 2;
+}
+
+#my-exams {
+  flex-grow: 1;
 }
 
 form {
@@ -10,7 +20,12 @@ form {
   flex-direction: column;
 }
 
-form * {
+form mat-form-field {
   width: 400px;
-  padding-bottom: 4%;
+  padding-bottom: 5%;
+}
+
+#my-exams h2:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
