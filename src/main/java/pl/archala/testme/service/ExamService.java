@@ -24,15 +24,12 @@ public class ExamService {
 
     private final UserRepository userRepo;
 
-    private final ExamAttemptRepository examAttemptRepo;
-
-    public ExamService(QuestionService questionService, ExamRepository examRepo, AnswerRepository answerRepo, QuestionRepository questionRepo, UserRepository userRepo, ExamAttemptRepository examAttemptRepo) {
+    public ExamService(QuestionService questionService, ExamRepository examRepo, AnswerRepository answerRepo, QuestionRepository questionRepo, UserRepository userRepo) {
         this.questionService = questionService;
         this.examRepo = examRepo;
         this.answerRepo = answerRepo;
         this.questionRepo = questionRepo;
         this.userRepo = userRepo;
-        this.examAttemptRepo = examAttemptRepo;
     }
 
     public List<Exam> getAllExams() {
@@ -125,9 +122,6 @@ public class ExamService {
 
         User user = userRepo.findByUsername(username).orElse(null);
         if(user == null) return true;
-
-        examAttempt.setUser(user);
-        examAttemptRepo.save(examAttempt);
 
         user.getExamAttempts().add(examAttempt);
         userRepo.save(user);
