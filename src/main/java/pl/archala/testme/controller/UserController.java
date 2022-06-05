@@ -10,6 +10,8 @@ import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.security.Token;
 import pl.archala.testme.service.UserService;
 
+import static pl.archala.testme.entity.CustomResponseEntity.*;
+
 @Slf4j
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
@@ -32,27 +34,27 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         switch (userService.registerUser(user)) {
             case 1:
-                return new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.CREATED);
+                return USER_REGISTERED_CHECK_MAILBOX;
             case 0:
-                return new ResponseEntity<>("This username is already taken.", HttpStatus.BAD_REQUEST);
+                return USERNAME_ALREADY_TAKEN;
             case -1:
-                return new ResponseEntity<>("This e-mail is already taken.", HttpStatus.BAD_REQUEST);
+                return EMAIL_ALREADY_TAKEN;
             default:
-                return new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
+                return UNDEFINED_ERROR;
         }
     }
 
     @GetMapping("/token")
     public ResponseEntity<?> sendToken(@RequestParam String value) {
         Token token = tokenRepo.findByValue(value).orElse(null);
-        if (token == null) return new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
+        if (token == null) return TOKEN_DOES_NOT_EXIST;
 
         User user = token.getUser();
-        if (user == null) return new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
+        if (user == null) return TOKEN_HAS_NO_USER;
 
         user.setEnabled(true);
         userRepo.save(user);
-        return new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
+        return ACCOUNT_ENABLED;
     }
 
     @PostMapping("/findByUsername")
