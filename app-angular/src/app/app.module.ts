@@ -30,6 +30,7 @@ import {AuthenticationService} from "./services/authentication.service";
 import {HttpRequestInterceptor} from "./services/http-request.interceptor";
 import {MyAccountComponent} from './pages/my-account/my-account.component';
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
+import { MyExamAttemptsComponent } from './pages/my-exam-attempts/my-exam-attempts.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ActivateAccountComponent } from './pages/activate-account/activate-acco
     RegisterComponent,
     LogoutComponent,
     MyAccountComponent,
-    ActivateAccountComponent
+    ActivateAccountComponent,
+    MyExamAttemptsComponent
   ],
   entryComponents: [DialogComponent],
   imports: [
