@@ -19,7 +19,7 @@ public class Exam extends AbstractEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
 
     private String examName;

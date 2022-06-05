@@ -28,7 +28,7 @@ public abstract class Question extends AbstractEntity<Long> implements Serializa
 
     protected String content;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     protected List<Answer> answers;
 
     public Question() {
