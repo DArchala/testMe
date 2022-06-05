@@ -1,6 +1,6 @@
 <div id="exams-container">
 
-  <div *ngIf="exams === null" id="empty-exams-list-info">
+  <div *ngIf="exams === null || exams.length === 0" id="empty-exams-list-info">
     <p>Brak egzaminów. Kliknij <a id="tutaj-text" [routerLink]="['/new-exam']"><u>tutaj</u></a>, aby dodać własny.</p>
   </div>
 
