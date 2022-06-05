@@ -44,7 +44,7 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @NotNull
     private boolean isEnabled;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinTable(
             name = "users_exam_attempts",
             joinColumns = @JoinColumn(name = "user_id"),
