@@ -1,2 +1,16 @@
-package pl.archala.testme.entity;public class ExamForm {
+package pl.archala.testme.entity;
+
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+public class ExamForm {
+    
+    private ExamDateTime examDateTime;
+    private Exam exam;
+
 }
