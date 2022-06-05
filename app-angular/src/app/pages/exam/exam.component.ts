@@ -5,6 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {Answer} from "../../models/answer";
 import {Question} from "../../models/question";
 import {DialogService} from "../../services/dialog.service";
+import {ExamDateTime} from "../../models/exam-date-time";
+import {ExamForm} from "../../models/exam-form";
 
 @Component({
   selector: 'app-exam',
@@ -13,15 +15,18 @@ import {DialogService} from "../../services/dialog.service";
 })
 export class ExamComponent {
 
+  examForm = new ExamForm();
   exam = new Exam();
-  responseExamPoints = 0;
-  examStarted = false;
-  interval: any;
+  examDateTime = new ExamDateTime();
+
   examId: any;
-  maxExamTime!: number;
+  examStarted = false;
   examTimeLeft!: number;
-  userLastExamTime = 0;
   examMaxPoints!: number;
+  maxExamTime!: number;
+  responseExamPoints = 0;
+  userLastExamTime = 0;
+  interval: any;
 
   constructor(private examService: ExamsService,
               private route: ActivatedRoute, private dialogService: DialogService) {
@@ -37,6 +42,7 @@ export class ExamComponent {
 
   startTest() {
     this.examService.getExamById(this.examId).subscribe(data => this.exam = data);
+    this.examDateTime.startDateTime = new Date();
     this.examStarted = true;
     this.startTimer();
   }
@@ -54,8 +60,12 @@ export class ExamComponent {
 
   finishTest() {
     clearInterval(this.interval);
-    this.examService.postExamToCheckCorrectness(this.exam).subscribe(data => this.responseExamPoints = data);
     this.userLastExamTime = this.maxExamTime - this.examTimeLeft;
+    this.examDateTime.endDateTime = new Date();
+    this.examForm.exam = this.exam;
+    this.examForm.examDateTime = this.examDateTime;
+    this.examForm.examDateTime.userExamTime = this.userLastExamTime;
+    this.examService.postExamToCheckCorrectness(this.examForm).subscribe(data => this.responseExamPoints = data);
     alert("Egzamin zakończony!");
     this.examStarted = false;
     this.examService.getExamById(this.examId).subscribe(data => this.examTimeLeft = data.timeInSeconds);
@@ -83,11 +93,9 @@ export class ExamComponent {
   doUserFillAllAnswers() {
     let count = 0;
     this.exam.questions.forEach(question => {
-      console.log(question);
       if (question.type != 'short' && question.answers.filter(answer => answer.correctness).length < 1) count++;
       if (question.type === 'short' && question.userAnswer.trim() === '') count++;
     });
-    console.log("count = " + count);
     return count === 0;
   }
 }

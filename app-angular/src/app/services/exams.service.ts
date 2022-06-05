@@ -6,6 +6,7 @@ import {Answer} from "../models/answer";
 import {SingleChoiceQuestion} from "../models/questionTypes/single-choice-question";
 import {MultipleChoiceQuestion} from "../models/questionTypes/multiple-choice-question";
 import {ShortAnswerQuestion} from "../models/questionTypes/short-answer-question";
+import {ExamForm} from "../models/exam-form";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class ExamsService {
     return this.httpClient.get<Exam>(this.url + `/exams/exam/` + examId).pipe(tap(console.log));
   }
 
-  postExamToCheckCorrectness(exam: Exam) {
-    return this.httpClient.post<Exam>(this.url + `/exams/exam`, exam).pipe(tap(console.log));
+  postExamToCheckCorrectness(examForm: ExamForm) {
+    return this.httpClient.post<Exam>(this.url + `/exams/exam`, examForm).pipe(tap(console.log));
   }
 
   postExamGetMaxPoints(examId: string | any) {
