@@ -1,4 +1,4 @@
-package pl.archala.testme.entity;
+package pl.archala.testme.component;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

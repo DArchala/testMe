@@ -1,7 +1,10 @@
-package pl.archala.testme.entity;
+package pl.archala.testme.component;
 
 import lombok.*;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,8 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ExamDateTime {
 
+    @Past
     private LocalDateTime startDateTime;
+
+    @PastOrPresent
     private LocalDateTime endDateTime;
+
+    @Min(1)
     private long userExamTime;
 
 }

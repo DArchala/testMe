@@ -1,6 +1,7 @@
-package pl.archala.testme.entity;
+package pl.archala.testme.component;
 
 import lombok.*;
+import pl.archala.testme.entity.Exam;
 
 @Getter
 @Setter
