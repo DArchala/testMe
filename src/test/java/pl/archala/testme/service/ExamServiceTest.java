@@ -8,8 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import pl.archala.testme.component.ExamDateTime;
+import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.entity.Exam;
+import pl.archala.testme.entity.User;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
@@ -295,6 +298,41 @@ class ExamServiceTest {
     void deleteExamShouldReturnTrueIfExamWasFoundByRepo() {
         when(examRepo.findById(anyLong())).thenReturn(Optional.of(new Exam()));
         assertTrue(examService.deleteExam(anyLong()));
+    }
+
+    @Test
+    void saveExamAttemptToUserShouldReturnTrueIfUserDoesNotExist() {
+        //given
+        ExamDateTime examDateTime = new ExamDateTime();
+        Exam exam = new Exam();
+        exam.setId(1L);
+        ExamForm examForm = new ExamForm(examDateTime, exam);
+
+        //when
+        when(examRepo.findById(anyLong())).thenReturn(Optional.of(exam));
+        when(userRepo.findByUsername("username")).thenReturn(Optional.empty());
+
+        //then
+        assertTrue(examService.saveExamAttemptToUser(examForm, "username"));
+
+    }
+
+    @Test
+    void saveExamAttemptToUserShouldReturnFalseIfUserWasSent() {
+        //given
+        ExamDateTime examDateTime = new ExamDateTime();
+        Exam exam = new Exam();
+        exam.setId(1L);
+        ExamForm examForm = new ExamForm(examDateTime, exam);
+        User user = new User();
+
+        //when
+        when(examRepo.findById(anyLong())).thenReturn(Optional.of(exam));
+        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+
+        //then
+        assertFalse(examService.saveExamAttemptToUser(examForm, "username"));
+
     }
 
     private Question[] getAnswersFromDB() {
