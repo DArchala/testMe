@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.entity.Exam;
-import pl.archala.testme.entity.ExamForm;
+import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
@@ -234,6 +234,19 @@ class ExamControllerTest {
 
         //then
         assertEquals(response, examController.checkExamCorrectness(examform, principal));
+    }
+
+    @Test
+    void checkExamCorrectnessShouldReturnUserDoesNotExistInBadWay() {
+        //given
+        ExamForm examForm = new ExamForm();
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+
+        //when
+        when(examService.saveExamAttemptToUser(examForm, principal.getName())).thenReturn(true);
+
+        //then
+        assertEquals(response, examController.checkExamCorrectness(examForm, principal));
     }
 
     @Test

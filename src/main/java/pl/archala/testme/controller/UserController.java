@@ -10,7 +10,7 @@ import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.security.Token;
 import pl.archala.testme.service.UserService;
 
-import static pl.archala.testme.entity.CustomResponseEntity.*;
+import static pl.archala.testme.component.CustomResponseEntity.*;
 
 @Slf4j
 @RestController

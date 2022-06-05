@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.archala.testme.entity.Exam;
-import pl.archala.testme.entity.ExamForm;
+import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.service.ExamService;
@@ -14,7 +14,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
-import static pl.archala.testme.entity.CustomResponseEntity.*;
+import static pl.archala.testme.component.CustomResponseEntity.*;
 
 @Slf4j
 @RestController

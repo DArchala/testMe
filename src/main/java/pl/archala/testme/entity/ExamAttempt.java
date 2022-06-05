@@ -1,6 +1,7 @@
 package pl.archala.testme.entity;
 
 import lombok.*;
+import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 
