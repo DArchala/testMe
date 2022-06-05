@@ -31,6 +31,27 @@ CREATE TABLE EXAMS (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE EXAM_ATTEMPTS (
+    id LONG NOT NULL AUTO_INCREMENT,
+    user_id LONG REFERENCES USERS(id),
+    exam_name VARCHAR(255) NOT NULL,
+    exam_time LONG NOT NULL,
+    exam_user_time LONG NOT NULL,
+    exam_user_points LONG NOT NULL,
+    exam_max_points LONG NOT NULL,
+    start_time_date DATETIME NOT NULL,
+    end_time_date DATETIME NOT NULL,
+    exam_difficulty_level ENUM('EASY', 'VERY_EASY', 'MEDIUM', 'HARD', 'VERY_HARD') NOT NULL,
+    PRIMARY KEY (id)
+);
+-- 1000-01-01 00:00:00
+-- 9999-12-31 23:59:59
+
+CREATE TABLE USERS_EXAM_ATTEMPTS (
+    user_id LONG REFERENCES USERS(id),
+    exam_attempts_id LONG REFERENCES EXAM_ATTEMPTS(id)
+);
+
 CREATE TABLE QUESTIONS_ANSWERS (
     question_id LONG REFERENCES QUESTIONS(id),
     answers_id LONG REFERENCES ANSWERS(id)
@@ -46,4 +67,5 @@ CREATE TABLE TOKENS (
     user_id LONG REFERENCES USERS(id),
     value VARCHAR(255)
 );
+
 
