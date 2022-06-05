@@ -1,12 +1,9 @@
 package pl.archala.testme.service;
 
 import org.springframework.stereotype.Service;
-import pl.archala.testme.entity.Answer;
-import pl.archala.testme.entity.Exam;
+import pl.archala.testme.entity.*;
 import pl.archala.testme.entity.abstractEntities.Question;
-import pl.archala.testme.repository.AnswerRepository;
-import pl.archala.testme.repository.ExamRepository;
-import pl.archala.testme.repository.QuestionRepository;
+import pl.archala.testme.repository.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -24,11 +21,17 @@ public class ExamService {
 
     private final QuestionRepository questionRepo;
 
-    public ExamService(QuestionService questionService, ExamRepository examRepo, AnswerRepository answerRepo, QuestionRepository questionRepo) {
+    private final UserRepository userRepo;
+
+    private final ExamAttemptRepository examAttemptRepo;
+
+    public ExamService(QuestionService questionService, ExamRepository examRepo, AnswerRepository answerRepo, QuestionRepository questionRepo, UserRepository userRepo, ExamAttemptRepository examAttemptRepo) {
         this.questionService = questionService;
-        this.questionRepo = questionRepo;
         this.examRepo = examRepo;
         this.answerRepo = answerRepo;
+        this.questionRepo = questionRepo;
+        this.userRepo = userRepo;
+        this.examAttemptRepo = examAttemptRepo;
     }
 
     public List<Exam> getAllExams() {
@@ -112,5 +115,21 @@ public class ExamService {
         findExamById(id);
         examRepo.deleteById(id);
         return true;
+    }
+
+    public boolean saveExamAttemptToUser(ExamForm examForm, String username) {
+        ExamAttempt examAttempt = new ExamAttempt(examForm);
+        examAttempt.setExamUserPoints(countUserExamPoints(examForm.getExam()));
+        examAttempt.setExamMaxPoints(getMaxPossibleExamPoints(examForm.getExam().getId()));
+
+        User user = userRepo.findByUsername(username).orElse(null);
+        if(user == null) return true;
+
+        examAttempt.setUser(user);
+        examAttemptRepo.save(examAttempt);
+
+        user.getExamAttempts().add(examAttempt);
+        userRepo.save(user);
+        return false;
     }
 }
