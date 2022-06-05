@@ -31,6 +31,8 @@ import {HttpRequestInterceptor} from "./services/http-request.interceptor";
 import {MyAccountComponent} from './pages/my-account/my-account.component';
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 import { MyExamAttemptsComponent } from './pages/my-exam-attempts/my-exam-attempts.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { MyExamAttemptsComponent } from './pages/my-exam-attempts/my-exam-attemp
     MatSelectModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTableModule,
+    MatSortModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, AuthenticationService, [

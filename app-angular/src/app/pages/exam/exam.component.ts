@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ExamsService} from "../../services/exams.service";
 import {Exam} from "../../models/exam";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Answer} from "../../models/answer";
 import {Question} from "../../models/question";
 import {DialogService} from "../../services/dialog.service";
@@ -28,13 +28,15 @@ export class ExamComponent {
   userLastExamTime = 0;
   interval: any;
 
-  constructor(private examService: ExamsService,
+  constructor(private examService: ExamsService, private router: Router,
               private route: ActivatedRoute, private dialogService: DialogService) {
     this.examId = this.route.snapshot.paramMap.get('id');
     this.examService.getExamById(this.examId).subscribe(data => {
       this.exam = data;
       this.maxExamTime = data.timeInSeconds;
       this.examTimeLeft = data.timeInSeconds;
+    }, error => {
+      if(error.status === 404) this.router.navigate(['exams']);
     });
     this.examService.postExamGetMaxPoints(this.examId).subscribe(data => this.examMaxPoints = data);
   }
