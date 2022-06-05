@@ -4,10 +4,7 @@ import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +16,7 @@ public class Exam extends AbstractEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
 
     private String examName;
