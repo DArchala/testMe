@@ -9,6 +9,7 @@ import pl.archala.testme.enums.RoleEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Getter
@@ -44,12 +45,7 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @NotNull
     private boolean isEnabled;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinTable(
-            name = "users_exam_attempts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "exam_attempts_id")
-    )
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ExamAttempt> examAttempts = new ArrayList<>();
 
     public void setEnabled(boolean enabled) {
@@ -78,6 +74,11 @@ public class User extends AbstractEntity<Long> implements UserDetails {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+
+    public List<ExamAttempt> getExamAttempts() {
+        return examAttempts;
     }
 
     @Override
