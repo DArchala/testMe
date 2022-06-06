@@ -11,6 +11,7 @@ import pl.archala.testme.entity.Token;
 import pl.archala.testme.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static pl.archala.testme.component.CustomResponseEntity.*;
@@ -73,6 +74,12 @@ public class UserController {
         User user = userRepo.findByUsername(username).orElse(null);
         if (user != null) return new ResponseEntity<>(user, HttpStatus.OK);
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> findAllUsers() {
+        List<User> users = userRepo.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 }
