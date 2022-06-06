@@ -38,9 +38,9 @@ public class ExamService {
 
     public int countUserExamPoints(Exam userExam) {
         int points = 0;
-
-        for (Question q : userExam.getQuestions())
+        for (Question q : userExam.getQuestions()) {
             points += questionService.countQuestionPoints(q);
+        }
 
         return points;
     }
@@ -51,38 +51,30 @@ public class ExamService {
         for (Question q : exam.orElseThrow().getQuestions()) {
             counter += q.countCorrectAnswers();
         }
+
         return counter;
     }
 
-    public boolean saveNewExam(Exam exam) {
-
+    public int saveNewExam(Exam exam) {
+        if(examRepo.findByExamName(exam.getExamName()).isPresent()) return -1;
         List<Question> questionList = new ArrayList<>();
 
         for (Question q : exam.getQuestions()) {
-
-            List<Answer> answerList = new ArrayList<>();
-
-            for (Answer a : q.getAnswers()) {
-                a.setId(null);
-                answerList.add(a);
-            }
-
+            List<Answer> answerList = new ArrayList<>(q.getAnswers());
             answerRepo.saveAll(answerList);
 
-            q.setId(null);
             q.setAnswers(answerList);
-            if (q.countCorrectAnswers() == 0)
-                throw new IllegalArgumentException("Number of correct answer in any question cannot be less than 1.");
+
+            if (q.countCorrectAnswers() == 0) return 0;
             questionList.add(q);
         }
 
         questionRepo.saveAll(questionList);
 
-        exam.setId(null);
         exam.setQuestions(questionList);
-
         examRepo.save(exam);
-        return true;
+
+        return 1;
     }
 
     public Exam findExamById(Long id) {
@@ -91,27 +83,23 @@ public class ExamService {
     }
 
     public boolean putExam(Exam exam) {
-
         if (exam.isNew()) throw new EntityNotFoundException("Exam not contain id.");
-
         Exam examToUpdate = findExamById(exam.getId());
 
         for (Question q : exam.getQuestions()) {
             questionService.putQuestion(q);
         }
 
-        examToUpdate.setExamName(exam.getExamName());
-        examToUpdate.setTimeInSeconds(exam.getTimeInSeconds());
-        examToUpdate.setDifficultyLevel(exam.getDifficultyLevel());
-        examToUpdate.setQuestions(exam.getQuestions());
-
+        examToUpdate.overwriteFields(exam);
         examRepo.save(examToUpdate);
+
         return true;
     }
 
     public boolean deleteExam(Long id) {
         findExamById(id);
         examRepo.deleteById(id);
+
         return true;
     }
 
@@ -121,10 +109,11 @@ public class ExamService {
         examAttempt.setExamMaxPoints(getMaxPossibleExamPoints(examForm.getExam().getId()));
 
         User user = userRepo.findByUsername(username).orElse(null);
-        if(user == null) return true;
+        if (user == null) return true;
 
         user.getExamAttempts().add(examAttempt);
         userRepo.save(user);
+
         return false;
     }
 }
