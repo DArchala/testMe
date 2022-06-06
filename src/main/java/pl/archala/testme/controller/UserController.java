@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
-import pl.archala.testme.security.Token;
+import pl.archala.testme.entity.Token;
 import pl.archala.testme.service.UserService;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static pl.archala.testme.component.CustomResponseEntity.*;
 
@@ -49,11 +52,19 @@ public class UserController {
         Token token = tokenRepo.findByValue(value).orElse(null);
         if (token == null) return TOKEN_DOES_NOT_EXIST;
 
+        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
+            tokenRepo.delete(token);
+            Optional<User> user = userRepo.findByUsername(token.getUser().getUsername());
+            if(user.isPresent() && !user.get().isEnabled()) userRepo.delete(user.get());
+            return TOKEN_HAS_EXPIRED;
+        }
+
         User user = token.getUser();
         if (user == null) return TOKEN_HAS_NO_USER;
 
         user.setEnabled(true);
         userRepo.save(user);
+        tokenRepo.delete(token);
         return ACCOUNT_ENABLED;
     }
 
