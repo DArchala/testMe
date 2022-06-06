@@ -1,0 +1,14 @@
+#users-container {
+  display: flex;
+  flex-direction: initial;
+  justify-content: center;
+}
+
+#users-list {
+  flex-grow: 0.5;
+}
+
+table {
+  margin-top: 5%;
+  width: 100%;
+}
