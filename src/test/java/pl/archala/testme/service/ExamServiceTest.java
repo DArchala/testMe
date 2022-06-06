@@ -24,8 +24,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -221,21 +220,32 @@ class ExamServiceTest {
     }
 
     @Test
-    void saveNewExamShouldReturnTrueIfExamQuestionsAndAnswersHaveCorrectFields() {
+    void saveNewExamShouldReturnOneIfExamSavedCorrectly() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
 
-        assertTrue(examService.saveNewExam(newExam));
+        assertEquals(1, examService.saveNewExam(newExam));
     }
 
-
     @Test
-    void saveNewExamShouldThrowExceptionIfAllAnswersCorrectnessAreFalse() {
+    void saveNewExamShouldReturnZeroIfAtLeastOneQuestionInExamDoesNotContainAnyCorrectAnswer() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
-        newExam.setAllAnswersFalse();
+        for (Answer answer : newExam.getQuestions().get(0).getAnswers()) {
+            answer.setCorrectness(false);
+        }
 
-        assertThrows(IllegalArgumentException.class, () -> examService.saveNewExam(newExam));
+        assertEquals(0, examService.saveNewExam(newExam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnMinusOneIfExamWithThisNameAlreadyExistInDB() {
+        //given
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+
+        when(examRepo.findByExamName(anyString())).thenReturn(Optional.of(new Exam()));
+
+        assertEquals(-1, examService.saveNewExam(newExam));
     }
 
     @Test

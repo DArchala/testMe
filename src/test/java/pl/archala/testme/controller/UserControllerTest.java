@@ -12,9 +12,10 @@ import org.springframework.http.ResponseEntity;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
-import pl.archala.testme.security.Token;
+import pl.archala.testme.entity.Token;
 import pl.archala.testme.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -112,6 +113,7 @@ class UserControllerTest {
     void sendTokenShouldReturnNotFoundIfTokenHasNoUser() {
         //given
         Token token = new Token();
+        token.setExpirationDate(LocalDateTime.now().plusMinutes(60));
         String tokenValue = UUID.randomUUID().toString();
         ResponseEntity<?> response = new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
 
@@ -127,6 +129,7 @@ class UserControllerTest {
         //given
         Token token = new Token();
         token.setUser(new User());
+        token.setExpirationDate(LocalDateTime.now().plusMinutes(60));
         String tokenValue = UUID.randomUUID().toString();
         ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
 

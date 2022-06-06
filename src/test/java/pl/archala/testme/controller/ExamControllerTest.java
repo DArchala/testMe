@@ -72,7 +72,7 @@ class ExamControllerTest {
     @Test
     void getExamsShouldReturnResponseEntityWithNotFoundStatusIfThereIsNotAnyExam() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("No exams found", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("No exams found.", HttpStatus.NOT_FOUND);
 
         //when
         when(examService.getAllExams()).thenReturn(List.of());
@@ -98,7 +98,7 @@ class ExamControllerTest {
     @Test
     void getExamMaxPointsShouldReturnExamNotExistAndNotFoundStatusIfExamDoesNotExist() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
 
         //when
         when(examRepo.findById(anyLong())).thenReturn(Optional.empty());
@@ -119,7 +119,7 @@ class ExamControllerTest {
     @Test
     void getExamByIdShouldReturnNullAndNotFoundHttpStatusIfExamNotExists() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
 
         //when
         when(examRepo.findById(1L)).thenReturn(Optional.empty());
@@ -140,26 +140,52 @@ class ExamControllerTest {
     }
 
     @Test
-    void saveNewExamShouldReturnExamTheSameExamAndStatusOKIfItIsCorrect() {
+    void saveNewExamShouldReturnMinusOneIfExamNameIsAlreadyTaken() {
         //given
         Exam exam = new Exam();
-        ResponseEntity<Exam> examResponse = new ResponseEntity<>(exam, HttpStatus.OK);
+        ResponseEntity<?> response = new ResponseEntity<>("This exam name is already taken.", HttpStatus.BAD_REQUEST);
 
         //when
-        when(examService.saveNewExam(exam)).thenReturn(true);
+        when(examService.saveNewExam(exam)).thenReturn(-1);
 
         //then
-        assertEquals(examController.saveNewExam(exam), examResponse);
+        assertEquals(response, examController.saveNewExam(exam));
     }
 
     @Test
-    void saveNewExamShouldReturnBadRequestStatusIfItIsIncorrect() {
+    void saveNewExamShouldReturnZeroIfExamDoesNotContainAnyCorrectAnswer() {
         //given
         Exam exam = new Exam();
-        ResponseEntity<?> response = new ResponseEntity<>("Saving exam failed", HttpStatus.BAD_REQUEST);
+        ResponseEntity<?> response = new ResponseEntity<>("Number of correct answer in any question cannot be less than 1.", HttpStatus.BAD_REQUEST);
 
         //when
-        when(examService.saveNewExam(exam)).thenReturn(false);
+        when(examService.saveNewExam(exam)).thenReturn(0);
+
+        //then
+        assertEquals(response, examController.saveNewExam(exam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnOneIfExamSavedCorrectly() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<?> response = new ResponseEntity<>("Exam saved.", HttpStatus.OK);
+
+        //when
+        when(examService.saveNewExam(exam)).thenReturn(1);
+
+        //then
+        assertEquals(response, examController.saveNewExam(exam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnSavingExamFailedIfServiceDidNotReturnCorrectValue() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<?> response = new ResponseEntity<>("Saving exam failed.", HttpStatus.BAD_REQUEST);
+
+        //when
+        when(examService.saveNewExam(exam)).thenReturn(10);
 
         //then
         assertEquals(response, examController.saveNewExam(exam));
@@ -168,7 +194,7 @@ class ExamControllerTest {
     @Test
     void getExamToEditByIdShouldReturnResponseEntityWithNotFoundStatusIfExamNotExists() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
 
         //when
         when(examRepo.findById(1L)).thenReturn(Optional.empty());
@@ -198,8 +224,7 @@ class ExamControllerTest {
         Exam exam = new Exam();
         exam.setId(1L);
 
-        ResponseEntity<?> response = new ResponseEntity<>("Exam saved", HttpStatus.OK);
-
+        ResponseEntity<?> response = new ResponseEntity<>("Exam saved.", HttpStatus.OK);
 
         //when
         when(examService.putExam(exam)).thenReturn(true);
@@ -240,7 +265,7 @@ class ExamControllerTest {
     void checkExamCorrectnessShouldReturnUserDoesNotExistInBadWay() {
         //given
         ExamForm examForm = new ExamForm();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
 
         //when
         when(examService.saveExamAttemptToUser(examForm, principal.getName())).thenReturn(true);
@@ -264,7 +289,7 @@ class ExamControllerTest {
     @Test
     void deleteExamShouldReturnStatusNotFoundResponseIfExamServiceCannotDeleteIt() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
 
         //when
         when(examService.deleteExam(anyLong())).thenReturn(false);
