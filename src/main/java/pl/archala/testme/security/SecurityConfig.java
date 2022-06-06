@@ -48,8 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/token").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers( "/api/users").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/exams/delete/**").hasAuthority("ADMIN")
+                .antMatchers("/api/**").authenticated()
 
                 .and()
                 .formLogin()
