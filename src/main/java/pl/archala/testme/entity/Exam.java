@@ -16,10 +16,10 @@ public class Exam extends AbstractEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
+    private String examName;
+
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
-
-    private String examName;
 
     private ExamDifficultyLevel difficultyLevel = ExamDifficultyLevel.MEDIUM;
 
@@ -34,6 +34,13 @@ public class Exam extends AbstractEntity<Long> implements Serializable {
         setExamName(examName);
         setDifficultyLevel(difficultyLevel);
         setTimeInSeconds(timeInSeconds);
+    }
+
+    public void overwriteFields(Exam newExam) {
+        this.examName = newExam.getExamName();
+        this.questions = newExam.getQuestions();
+        this.difficultyLevel = newExam.getDifficultyLevel();
+        this.timeInSeconds = newExam.getTimeInSeconds();
     }
 
     public Exam setAllAnswersFalse() {
