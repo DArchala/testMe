@@ -12,7 +12,7 @@ import {ExamAttemptsService} from "../../services/exam-attempts.service";
 })
 export class MyExamAttemptsComponent {
 
-  constructor(private examAttemptsService: ExamAttemptsService,private _liveAnnouncer: LiveAnnouncer) {
+  constructor(private examAttemptsService: ExamAttemptsService) {
     this.examAttemptsService.getMyExamAttempts().subscribe(next => {
       next.forEach(examAttempt => {
         this.myExamAttempts.push(examAttempt);

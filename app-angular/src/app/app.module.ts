@@ -34,6 +34,7 @@ import { MyExamAttemptsComponent } from './pages/my-exam-attempts/my-exam-attemp
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import { ExamAttemptConverterPipe } from './pipes/exam-attempt-converter.pipe';
+import { UsersComponent } from './pages/users/users.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ExamAttemptConverterPipe } from './pipes/exam-attempt-converter.pipe';
     MyAccountComponent,
     ActivateAccountComponent,
     MyExamAttemptsComponent,
-    ExamAttemptConverterPipe
+    ExamAttemptConverterPipe,
+    UsersComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

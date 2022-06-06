@@ -29,4 +29,7 @@ export class UserService {
     return this.httpClient.get<any>(this.url + `/token?value=` + tokenValue).pipe(tap(console.log));
   }
 
+  getUsers() {
+    return this.httpClient.get<User[]>(this.url + `/users`).pipe(tap(console.log));
+  }
 }
