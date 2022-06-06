@@ -41,7 +41,6 @@ public class ExamController {
     public ResponseEntity<?> checkExamCorrectness(@RequestBody ExamForm examForm, Principal principal) {
         if (examService.saveExamAttemptToUser(examForm, principal.getName()))
             return USER_DOES_NOT_EXIST;
-
         int score = examService.countUserExamPoints(examForm.getExam());
         return new ResponseEntity<>(score, HttpStatus.OK);
     }
@@ -68,8 +67,12 @@ public class ExamController {
 
     @PostMapping("/new-exam/save")
     public ResponseEntity<?> saveNewExam(@RequestBody Exam exam) {
-        if (examService.saveNewExam(exam)) return new ResponseEntity<>(exam, HttpStatus.OK);
-        else return SAVING_EXAM_FAILED;
+        switch (examService.saveNewExam(exam)) {
+            case -1: return EXAM_NAME_ALREADY_TAKEN;
+            case 0: return EXAM_ANY_QUESTION_DOES_NOT_CONTAIN_ANY_CORRECT_ANSWER;
+            case 1: return EXAM_SAVED;
+            default: return SAVING_EXAM_FAILED;
+        }
     }
 
     @GetMapping("/exams/edit/{id}")
