@@ -85,9 +85,32 @@ export class NewExamComponent {
       this.examModel.examName = this.examNameControl.value;
       this.examModel.difficultyLevel = this.difficultyLevelControl.value;
       this.examModel.timeInSeconds = this.examTimeCalc();
-      this.examService.postNewExam(this.examModel).subscribe(console.log);
-      alert("Egzamin został zapisany.");
-      window.location.reload();
+      this.examService.postNewExam(this.examModel).subscribe(
+        () => {
+
+        }, error => {
+          switch (error.error) {
+            case 'This exam name is already taken.':
+              alert("Ta nazwa egzaminu jest już zajęta.");
+              break;
+            case 'Number of correct answer in any question cannot be less than 1.':
+              alert("Każde pytanie powinno zawierać conajmniej jedną prawidłową odpowiedź.")
+              break;
+            case 'Saving exam failed.':
+              alert("Zapisywanie egzaminu nie powiodło się.");
+              break;
+          }
+          switch (error.error.text) {
+            case 'Exam saved.':
+              alert("Egzamin został zapisany.");
+              window.location.reload();
+              break;
+            default:
+              return;
+          }
+        }
+      );
+
     } else {
       if (!this.doAllAnswersContainContent())
         alert("Wszystkie odpowiedzi muszą zawierać odpowiedź.");
