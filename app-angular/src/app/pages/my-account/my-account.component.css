@@ -29,3 +29,22 @@ form mat-form-field {
   cursor: pointer;
   text-decoration: underline;
 }
+
+#admin-panel {
+  border: 3px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+#admin-panel p {
+  padding-left: 20px;
+  font-weight: bold;
+  flex-grow: 0.5;
+}
+
+#admin-panel p:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

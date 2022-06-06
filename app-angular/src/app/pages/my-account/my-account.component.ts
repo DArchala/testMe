@@ -18,9 +18,12 @@ export class MyAccountComponent {
       data => {
         this.usernameControl.patchValue(data.username);
         this.emailControl.patchValue(data.email);
+        this.myRole = data.role;
       }
     );
   }
+
+  myRole!: string;
 
   usernameControl = new FormControl('', [
     Validators.required,

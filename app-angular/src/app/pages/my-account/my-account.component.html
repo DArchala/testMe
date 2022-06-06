@@ -62,7 +62,15 @@
 
   </div>
   <div id="my-exams">
+    <h2>Twoja rola: {{this.myRole}}</h2>
     <h2 routerLink="/my-exam-attempts">Przeglądaj historię egzaminów</h2>
+
+    <div id="admin-panel" *ngIf="this.myRole === 'ADMIN'">
+      <ul>
+        <li><p routerLink="/users">Przeglądaj użytkowników</p></li>
+      </ul>
+    </div>
+
   </div>
 
 </div>
