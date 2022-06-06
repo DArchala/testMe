@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
-import pl.archala.testme.security.Token;
+import pl.archala.testme.entity.Token;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -40,24 +41,26 @@ public class UserService {
     private void sendToken(User user) {
         String tokenValue = UUID.randomUUID().toString();
 
-        Token token = new Token();
-        token.setValue(tokenValue);
-        token.setUser(user);
+        Token token = new Token(user, tokenValue, LocalDateTime.now().plusMinutes(10));
         tokenRepo.save(token);
 
         String url = "http://localhost:4200/#/activate-account/" + tokenValue;
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Kliknij w poniższy link, aby aktywować Twoje konto:\n\n");
-        sb.append(url);
-        sb.append("\n\nAutor aplikacji: Damian Archała");
+        String message = getMailMessage(url);
 
         try {
-            mailService.sendMail(user.getEmail(), "Link aktywacyjny", sb.toString(), false);
+            mailService.sendMail(user.getEmail(), "Link aktywacyjny", message, false);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private String getMailMessage(String url) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Kliknij w poniższy link, aby aktywować Twoje konto:\n\n");
+        sb.append(url);
+        sb.append("\n\nAutor aplikacji: Damian Archała");
+        return sb.toString();
     }
 
 }
