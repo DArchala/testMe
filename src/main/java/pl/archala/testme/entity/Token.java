@@ -1,4 +1,4 @@
-package pl.archala.testme.security;
+package pl.archala.testme.entity;
 
 import lombok.*;
 import pl.archala.testme.entity.User;
