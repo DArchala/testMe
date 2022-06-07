@@ -25,6 +25,5 @@ export class UserNewRoleDialogComponent {
 
   setRole(role: string) {
     this.acceptRole.role = role;
-    console.log(this.acceptRole);
   }
 }
