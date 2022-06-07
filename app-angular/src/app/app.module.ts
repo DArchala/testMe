@@ -35,6 +35,8 @@ import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import { ExamAttemptConverterPipe } from './pipes/exam-attempt-converter.pipe';
 import { UsersComponent } from './pages/users/users.component';
+import { UserOptionsDialogComponent } from './pages/users/user-options-dialog/user-options-dialog.component';
+import { UserNewRoleDialogComponent } from './pages/users/user-new-role-dialog/user-new-role-dialog.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { UsersComponent } from './pages/users/users.component';
     ActivateAccountComponent,
     MyExamAttemptsComponent,
     ExamAttemptConverterPipe,
-    UsersComponent
+    UsersComponent,
+    UserOptionsDialogComponent,
+    UserNewRoleDialogComponent
   ],
   entryComponents: [DialogComponent],
   imports: [

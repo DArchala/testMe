@@ -12,3 +12,12 @@ table {
   margin-top: 5%;
   width: 100%;
 }
+
+#username:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+mat-column-id {
+  flex: 0 0 10%;
+}

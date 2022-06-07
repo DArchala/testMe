@@ -13,7 +13,6 @@ export class AppComponent {
 
   constructor(public authService: AuthenticationService, private dialogService: DialogService,
               private router: Router) {
-
   }
 
   logMeOut(information: string) {
