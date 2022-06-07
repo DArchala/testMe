@@ -140,23 +140,10 @@ class ExamControllerTest {
     }
 
     @Test
-    void saveNewExamShouldReturnMinusOneIfExamNameIsAlreadyTaken() {
+    void saveNewExamShouldExamNameAlreadyTakenIfServiceReturnZero() {
         //given
         Exam exam = new Exam();
         ResponseEntity<?> response = new ResponseEntity<>("This exam name is already taken.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(examService.saveNewExam(exam)).thenReturn(-1);
-
-        //then
-        assertEquals(response, examController.saveNewExam(exam));
-    }
-
-    @Test
-    void saveNewExamShouldReturnZeroIfExamDoesNotContainAnyCorrectAnswer() {
-        //given
-        Exam exam = new Exam();
-        ResponseEntity<?> response = new ResponseEntity<>("Number of correct answer in any question cannot be less than 1.", HttpStatus.BAD_REQUEST);
 
         //when
         when(examService.saveNewExam(exam)).thenReturn(0);
@@ -166,13 +153,26 @@ class ExamControllerTest {
     }
 
     @Test
-    void saveNewExamShouldReturnOneIfExamSavedCorrectly() {
+    void saveNewExamShouldReturnQuestionDoesNotContainAnyCorrectAnswerIfServiceReturnOne() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<?> response = new ResponseEntity<>("Number of correct answer in any question cannot be less than 1.", HttpStatus.BAD_REQUEST);
+
+        //when
+        when(examService.saveNewExam(exam)).thenReturn(1);
+
+        //then
+        assertEquals(response, examController.saveNewExam(exam));
+    }
+
+    @Test
+    void saveNewExamShouldReturnExamSavedIfServiceReturnTwo() {
         //given
         Exam exam = new Exam();
         ResponseEntity<?> response = new ResponseEntity<>("Exam saved.", HttpStatus.OK);
 
         //when
-        when(examService.saveNewExam(exam)).thenReturn(1);
+        when(examService.saveNewExam(exam)).thenReturn(2);
 
         //then
         assertEquals(response, examController.saveNewExam(exam));

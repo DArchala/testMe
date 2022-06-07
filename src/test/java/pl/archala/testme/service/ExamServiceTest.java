@@ -220,32 +220,32 @@ class ExamServiceTest {
     }
 
     @Test
-    void saveNewExamShouldReturnOneIfExamSavedCorrectly() {
+    void saveNewExamShouldReturnTwoIfExamSavedCorrectly() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
 
-        assertEquals(1, examService.saveNewExam(newExam));
+        assertEquals(2, examService.saveNewExam(newExam));
     }
 
     @Test
-    void saveNewExamShouldReturnZeroIfAtLeastOneQuestionInExamDoesNotContainAnyCorrectAnswer() {
+    void saveNewExamShouldReturnOneIfAtLeastOneQuestionInExamDoesNotContainAnyCorrectAnswer() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
         for (Answer answer : newExam.getQuestions().get(0).getAnswers()) {
             answer.setCorrectness(false);
         }
 
-        assertEquals(0, examService.saveNewExam(newExam));
+        assertEquals(1, examService.saveNewExam(newExam));
     }
 
     @Test
-    void saveNewExamShouldReturnMinusOneIfExamWithThisNameAlreadyExistInDB() {
+    void saveNewExamShouldReturnZeroIfExamWithThisNameAlreadyExistInDB() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
 
         when(examRepo.findByExamName(anyString())).thenReturn(Optional.of(new Exam()));
 
-        assertEquals(-1, examService.saveNewExam(newExam));
+        assertEquals(0, examService.saveNewExam(newExam));
     }
 
     @Test

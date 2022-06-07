@@ -37,7 +37,6 @@ class ExamAttemptTest {
     @Test
     void toStringResultsShouldBeEqualIfObjectsAreSame() {
         assertEquals(examAttempt1.toString(), examAttempt2.toString());
-
     }
 
 }
