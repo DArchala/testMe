@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {User} from "../models/user";
 import {tap} from "rxjs";
+import {PasswordChangeRequest} from "../models/password-change-request";
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,11 @@ export class UserService {
   }
 
   findUserByUsername(username: any) {
-    return this.httpClient.post<User>(this.url + `/findBy/username`, username).pipe(tap(console.log));
+    return this.httpClient.post<User>(this.url + `/users/findBy/username`, username).pipe(tap(console.log));
   }
 
   updateUserRole(user: User) {
-    return this.httpClient.put<User>(this.url + `/update/role`, user).pipe(tap(console.log));
+    return this.httpClient.put<User>(this.url + `/users/update/role`, user).pipe(tap(console.log));
   }
 
   confirmToken(tokenValue: string) {
@@ -39,6 +40,10 @@ export class UserService {
 
   getRoles() {
     return this.httpClient.get<string[]>(this.url + `/roles`).pipe(tap(console.log));
+  }
+
+  updateUserPassword(passwordRequest: PasswordChangeRequest) {
+    return this.httpClient.post<User>(this.url + `/users/changePassword`, passwordRequest).pipe(tap(console.log));
   }
 
   updateUser(user: User) {
