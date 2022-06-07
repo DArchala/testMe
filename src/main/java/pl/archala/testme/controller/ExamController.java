@@ -68,10 +68,14 @@ public class ExamController {
     @PostMapping("/new-exam/save")
     public ResponseEntity<?> saveNewExam(@RequestBody Exam exam) {
         switch (examService.saveNewExam(exam)) {
-            case -1: return EXAM_NAME_ALREADY_TAKEN;
-            case 0: return EXAM_ANY_QUESTION_DOES_NOT_CONTAIN_ANY_CORRECT_ANSWER;
-            case 1: return EXAM_SAVED;
-            default: return SAVING_EXAM_FAILED;
+            case 0:
+                return EXAM_NAME_ALREADY_TAKEN;
+            case 1:
+                return EXAM_ANY_QUESTION_DOES_NOT_CONTAIN_ANY_CORRECT_ANSWER;
+            case 2:
+                return EXAM_SAVED;
+            default:
+                return SAVING_EXAM_FAILED;
         }
     }
 
