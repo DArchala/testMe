@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.Token;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.enums.RoleEnum;
@@ -238,5 +239,90 @@ class UserServiceTest {
         assertEquals(3, userService.activateAccount(tokenValue));
     }
 
+    @Test
+    void updatePasswordShouldReturnZeroIfUserDoesNotExist() {
+        //given
+        var passwordChangeRequest = new PasswordChangeRequest();
+        passwordChangeRequest.setUsername("username");
+
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.empty());
+
+        //then
+        assertEquals(0, userService.updatePassword(passwordChangeRequest));
+    }
+
+    @Test
+    void updatePasswordShouldReturnOneIfPasswordFromRequestAndUserPasswordFromDBDoNotMatch() {
+        //given
+        var passwordChangeRequest = new PasswordChangeRequest();
+        passwordChangeRequest.setUsername("username");
+        User user = new User();
+
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(false);
+
+        //then
+        assertEquals(1, userService.updatePassword(passwordChangeRequest));
+    }
+
+    @Test
+    void updatePasswordShouldReturnTwoIfEmailDoNotMatchToUsername() {
+        //given
+        var passwordChangeRequest = new PasswordChangeRequest();
+        passwordChangeRequest.setUsername("username");
+        passwordChangeRequest.setEmail("email2");
+
+        User user = new User();
+        user.setEmail("email1");
+
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
+
+        //then
+        assertEquals(2, userService.updatePassword(passwordChangeRequest));
+    }
+
+    @Test
+    void updatePasswordShouldReturnThreeIfNewPasswordIsEqualToCurrentPassword() {
+        //given
+        var passwordChangeRequest = new PasswordChangeRequest();
+        passwordChangeRequest.setUsername("username");
+        passwordChangeRequest.setEmail("email1");
+
+        User user = new User();
+        user.setEmail("email1");
+
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
+        when(passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())).thenReturn(true);
+
+        //then
+        assertEquals(3, userService.updatePassword(passwordChangeRequest));
+    }
+
+    @Test
+    void updatePasswordShouldReturnFourIfAllConditionsAreMet() {
+        //given
+        var passwordChangeRequest = new PasswordChangeRequest();
+        passwordChangeRequest.setUsername("username");
+        passwordChangeRequest.setNewPassword("newPass");
+        passwordChangeRequest.setEmail("email1");
+
+        User user = new User();
+        user.setPassword("currentPass");
+        user.setEmail("email1");
+
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
+        when(passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())).thenReturn(false);
+
+        //then
+        assertEquals(4, userService.updatePassword(passwordChangeRequest));
+    }
 
 }
