@@ -14,6 +14,9 @@ public final class CustomResponseEntity {
     public static final ResponseEntity<?> USER_DELETED = new ResponseEntity<>("User deleted.", HttpStatus.OK);
     public static final ResponseEntity<?> DELETING_LAST_ADMIN_FORBIDDEN = new ResponseEntity<>("Deleting last admin is forbidden.", HttpStatus.FORBIDDEN);
     public static final ResponseEntity<?> USER_SAVED = new ResponseEntity<>("User saved.", HttpStatus.OK);
+    public static final ResponseEntity<?> PASSWORD_DOES_NOT_MATCH = new ResponseEntity<>("The password and password provided for the account do not match", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> USERNAME_DO_NOT_MATCH_WITH_EMAIL = new ResponseEntity<>("The password and password provided for the account do not match", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> NEW_PASSWORD_CANNOT_BE_EQUAL_TO_OLD_PASSWORD = new ResponseEntity<>("New password cannot be equal to old password.", HttpStatus.BAD_REQUEST);
 
 
     //EXAM
