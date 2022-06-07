@@ -4,12 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.enums.RoleEnum;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.service.UserService;
 
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 import static pl.archala.testme.component.CustomResponseEntity.*;
@@ -33,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
         switch (userService.registerUser(user)) {
             case 0:
                 return USERNAME_ALREADY_TAKEN;
@@ -63,7 +66,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/findBy/username")
+    @PostMapping("/users/findBy/username")
     public ResponseEntity<?> findUserByUsername(@RequestBody String username) {
         User user = userRepo.findByUsername(username).orElse(null);
         if (user != null) return new ResponseEntity<>(user, HttpStatus.OK);
@@ -95,12 +98,30 @@ public class UserController {
         return new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
     }
 
-    @PutMapping("/update/role")
-    public ResponseEntity<?> updateUserRole(@RequestBody User user) {
+    @PutMapping("/users/update/role")
+    public ResponseEntity<?> updateUserRole(@RequestBody @Valid User user) {
         switch (userService.updateUserRole(user)) {
             case 0:
                 return USER_DOES_NOT_EXIST;
             case 1:
+                return USER_SAVED;
+            default:
+                return UNDEFINED_ERROR;
+        }
+    }
+
+    @PostMapping("users/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid PasswordChangeRequest passwordChangeRequest) {
+        switch (userService.updatePassword(passwordChangeRequest)) {
+            case 0:
+                return USER_DOES_NOT_EXIST;
+            case 1:
+                return PASSWORD_DOES_NOT_MATCH;
+            case 2:
+                return USERNAME_DO_NOT_MATCH_WITH_EMAIL;
+            case 3:
+                return NEW_PASSWORD_CANNOT_BE_EQUAL_TO_OLD_PASSWORD;
+            case 4:
                 return USER_SAVED;
             default:
                 return UNDEFINED_ERROR;
