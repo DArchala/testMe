@@ -63,7 +63,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/findByUsername")
+    @PostMapping("/findBy/username")
     public ResponseEntity<?> findUserByUsername(@RequestBody String username) {
         User user = userRepo.findByUsername(username).orElse(null);
         if (user != null) return new ResponseEntity<>(user, HttpStatus.OK);
@@ -90,12 +90,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getRoles")
+    @GetMapping("/roles")
     public ResponseEntity<?> getRoles() {
         return new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
     }
 
-    @PutMapping("/updateUser/role")
+    @PutMapping("/update/role")
     public ResponseEntity<?> updateUserRole(@RequestBody User user) {
         switch (userService.updateUserRole(user)) {
             case 0:

@@ -18,11 +18,11 @@ export class UserService {
   }
 
   findUserByUsername(username: any) {
-    return this.httpClient.post<User>(this.url + `/findByUsername`, username).pipe(tap(console.log));
+    return this.httpClient.post<User>(this.url + `/findBy/username`, username).pipe(tap(console.log));
   }
 
   updateUserRole(user: User) {
-    return this.httpClient.put<User>(this.url + `/updateUser/role`, user).pipe(tap(console.log));
+    return this.httpClient.put<User>(this.url + `/update/role`, user).pipe(tap(console.log));
   }
 
   confirmToken(tokenValue: string) {
@@ -38,7 +38,7 @@ export class UserService {
   }
 
   getRoles() {
-    return this.httpClient.get<string[]>(this.url + `/getRoles`).pipe(tap(console.log));
+    return this.httpClient.get<string[]>(this.url + `/roles`).pipe(tap(console.log));
   }
 
   updateUser(user: User) {
