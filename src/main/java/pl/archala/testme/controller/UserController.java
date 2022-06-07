@@ -5,14 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.archala.testme.entity.User;
+import pl.archala.testme.enums.RoleEnum;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
-import pl.archala.testme.entity.Token;
 import pl.archala.testme.service.UserService;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static pl.archala.testme.component.CustomResponseEntity.*;
 
@@ -37,36 +35,32 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         switch (userService.registerUser(user)) {
-            case 1:
-                return USER_REGISTERED_CHECK_MAILBOX;
             case 0:
                 return USERNAME_ALREADY_TAKEN;
-            case -1:
+            case 1:
                 return EMAIL_ALREADY_TAKEN;
+            case 2:
+                return USER_REGISTERED_CHECK_MAILBOX;
             default:
                 return UNDEFINED_ERROR;
         }
     }
 
     @GetMapping("/token")
-    public ResponseEntity<?> sendToken(@RequestParam String value) {
-        Token token = tokenRepo.findByValue(value).orElse(null);
-        if (token == null) return TOKEN_DOES_NOT_EXIST;
-
-        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
-            tokenRepo.delete(token);
-            Optional<User> user = userRepo.findByUsername(token.getUser().getUsername());
-            if(user.isPresent() && !user.get().isEnabled()) userRepo.delete(user.get());
-            return TOKEN_HAS_EXPIRED;
+    public ResponseEntity<?> activateAccountByToken(@RequestParam String value) {
+        switch (userService.activateAccount(value)) {
+            case 0:
+                return TOKEN_DOES_NOT_EXIST;
+            case 1:
+                return TOKEN_HAS_EXPIRED;
+            case 2:
+                return TOKEN_HAS_NO_USER;
+            case 3:
+                return ACCOUNT_ENABLED;
+            default:
+                return UNDEFINED_ERROR;
         }
 
-        User user = token.getUser();
-        if (user == null) return TOKEN_HAS_NO_USER;
-
-        user.setEnabled(true);
-        userRepo.save(user);
-        tokenRepo.delete(token);
-        return ACCOUNT_ENABLED;
     }
 
     @PostMapping("/findByUsername")
@@ -82,4 +76,34 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @DeleteMapping("/users/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        switch (userService.deleteUser(id)) {
+            case 0:
+                return USER_DOES_NOT_EXIST;
+            case 1:
+                return DELETING_LAST_ADMIN_FORBIDDEN;
+            case 2:
+                return USER_DELETED;
+            default:
+                return UNDEFINED_ERROR;
+        }
+    }
+
+    @GetMapping("/getRoles")
+    public ResponseEntity<?> getRoles() {
+        return new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateUser/role")
+    public ResponseEntity<?> updateUserRole(@RequestBody User user) {
+        switch (userService.updateUserRole(user)) {
+            case 0:
+                return USER_DOES_NOT_EXIST;
+            case 1:
+                return USER_SAVED;
+            default:
+                return UNDEFINED_ERROR;
+        }
+    }
 }
