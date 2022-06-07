@@ -4,10 +4,7 @@ import lombok.*;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -22,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "tokens")
 public class Token extends AbstractEntity<Long> {
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
 
     private String value;
