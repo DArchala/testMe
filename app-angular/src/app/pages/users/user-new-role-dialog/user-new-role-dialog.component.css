@@ -1,0 +1,15 @@
+#roles {
+  display: flex;
+  flex-direction: column;
+  justify-items: left;
+}
+
+mat-radio-button {
+  padding-top: 15%;
+  padding-bottom: 15%;
+}
+
+#ok-cancel-buttons {
+  display: flex;
+  flex-direction: initial;
+}

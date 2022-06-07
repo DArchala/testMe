@@ -1,0 +1,15 @@
+<h2>Informacja</h2>
+<mat-dialog-content>{{data.information}}</mat-dialog-content>
+<mat-dialog-actions id="roles">
+  <mat-radio-group name="role" aria-label="Select an option" *ngFor="let role of data.roles">
+    <mat-radio-button (change)="setRole(role)" color="primary" value="{{role}}">{{role}}</mat-radio-button>
+  </mat-radio-group>
+  <div id="ok-cancel-buttons">
+    <button (click)="acceptNewRole()"
+            [disabled]="acceptRole.role === ''"
+            mat-button [mat-dialog-close]="acceptRole">Zastosuj</button>
+
+    <button (click)="cancelRole()"
+            mat-button [mat-dialog-close]="acceptRole">Anuluj</button>
+  </div>
+</mat-dialog-actions>
