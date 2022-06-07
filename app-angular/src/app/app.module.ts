@@ -37,6 +37,7 @@ import { ExamAttemptConverterPipe } from './pipes/exam-attempt-converter.pipe';
 import { UsersComponent } from './pages/users/users.component';
 import { UserOptionsDialogComponent } from './pages/users/user-options-dialog/user-options-dialog.component';
 import { UserNewRoleDialogComponent } from './pages/users/user-new-role-dialog/user-new-role-dialog.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -61,24 +62,25 @@ import { UserNewRoleDialogComponent } from './pages/users/user-new-role-dialog/u
     UserNewRoleDialogComponent
   ],
   entryComponents: [DialogComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    MatDialogModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatTooltipModule,
-    MatTableModule,
-    MatSortModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        MatDialogModule,
+        BrowserAnimationsModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatTooltipModule,
+        MatTableModule,
+        MatSortModule,
+        MatProgressSpinnerModule
+    ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, AuthenticationService, [
     {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true}

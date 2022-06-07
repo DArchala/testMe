@@ -87,6 +87,10 @@ export class UsersComponent {
             switch(error.status) {
               case 200:
                 alert(error.error.text);
+                this.router.navigate(['my-account']);
+                break;
+              case 403:
+                alert("Brak uprawnień.");
                 break;
               default:
                 alert("Error " + error.status + ": " + error.error);
