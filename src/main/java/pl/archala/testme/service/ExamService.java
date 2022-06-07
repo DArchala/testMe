@@ -56,7 +56,7 @@ public class ExamService {
     }
 
     public int saveNewExam(Exam exam) {
-        if(examRepo.findByExamName(exam.getExamName()).isPresent()) return -1;
+        if(examRepo.findByExamName(exam.getExamName()).isPresent()) return 0;
         List<Question> questionList = new ArrayList<>();
 
         for (Question q : exam.getQuestions()) {
@@ -65,7 +65,7 @@ public class ExamService {
 
             q.setAnswers(answerList);
 
-            if (q.countCorrectAnswers() == 0) return 0;
+            if (q.countCorrectAnswers() == 0) return 1;
             questionList.add(q);
         }
 
@@ -74,7 +74,7 @@ public class ExamService {
         exam.setQuestions(questionList);
         examRepo.save(exam);
 
-        return 1;
+        return 2;
     }
 
     public Exam findExamById(Long id) {
