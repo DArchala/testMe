@@ -1,9 +1,11 @@
 package pl.archala.testme.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.archala.testme.component.CustomAuthorityDeserializer;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 import pl.archala.testme.enums.RoleEnum;
 
@@ -76,11 +78,11 @@ public class User extends AbstractEntity<Long> implements UserDetails {
         this.role = role;
     }
 
-
     public List<ExamAttempt> getExamAttempts() {
         return examAttempts;
     }
 
+    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(role.name()));
