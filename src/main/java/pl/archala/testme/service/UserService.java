@@ -2,6 +2,7 @@ package pl.archala.testme.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.Token;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.repository.TokenRepository;
@@ -74,6 +75,9 @@ public class UserService {
 
         if (user.getRole().equals(ADMIN) && getAllAdmins().size() == 1) return 1;
 
+        List<Token> userTokens = tokenRepo.findAllByUserUsername(user.getUsername());
+        if (!userTokens.isEmpty()) tokenRepo.deleteAll(userTokens);
+
         userRepo.delete(user);
         return 2;
     }
@@ -114,5 +118,19 @@ public class UserService {
         userRepo.save(user);
         tokenRepo.delete(token);
         return 3;
+    }
+
+    public int updatePassword(PasswordChangeRequest passwordChangeRequest) {
+        User user = userRepo.findByUsername(passwordChangeRequest.getUsername()).orElse(null);
+        if (user == null) return 0;
+
+        if (!passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())) return 1;
+        if (!user.getEmail().equals(passwordChangeRequest.getEmail())) return 2;
+        if (passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())) return 3;
+
+        user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+
+        userRepo.save(user);
+        return 4;
     }
 }
