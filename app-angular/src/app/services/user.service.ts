@@ -21,8 +21,8 @@ export class UserService {
     return this.httpClient.post<User>(this.url + `/findByUsername`, username).pipe(tap(console.log));
   }
 
-  updateUser(user: User) {
-    return this.httpClient.put<User>(this.url + `/saveUserChanges`, user).pipe(tap(console.log));
+  updateUserRole(user: User) {
+    return this.httpClient.put<User>(this.url + `/updateUser/role`, user).pipe(tap(console.log));
   }
 
   confirmToken(tokenValue: string) {
@@ -31,5 +31,17 @@ export class UserService {
 
   getUsers() {
     return this.httpClient.get<User[]>(this.url + `/users`).pipe(tap(console.log));
+  }
+
+  deleteUser(userID: any) {
+    return this.httpClient.delete<any>(this.url + `/users/delete/` + userID).pipe(tap(console.log));
+  }
+
+  getRoles() {
+    return this.httpClient.get<string[]>(this.url + `/getRoles`).pipe(tap(console.log));
+  }
+
+  updateUser(user: User) {
+    // return this.httpClient.put<User>(this.url + `/saveUserChanges`, user).pipe(tap(console.log));
   }
 }
