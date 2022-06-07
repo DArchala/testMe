@@ -13,6 +13,8 @@ export class LoginComponent {
   constructor(private authService: AuthenticationService, private router: Router) {
   }
 
+  turnSpinnerOn = false;
+
   usernameControl = new FormControl('', [
     Validators.required,
   ]);
@@ -27,8 +29,10 @@ export class LoginComponent {
   });
 
   login() {
+    this.turnSpinnerOn = true;
     if (this.userLoginForm.invalid) {
       alert("Sprawdź poprawność wpisanych informacji.");
+      this.turnSpinnerOn = false;
     } else {
       this.authService.authenticate(this.usernameControl.value, this.passwordControl.value).subscribe(
         data => {
@@ -36,6 +40,7 @@ export class LoginComponent {
         },
         error => {
           alert("Error = " + error);
+          this.turnSpinnerOn = false;
         }
       );
     }

@@ -11,10 +11,11 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class RegisterComponent {
 
-  userModel = new User();
-
   constructor(private userService: UserService) {
   }
+
+  userModel = new User();
+  turnSpinnerOn = false;
 
   usernameControl = new FormControl('', [
     Validators.required,
@@ -50,12 +51,14 @@ export class RegisterComponent {
     if (this.userRegisterForm.invalid || this.passwordControl.value != this.passwordRepeatControl.value) {
       alert("Sprawdź poprawność wpisanych informacji.");
     } else {
+      this.turnSpinnerOn = true;
       this.userModel.username = this.usernameControl.value;
       this.userModel.email = this.emailControl.value;
       this.userModel.password = this.passwordControl.value;
       this.userService.registerNewUser(this.userModel).subscribe(
         () => {
         }, (error: HttpErrorResponse) => {
+          this.turnSpinnerOn = false;
           if(error.status === 400) alert(error.error);
           else alert(error.error.text);
         }
