@@ -1,6 +1,6 @@
 <div id="my-account-container">
   <div id="form-container">
-    <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="userOverwriteDataForm">
+    <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="changePasswordForm">
 
       <mat-form-field appearance="outline">
         <mat-label>Nazwa użytkownika</mat-label>
@@ -30,34 +30,44 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Hasło</mat-label>
+        <mat-label>Aktualne hasło</mat-label>
 
-        <input type="password" matInput [formControl]="passwordControl">
+        <input type="password" matInput [formControl]="currentPasswordControl">
 
-        <mat-error *ngIf="passwordControl.hasError('required')">
-          Hasło jest wymagane
+        <mat-error *ngIf="currentPasswordControl.hasError('required')">
+          Aktualne hasło jest wymagane
         </mat-error>
-        <mat-error *ngIf="passwordControl.hasError('minlength')
-              || passwordControl.hasError('maxlength')">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nowe hasło</mat-label>
+
+        <input type="password" matInput [formControl]="newPasswordControl">
+
+        <mat-error *ngIf="newPasswordControl.hasError('required')">
+          Nowe hasło jest wymagane
+        </mat-error>
+        <mat-error *ngIf="newPasswordControl.hasError('minlength')
+              || newPasswordControl.hasError('maxlength')">
           Hasło musi zawierać od 6 do 30 znaków
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Powtórz hasło</mat-label>
-        <input type="password" matInput [formControl]="passwordRepeatControl">
+        <mat-label>Powtórz nowe hasło</mat-label>
+        <input type="password" matInput [formControl]="newPasswordRepeatControl">
 
-        <mat-error *ngIf="passwordRepeatControl.hasError('required')">
+        <mat-error *ngIf="newPasswordRepeatControl.hasError('required')">
           Powtórzenie hasła jest wymagane
         </mat-error>
 
-        <mat-error *ngIf="passwordControl.value != passwordRepeatControl.value">
+        <mat-error *ngIf="newPasswordControl.value != newPasswordRepeatControl.value">
           Hasła nie są zgodne
         </mat-error>
 
       </mat-form-field>
 
-      <button type="submit" mat-raised-button color="primary">Zapisz zmiany</button>
+      <button type="submit" mat-raised-button color="primary">Zapisz nowe hasło</button>
     </form>
 
   </div>
@@ -74,3 +84,6 @@
   </div>
 
 </div>
+<mat-spinner style="margin: -10% 0 0 47.5%;"
+             mode="indeterminate" color="accent"
+             *ngIf="turnSpinnerOn === true"></mat-spinner>

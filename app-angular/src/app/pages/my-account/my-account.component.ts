@@ -2,8 +2,8 @@ import {Component} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../services/authentication.service";
-import {User} from "../../models/user";
 import {DialogService} from "../../services/dialog.service";
+import {PasswordChangeRequest} from "../../models/password-change-request";
 
 @Component({
   selector: 'app-my-account',
@@ -24,6 +24,7 @@ export class MyAccountComponent {
   }
 
   myRole!: string;
+  turnSpinnerOn = false;
 
   usernameControl = new FormControl('', [
     Validators.required,
@@ -36,23 +37,27 @@ export class MyAccountComponent {
     Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
   ]);
 
-  passwordControl = new FormControl('', [
+  currentPasswordControl = new FormControl('', [
+    Validators.required,
+  ]);
+
+  newPasswordControl = new FormControl('', [
     Validators.required,
     Validators.minLength(6),
     Validators.maxLength(30)
   ]);
 
-  passwordRepeatControl = new FormControl('', [
+  newPasswordRepeatControl = new FormControl('', [
     Validators.required,
     Validators.minLength(6),
     Validators.maxLength(30)
   ]);
 
-  userOverwriteDataForm = new FormGroup({
+  changePasswordForm = new FormGroup({
     username: this.usernameControl,
     email: this.emailControl,
-    password: this.passwordControl,
-    passwordRepeat: this.passwordRepeatControl
+    password: this.newPasswordControl,
+    passwordRepeat: this.newPasswordRepeatControl
   });
 
   saveUser(information: string) {
@@ -60,17 +65,32 @@ export class MyAccountComponent {
     answer.afterClosed().subscribe(accept => {
       if (accept) this.overwriteUserData();
     });
-
   }
 
   overwriteUserData() {
-    if (this.userOverwriteDataForm.valid
-      && this.passwordControl.value === this.passwordRepeatControl.value) {
-      let user = new User();
-      user.username = this.usernameControl.value;
-      user.email = this.emailControl.value;
-      user.password = this.passwordControl.value;
-      this.userService.updateUser(user);
+    if (this.changePasswordForm.valid
+      && this.newPasswordControl.value === this.newPasswordRepeatControl.value) {
+      this.turnSpinnerOn= true;
+      let passChangeReq = new PasswordChangeRequest();
+      passChangeReq.username = this.usernameControl.value;
+      passChangeReq.email = this.emailControl.value;
+      passChangeReq.currentPassword = this.currentPasswordControl.value;
+      passChangeReq.newPassword = this.newPasswordControl.value;
+      this.userService.updateUserPassword(passChangeReq).subscribe(
+        () => {
+        }, error => {
+          switch (error.status) {
+            case 200:
+              alert("Hasło zostało zmienione.");
+              window.location.reload();
+              break;
+            default:
+              this.turnSpinnerOn = false;
+              alert("Error " + error.status + ": " + error.error);
+              break;
+          }
+        }
+      );
     } else alert("Sprawdź poprawność wpisanych danych.")
   }
 }
