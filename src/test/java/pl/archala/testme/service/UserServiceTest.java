@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static pl.archala.testme.enums.RoleEnum.ADMIN;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -177,6 +178,26 @@ class UserServiceTest {
 
         //then
         assertEquals(1, userService.updateUserRole(user));
+    }
+
+    @Test
+    void updateUserRoleShouldReturnTwoIfThereIsARequestToSetLastAdminAsUser() {
+        //given
+        User newUser = new User();
+        newUser.setId(100L);
+
+        User currentuser = new User();
+        currentuser.setId(100L);
+        currentuser.setRole(ADMIN);
+
+        List<User> admins = new ArrayList<>(List.of(currentuser));
+
+        //when
+        when(userRepo.findById(100L)).thenReturn(Optional.of(currentuser));
+        when(userRepo.findByRole(ADMIN)).thenReturn(admins);
+
+        //then
+        assertEquals(2, userService.updateUserRole(newUser));
     }
 
     @Test
