@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static pl.archala.testme.enums.RoleEnum.ADMIN;
+import static pl.archala.testme.enums.RoleEnum.USER;
 
 @Service
 public class UserService {
@@ -94,6 +95,11 @@ public class UserService {
 
         User user = userRepo.findById(newUser.getId()).orElse(null);
         if (user == null) return 0;
+
+        if (user.getRole().equals(ADMIN)
+                && newUser.getRole().equals(USER)
+                && userRepo.findByRole(ADMIN).size() == 1)
+            return 2;
 
         user.setRole(newUser.getRole());
         userRepo.save(user);
