@@ -4,6 +4,7 @@ package pl.archala.testme.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -19,6 +20,7 @@ public class PasswordChangeRequest {
     private String username;
 
     @NotEmpty
+    @Pattern(regexp = "^$|^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
     private String email;
 
     @NotEmpty
