@@ -10,6 +10,7 @@ import pl.archala.testme.enums.ExamDifficultyLevel;
 import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.service.ExamService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class ExamController {
     }
 
     @PostMapping("/exams/exam")
-    public ResponseEntity<?> checkExamCorrectness(@RequestBody ExamForm examForm, Principal principal) {
+    public ResponseEntity<?> checkExamCorrectness(@RequestBody @Valid ExamForm examForm, Principal principal) {
         if (examService.saveExamAttemptToUser(examForm, principal.getName()))
             return USER_DOES_NOT_EXIST;
         int score = examService.countUserExamPoints(examForm.getExam());
@@ -66,7 +67,7 @@ public class ExamController {
     }
 
     @PostMapping("/new-exam/save")
-    public ResponseEntity<?> saveNewExam(@RequestBody Exam exam) {
+    public ResponseEntity<?> saveNewExam(@RequestBody @Valid Exam exam) {
         switch (examService.saveNewExam(exam)) {
             case 0:
                 return EXAM_NAME_ALREADY_TAKEN;
@@ -87,7 +88,7 @@ public class ExamController {
     }
 
     @PutMapping("/exams/edit")
-    public ResponseEntity<?> putExam(@RequestBody Exam exam) {
+    public ResponseEntity<?> putExam(@RequestBody @Valid Exam exam) {
         if (examService.putExam(exam)) return EXAM_SAVED;
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
