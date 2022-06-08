@@ -105,6 +105,8 @@ public class UserController {
                 return USER_DOES_NOT_EXIST;
             case 1:
                 return USER_SAVED;
+            case 2:
+                return DELETING_LAST_ADMIN_FORBIDDEN;
             default:
                 return UNDEFINED_ERROR;
         }
