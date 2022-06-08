@@ -76,13 +76,11 @@ export class UsersComponent {
 
   changeRole(user: User) {
     let roles: string[] = [];
-
     this.userService.getRoles().subscribe((data: RoleEnum[]) => {
       data.forEach(role => {
         roles.push(role.toString());
       });
     });
-
     const answer = this.dialogService.getUserNewRoleDialog("Wybierz nową rolę użytkownika: " + user.username, roles);
     answer.afterClosed().subscribe((accept: AcceptRole) => {
       if (accept.accept) {

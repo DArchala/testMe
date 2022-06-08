@@ -21,7 +21,6 @@ public class ExamDateTime {
     @PastOrPresent
     private LocalDateTime endDateTime;
 
-    @Min(1)
     private long userExamTime;
 
 }
