@@ -8,6 +8,9 @@ import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,15 +23,22 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "exam_attempts")
-public class ExamAttempt extends AbstractEntity<Long> implements Serializable {
+public class ExamAttempt extends AbstractEntity<Long> {
 
+    public static final long serialVersionUID = 9L;
+
+    @NotEmpty
+    @Size(min = 1)
     private String examName;
+
     private long examTime;
     private long examUserTime;
     private long examUserPoints;
     private long examMaxPoints;
     private LocalDateTime startTimeDate;
     private LocalDateTime endTimeDate;
+
+    @NotNull
     private ExamDifficultyLevel examDifficultyLevel;
 
     public ExamAttempt(ExamForm examForm) {

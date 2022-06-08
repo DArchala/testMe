@@ -4,15 +4,20 @@ import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "answers")
-public class Answer extends AbstractEntity<Long> implements Serializable {
+public class Answer extends AbstractEntity<Long> {
 
     private static final long serialVersionUID = 6L;
 
+    @NotEmpty
+    @Min(1)
     private String content;
     private boolean correctness;
 

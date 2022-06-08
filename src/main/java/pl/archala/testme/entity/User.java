@@ -28,23 +28,20 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     public static final long serialVersionUID = 7L;
 
     @NotBlank
-    @Min(3)
-    @Max(60)
+    @Size(min = 3, max = 60)
     private String username;
 
     @NotBlank
-    @Min(6)
-    @Max(30)
+    @Size(min = 6, max = 30)
     private String password;
 
-    @Pattern(regexp = "^$|^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
     @NotBlank
+    @Pattern(regexp = "^$|^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
     private String email;
 
     @NotNull
     private RoleEnum role = RoleEnum.USER;
 
-    @NotNull
     private boolean isEnabled;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)

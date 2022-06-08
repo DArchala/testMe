@@ -5,6 +5,10 @@ import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.enums.ExamDifficultyLevel;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +16,23 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "exams")
-public class Exam extends AbstractEntity<Long> implements Serializable {
+public class Exam extends AbstractEntity<Long> {
 
     private static final long serialVersionUID = 2L;
 
+    @NotEmpty
+    @Size(min = 1, max = 255)
     private String examName;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Size(min = 1)
     private List<Question> questions = new ArrayList<>();
 
+    @NotNull
     private ExamDifficultyLevel difficultyLevel = ExamDifficultyLevel.MEDIUM;
 
     @Column(name = "exam_time")
+    @Size(min = 60, max = 360_000)
     private long timeInSeconds = 3600;
 
     public Exam() {

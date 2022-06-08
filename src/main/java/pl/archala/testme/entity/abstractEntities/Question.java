@@ -24,7 +24,7 @@ import java.util.Objects;
         @JsonSubTypes.Type(value = MultipleChoiceQuestion.class, name = "multiple"),
         @JsonSubTypes.Type(value = ShortAnswerQuestion.class, name = "short")
 })
-public abstract class Question extends AbstractEntity<Long> implements Serializable, Questionable {
+public abstract class Question extends AbstractEntity<Long> implements Questionable {
 
     protected String content;
 

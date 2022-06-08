@@ -5,6 +5,7 @@ import pl.archala.testme.entity.User;
 import pl.archala.testme.entity.abstractEntities.AbstractEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -19,9 +20,12 @@ import java.time.LocalDateTime;
 @Table(name = "tokens")
 public class Token extends AbstractEntity<Long> {
 
+    public static final long serialVersionUID = 8L;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
 
+    @NotEmpty
     private String value;
 
     private LocalDateTime expirationDate;
