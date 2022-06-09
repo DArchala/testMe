@@ -22,7 +22,7 @@ public class Token extends AbstractEntity<Long> {
 
     public static final long serialVersionUID = 8L;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne
     private User user;
 
     @NotEmpty
