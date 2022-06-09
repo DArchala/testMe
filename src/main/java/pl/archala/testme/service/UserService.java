@@ -41,18 +41,18 @@ public class UserService {
         if (userRepo.findByEmail(user.getEmail()).isPresent()) return 1;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-        sendToken(user);
+        sendAccountActivateToken(user);
         return 2;
     }
 
-    private void sendToken(User user) {
+    private void sendAccountActivateToken(User user) {
         String tokenValue = UUID.randomUUID().toString();
 
         Token token = new Token(user, tokenValue, LocalDateTime.now().plusMinutes(10));
         tokenRepo.save(token);
 
         String url = "http://localhost:4200/#/activate-account/" + tokenValue;
-        String message = getMailMessage(url);
+        String message = getActivateAccountMailMessage(url);
 
         try {
             mailService.sendMail(user.getEmail(), "Link aktywacyjny", message, false);
@@ -62,7 +62,7 @@ public class UserService {
 
     }
 
-    private String getMailMessage(String url) {
+    private String getActivateAccountMailMessage(String url) {
         StringBuilder sb = new StringBuilder();
         sb.append("Kliknij w poniższy link, aby aktywować Twoje konto:\n\n");
         sb.append(url);
@@ -106,7 +106,7 @@ public class UserService {
         return 1;
     }
 
-    public int activateAccount(String value) {
+    public int activateAccountByToken(String value) {
         Token token = tokenRepo.findByValue(value).orElse(null);
         if (token == null) return 0;
 
@@ -138,5 +138,63 @@ public class UserService {
 
         userRepo.save(user);
         return 4;
+    }
+
+    public int resetPassword(String email) {
+        User user = userRepo.findByEmail(email).orElse(null);
+        if (user == null) return 0;
+        if (!user.isEnabled()) return 2;
+
+        sendResetPasswordToken(user);
+        return 1;
+    }
+
+    private void sendResetPasswordToken(User user) {
+        String tokenValue = UUID.randomUUID().toString();
+        Token token = new Token(user, tokenValue, LocalDateTime.now().plusMinutes(10));
+        tokenRepo.save(token);
+
+        String url = "http://localhost:4200/#/password-reset-new/" + tokenValue;
+        String message = getPasswordResetMailMessage(url);
+
+        try {
+            mailService.sendMail(user.getEmail(), "Reset hasła", message, false);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getPasswordResetMailMessage(String url) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Kliknij w poniższy link, aby przejść do panelu zmiany hasła do Twojego konta:\n\n");
+        sb.append(url);
+        sb.append("\n\nAutor aplikacji: Damian Archała");
+        return sb.toString();
+    }
+
+    public int resetPasswordByToken(String value) {
+        Token token = tokenRepo.findByValue(value).orElse(null);
+        if (token == null) return 0;
+
+        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
+            tokenRepo.delete(token);
+            return 1;
+        }
+
+        return 2;
+    }
+
+    public User findUserByTokenValue(String value) {
+        Token token = tokenRepo.findByValue(value).orElseThrow();
+        return token.getUser();
+    }
+
+    public int updateNewPasswordUser(User newPasswordUser) {
+        User user = userRepo.findByUsername(newPasswordUser.getUsername()).orElse(null);
+        if (user == null) return 0;
+
+        user.setPassword(passwordEncoder.encode(newPasswordUser.getPassword()));
+        userRepo.save(user);
+        return 1;
     }
 }
