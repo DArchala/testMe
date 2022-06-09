@@ -76,12 +76,12 @@ export class MyAccountComponent {
       passChangeReq.email = this.emailControl.value;
       passChangeReq.currentPassword = this.currentPasswordControl.value;
       passChangeReq.newPassword = this.newPasswordControl.value;
-      this.userService.updateUserPassword(passChangeReq).subscribe(
+      this.userService.postPasswordChangeRequest(passChangeReq).subscribe(
         () => {
         }, error => {
           switch (error.status) {
             case 200:
-              alert("Hasło zostało zmienione.");
+              alert("Password was changed.");
               window.location.reload();
               break;
             default:
@@ -91,6 +91,6 @@ export class MyAccountComponent {
           }
         }
       );
-    } else alert("Sprawdź poprawność wpisanych danych.")
+    } else alert("Check form data correctness.")
   }
 }
