@@ -3,7 +3,7 @@
   <form (ngSubmit)="registerUser()" [formGroup]="userRegisterForm">
 
     <mat-form-field appearance="outline">
-    <mat-label>Nazwa użytkownika</mat-label>
+      <mat-label>Nazwa użytkownika</mat-label>
 
       <input type="text" matInput [formControl]="usernameControl">
 
@@ -25,7 +25,7 @@
         Adres e-mail jest wymagany
       </mat-error>
       <mat-error *ngIf="emailControl.hasError('pattern')">
-        Nieprawidłowy wzór adresu e-mail
+        Nieprawidłowy format adresu e-mail
       </mat-error>
     </mat-form-field>
 
@@ -63,4 +63,4 @@
 </div>
 <mat-spinner style="margin: -10% 0 0 47.5%;"
              mode="indeterminate" color="accent"
-             *ngIf="turnSpinnerOn === true"></mat-spinner>
+             *ngIf="turnSpinnerOn"></mat-spinner>

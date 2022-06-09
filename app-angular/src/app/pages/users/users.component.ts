@@ -88,7 +88,7 @@ export class UsersComponent {
         userDTO.role = accept.role;
         if (userDTO.username === this.authService.getUsername() && accept.role === 'USER') this.settingMyselfAsUser = true;
 
-        this.userService.updateUserRole(userDTO).subscribe(
+        this.userService.putUserWithNewRole(userDTO).subscribe(
           () => {
           }, error => {
             switch (error.status) {
