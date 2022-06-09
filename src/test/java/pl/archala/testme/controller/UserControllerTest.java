@@ -101,7 +101,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
 
         //when
-        when(userService.activateAccount(tokenValue)).thenReturn(0);
+        when(userService.activateAccountByToken(tokenValue)).thenReturn(0);
 
         //then
         assertEquals(response, userController.activateAccountByToken(tokenValue));
@@ -114,7 +114,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("Your token has expired.", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.activateAccount(tokenValue)).thenReturn(1);
+        when(userService.activateAccountByToken(tokenValue)).thenReturn(1);
 
         //then
         assertEquals(response, userController.activateAccountByToken(tokenValue));
@@ -127,7 +127,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
 
         //when
-        when(userService.activateAccount(tokenValue)).thenReturn(2);
+        when(userService.activateAccountByToken(tokenValue)).thenReturn(2);
 
         //then
         assertEquals(response, userController.activateAccountByToken(tokenValue));
@@ -140,7 +140,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
 
         //when
-        when(userService.activateAccount(tokenValue)).thenReturn(3);
+        when(userService.activateAccountByToken(tokenValue)).thenReturn(3);
 
         //then
         assertEquals(response, userController.activateAccountByToken(tokenValue));
@@ -153,7 +153,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
 
         //when
-        when(userService.activateAccount(tokenValue)).thenReturn(-1);
+        when(userService.activateAccountByToken(tokenValue)).thenReturn(-1);
 
         //then
         assertEquals(response, userController.activateAccountByToken(tokenValue));

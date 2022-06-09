@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.Token;
@@ -209,7 +208,7 @@ class UserServiceTest {
         when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.activateAccount(tokenValue));
+        assertEquals(0, userService.activateAccountByToken(tokenValue));
     }
 
     @Test
@@ -228,7 +227,7 @@ class UserServiceTest {
         when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(1, userService.activateAccount(tokenValue));
+        assertEquals(1, userService.activateAccountByToken(tokenValue));
     }
 
     @Test
@@ -242,7 +241,7 @@ class UserServiceTest {
         when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(2, userService.activateAccount(tokenValue));
+        assertEquals(2, userService.activateAccountByToken(tokenValue));
     }
 
     @Test
@@ -257,7 +256,7 @@ class UserServiceTest {
         when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(3, userService.activateAccount(tokenValue));
+        assertEquals(3, userService.activateAccountByToken(tokenValue));
     }
 
     @Test
