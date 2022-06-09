@@ -23,9 +23,10 @@
     </mat-form-field>
 
     <button type="submit" mat-raised-button color="primary">Zaloguj się</button>
+    <p id="password-reset-text" (click)="goToPasswordResetPage()">Zapomniałem hasła</p>
   </form>
-
+git 
 </div>
 <mat-spinner style="margin: -10% 0 0 47.5%;"
              mode="indeterminate" color="accent"
-             *ngIf="turnSpinnerOn === true"></mat-spinner>
+             *ngIf="turnSpinnerOn"></mat-spinner>

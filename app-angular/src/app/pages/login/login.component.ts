@@ -35,15 +35,27 @@ export class LoginComponent {
       this.turnSpinnerOn = false;
     } else {
       this.authService.authenticate(this.usernameControl.value, this.passwordControl.value).subscribe(
-        data => {
+        () => {
           this.router.navigate(["/home"]);
         },
         error => {
-          alert("Error = " + error);
-          this.turnSpinnerOn = false;
+          switch (error.status) {
+            case 200:
+              if (error.error.text.startsWith("<!DOCTYPE html>")) {
+                alert("Wrong username or password.");
+                this.turnSpinnerOn = false;
+              }
+              break;
+            default:
+              alert(error.error);
+              break;
+          }
         }
       );
     }
   }
 
+  goToPasswordResetPage() {
+    this.router.navigate(['password-reset']);
+  }
 }

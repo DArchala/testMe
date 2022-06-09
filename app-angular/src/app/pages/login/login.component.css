@@ -13,3 +13,12 @@ form {
 form * {
   padding-bottom: 4%;
 }
+
+#password-reset-text {
+  text-align: center;
+}
+
+#password-reset-text:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
