@@ -15,13 +15,16 @@ import pl.archala.testme.enums.RoleEnum;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static pl.archala.testme.enums.RoleEnum.ADMIN;
 
@@ -344,5 +347,136 @@ class UserServiceTest {
         //then
         assertEquals(4, userService.updatePassword(passwordChangeRequest));
     }
+
+    @Test
+    void resetPasswordShouldReturnZeroIfUserDoesNotExist() {
+        //given
+        String email = "email@gmail.com";
+
+        //when
+        when(userRepo.findByEmail(email)).thenReturn(Optional.empty());
+
+        //then
+        assertEquals(0, userService.resetPassword(email));
+    }
+
+    @Test
+    void resetPasswordShouldReturnTwoIfUserIsDisabled() {
+        //given
+        String email = "email@gmail.com";
+        User user = new User();
+
+        //when
+        when(userRepo.findByEmail(email)).thenReturn(Optional.of(user));
+
+        //then
+        assertEquals(2, userService.resetPassword(email));
+    }
+
+    @Test
+    void resetPasswordShouldReturnOneIfPasswordResetTokenWasSent() {
+        //given
+        String email = "email@gmail.com";
+        User user = new User();
+        user.setEnabled(true);
+
+        //when
+        when(userRepo.findByEmail(email)).thenReturn(Optional.of(user));
+
+        //then
+        assertEquals(1, userService.resetPassword(email));
+    }
+
+    @Test
+    void resetPasswordByTokenShouldReturnZeroIfTokenDoesNotExist() {
+        //given
+        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+
+        //when
+        when(tokenRepo.findByValue(value)).thenReturn(Optional.empty());
+
+        //then
+        assertEquals(0, userService.resetPasswordByToken(value));
+    }
+
+    @Test
+    void resetPasswordByTokenShouldReturnOneIfTokenHasExpired() {
+        //given
+        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        Token token = new Token();
+        token.setExpirationDate(LocalDateTime.now().minusMinutes(10));
+
+        //when
+        when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
+
+        //then
+        assertEquals(1, userService.resetPasswordByToken(value));
+    }
+
+    @Test
+    void resetPasswordByTokenShouldReturnTwoIfTokenWasFoundAndConfirmed() {
+        //given
+        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        Token token = new Token();
+        token.setExpirationDate(LocalDateTime.now().plusMinutes(60));
+
+        //when
+        when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
+
+        //then
+        assertEquals(2, userService.resetPasswordByToken(value));
+    }
+
+    @Test
+    void findUserByTokenValueShouldReturnZeroIfTokenDoesNotExist() {
+        //given
+        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+
+        //when
+        when(tokenRepo.findByValue(value)).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(NoSuchElementException.class, () -> userService.findUserByTokenValue(value));
+    }
+
+    @Test
+    void findUserByTokenValueShouldReturnTokenUserIfTokenExists() {
+        //given
+        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        User user = new User();
+        Token token = new Token(user, value, LocalDateTime.now().plusMinutes(60));
+
+        //when
+        when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
+
+        //then
+        assertEquals(user, userService.findUserByTokenValue(value));
+    }
+
+    @Test
+    void updateNewPasswordUserShouldReturnZeroIfUserDoesNotExist() {
+        //given
+        User newPasswordUser = new User();
+
+        //when
+        when(userRepo.findByUsername(newPasswordUser.getUsername())).thenReturn(Optional.empty());
+
+        //then
+        assertEquals(0, userService.updateNewPasswordUser(newPasswordUser));
+    }
+
+    @Test
+    void updateNewPasswordUserShouldReturnOneIfUserWithNewPasswordWasSaved() {
+        //given
+        User newPasswordUser = new User();
+        newPasswordUser.setPassword("newpassword123");
+
+        //when
+        when(userRepo.findByUsername(newPasswordUser.getUsername())).thenReturn(Optional.of(newPasswordUser));
+
+        //then
+        assertEquals(1, userService.updateNewPasswordUser(newPasswordUser));
+    }
+
 
 }
