@@ -14,22 +14,26 @@ import {MyAccountComponent} from "./pages/my-account/my-account.component";
 import {ActivateAccountComponent} from "./pages/activate-account/activate-account.component";
 import {MyExamAttemptsComponent} from "./pages/my-exam-attempts/my-exam-attempts.component";
 import {UsersComponent} from "./pages/users/users.component";
+import {PasswordResetComponent} from "./pages/password-reset/password-reset.component";
+import {PasswordResetNewComponent} from "./pages/password-reset/password-reset-new/password-reset-new.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
-  {path: 'logout', component: LogoutComponent, canActivate: [AuthGuard]},
-  {path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuard]},
-  {path: 'exams', component: ExamsComponent, canActivate: [AuthGuard]},
-  {path: 'exams/exam/:id', component: ExamComponent, canActivate: [AuthGuard]},
-  {path: 'exams/edit/:id', component: EditExamComponent, canActivate: [AuthGuard]},
-  {path: 'new-exam', component: NewExamComponent, canActivate: [AuthGuard]},
-  {path: 'activate-account/:token', component: ActivateAccountComponent},
-  {path: 'my-exam-attempts', component: MyExamAttemptsComponent, canActivate: [AuthGuard]},
-  {path: 'users', component: UsersComponent, canActivate: [AuthGuard]},
-  {path: '**', component: PageNotFoundComponent},
+  {path: 'home',                      component: HomeComponent,             canActivate: [AuthGuard]},
+  {path: 'login',                     component: LoginComponent},
+  {path: 'register',                  component: RegisterComponent},
+  {path: 'logout',                    component: LogoutComponent,           canActivate: [AuthGuard]},
+  {path: 'my-account',                component: MyAccountComponent,        canActivate: [AuthGuard]},
+  {path: 'exams',                     component: ExamsComponent,            canActivate: [AuthGuard]},
+  {path: 'exams/exam/:id',            component: ExamComponent,             canActivate: [AuthGuard]},
+  {path: 'exams/edit/:id',            component: EditExamComponent,         canActivate: [AuthGuard]},
+  {path: 'new-exam',                  component: NewExamComponent,          canActivate: [AuthGuard]},
+  {path: 'activate-account/:token',   component: ActivateAccountComponent},
+  {path: 'my-exam-attempts',          component: MyExamAttemptsComponent,   canActivate: [AuthGuard]},
+  {path: 'users',                     component: UsersComponent,            canActivate: [AuthGuard]},
+  {path: 'password-reset',            component: PasswordResetComponent},
+  {path: 'password-reset-new/:token', component: PasswordResetNewComponent},
+  {path: '**',                        component: PageNotFoundComponent},
 ]
 
 @NgModule({

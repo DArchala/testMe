@@ -38,6 +38,8 @@ import { UsersComponent } from './pages/users/users.component';
 import { UserOptionsDialogComponent } from './pages/users/user-options-dialog/user-options-dialog.component';
 import { UserNewRoleDialogComponent } from './pages/users/user-new-role-dialog/user-new-role-dialog.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
+import { PasswordResetNewComponent } from './pages/password-reset/password-reset-new/password-reset-new.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     ExamAttemptConverterPipe,
     UsersComponent,
     UserOptionsDialogComponent,
-    UserNewRoleDialogComponent
+    UserNewRoleDialogComponent,
+    PasswordResetComponent,
+    PasswordResetNewComponent
   ],
   entryComponents: [DialogComponent],
     imports: [
