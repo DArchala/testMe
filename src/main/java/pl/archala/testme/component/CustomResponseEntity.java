@@ -33,6 +33,8 @@ public final class CustomResponseEntity {
     public static final ResponseEntity<?> TOKEN_DOES_NOT_EXIST = new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
     public static final ResponseEntity<?> TOKEN_HAS_NO_USER = new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
     public static final ResponseEntity<?> TOKEN_HAS_EXPIRED = new ResponseEntity<>("Your token has expired.", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> PASSWORD_RESET_LINK_WAS_SENT_CHECK_MAILBOX = new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> PASSWORD_RESETTING_FOR_DISABLED_USER_IS_FORBIDDEN = new ResponseEntity<>("Password resetting for disabled user is forbidden.", HttpStatus.FORBIDDEN);
 
 
     //OTHER
