@@ -167,7 +167,7 @@ public class UserController {
     }
 
     @PostMapping("/findAllUsersPaginated")
-    public ResponseEntity<?> findAllUsersPaginated(@RequestBody DataTableSortPage dtSortPage) {
+    public ResponseEntity<?> findAllUsersPaginated(@RequestBody @Valid DataTableSortPage dtSortPage) {
         List<User> usersPaginated = userService.findAllUsersPaginated(dtSortPage);
         return new ResponseEntity<>(usersPaginated, HttpStatus.OK);
     }
