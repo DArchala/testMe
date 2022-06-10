@@ -1,66 +1,66 @@
 <div id="my-exam-attempts-container">
-  <div id="exam-attempts-list" *ngIf="myExamAttempts.length != 0">
-    <table mat-table matSort [dataSource]="dataSource"
+  <div id="exam-attempts-list" *ngIf="!lackOfExamAttempts">
+    <table mat-table matSort [dataSource]="dataSource" (matSortChange)="announceSortChange($event)"
            class="mat-elevation-z8">
 
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by ID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="id" sortActionDescription="Sort by ID">
           ID
         </th>
         <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
 
       <ng-container matColumnDef="examName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by examName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="examName" sortActionDescription="Sort by examName">
           Exam name
         </th>
         <td mat-cell *matCellDef="let element"> {{element.examName}} </td>
       </ng-container>
 
       <ng-container matColumnDef="examTime">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by examTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="examTime" sortActionDescription="Sort by examTime">
           Exam time (s)
         </th>
         <td mat-cell *matCellDef="let element"> {{element.examTime}} </td>
       </ng-container>
 
       <ng-container matColumnDef="examUserTime">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by examUserTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="examUserTime" sortActionDescription="Sort by examUserTime">
           Exam user time (s)
         </th>
         <td mat-cell *matCellDef="let element"> {{element.examUserTime}} </td>
       </ng-container>
 
       <ng-container matColumnDef="examUserPoints">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by examUserPoints">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="examUserPoints" sortActionDescription="Sort by examUserPoints">
           Exam user points
         </th>
         <td mat-cell *matCellDef="let element"> {{element.examUserPoints}} </td>
       </ng-container>
 
       <ng-container matColumnDef="examMaxPoints">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by examMaxPoints">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="examMaxPoints" sortActionDescription="Sort by examMaxPoints">
           Exam max points
         </th>
         <td mat-cell *matCellDef="let element"> {{element.examMaxPoints}} </td>
       </ng-container>
 
       <ng-container matColumnDef="startTimeDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by startTimeDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="startTimeDate" sortActionDescription="Sort by startTimeDate">
           Start Time Date
         </th>
         <td mat-cell *matCellDef="let element"> {{element.startTimeDate | examAttemptConverter}} </td>
       </ng-container>
 
       <ng-container matColumnDef="endTimeDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by endTimeDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="endTimeDate" sortActionDescription="Sort by endTimeDate">
           End Time Date
         </th>
         <td mat-cell *matCellDef="let element"> {{element.endTimeDate | examAttemptConverter}} </td>
       </ng-container>
 
       <ng-container matColumnDef="examDifficultyLevel">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="" sortActionDescription="Sort by examDifficultyLevel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="examDifficultyLevel" sortActionDescription="Sort by examDifficultyLevel">
           Exam difficulty level
         </th>
         <td mat-cell *matCellDef="let element"> {{element.examDifficultyLevel}} </td>
@@ -70,7 +70,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
-  <div *ngIf="myExamAttempts.length === 0">
+  <div *ngIf="lackOfExamAttempts">
     <h1>Brak wyników egzaminów :)</h1>
   </div>
 </div>
