@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.archala.testme.dto.DataTableSortPage;
 import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.enums.RoleEnum;
@@ -164,4 +165,11 @@ public class UserController {
                 return UNDEFINED_ERROR;
         }
     }
+
+    @PostMapping("/findAllUsersPaginated")
+    public ResponseEntity<?> findAllUsersPaginated(@RequestBody DataTableSortPage dtSortPage) {
+        List<User> usersPaginated = userService.findAllUsersPaginated(dtSortPage);
+        return new ResponseEntity<>(usersPaginated, HttpStatus.OK);
+    }
+
 }

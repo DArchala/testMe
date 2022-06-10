@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {DialogComponent} from "../pages/dialog/dialog.component";
-import {UserOptionsDialogComponent} from "../pages/users/user-options-dialog/user-options-dialog.component";
-import {UserNewRoleDialogComponent} from "../pages/users/user-new-role-dialog/user-new-role-dialog.component";
+import {UserOptionsDialogComponent} from "../pages/users-list/user-options-dialog/user-options-dialog.component";
+import {UserNewRoleDialogComponent} from "../pages/users-list/user-new-role-dialog/user-new-role-dialog.component";
 
 @Injectable({
   providedIn: 'root'
