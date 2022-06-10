@@ -12,6 +12,6 @@ export class ExamAttemptsService {
   private url = "http://localhost:8080/api";
 
   getMyExamAttempts() {
-    return this.httpClient.get<ExamAttempt[]>(this.url + `/examAttempts/getMyExamAttempts`);
+    return this.httpClient.get<ExamAttempt[]>(this.url + `/examAttempts`);
   }
 }
