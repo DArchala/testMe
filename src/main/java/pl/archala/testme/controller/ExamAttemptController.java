@@ -28,7 +28,7 @@ public class ExamAttemptController {
         this.userRepo = userRepo;
     }
 
-    @GetMapping("/examAttempts/getMyExamAttempts")
+    @GetMapping("/examAttempts")
     public ResponseEntity<?> getMyExamAttempts(Principal principal) {
         User user = userRepo.findByUsername(principal.getName()).orElse(null);
         if (user == null) return USER_DOES_NOT_EXIST;
