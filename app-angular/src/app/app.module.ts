@@ -34,12 +34,13 @@ import { MyExamAttemptsComponent } from './pages/my-exam-attempts/my-exam-attemp
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import { ExamAttemptConverterPipe } from './pipes/exam-attempt-converter.pipe';
-import { UsersComponent } from './pages/users/users.component';
-import { UserOptionsDialogComponent } from './pages/users/user-options-dialog/user-options-dialog.component';
-import { UserNewRoleDialogComponent } from './pages/users/user-new-role-dialog/user-new-role-dialog.component';
+import { UserOptionsDialogComponent } from './pages/users-list/user-options-dialog/user-options-dialog.component';
+import { UserNewRoleDialogComponent } from './pages/users-list/user-new-role-dialog/user-new-role-dialog.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 import { PasswordResetNewComponent } from './pages/password-reset/password-reset-new/password-reset-new.component';
+import { UsersListComponent } from './pages/users-list/users-list.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -59,11 +60,11 @@ import { PasswordResetNewComponent } from './pages/password-reset/password-reset
     ActivateAccountComponent,
     MyExamAttemptsComponent,
     ExamAttemptConverterPipe,
-    UsersComponent,
     UserOptionsDialogComponent,
     UserNewRoleDialogComponent,
     PasswordResetComponent,
-    PasswordResetNewComponent
+    PasswordResetNewComponent,
+    UsersListComponent
   ],
   entryComponents: [DialogComponent],
     imports: [
@@ -83,7 +84,8 @@ import { PasswordResetNewComponent } from './pages/password-reset/password-reset
         MatTooltipModule,
         MatTableModule,
         MatSortModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatPaginatorModule
     ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, AuthenticationService, [
