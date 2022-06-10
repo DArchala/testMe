@@ -1,7 +1,11 @@
 package pl.archala.testme.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.archala.testme.dto.DataTableSortPage;
 import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.Token;
 import pl.archala.testme.entity.User;
@@ -196,5 +200,29 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(newPasswordUser.getPassword()));
         userRepo.save(user);
         return 1;
+    }
+
+    public List<User> findAllUsersPaginated(DataTableSortPage dtSortPage) {
+        String column = dtSortPage.getColumn();
+        String direction = dtSortPage.getDirection().toUpperCase();
+
+        Sort sort = getSortingType(direction, column);
+        Pageable pageable = PageRequest.of(dtSortPage.getPage(), dtSortPage.getLength(), sort);
+
+        return userRepo.findAll(pageable).getContent();
+
+    }
+
+    private Sort getSortingType(String direction, String column) {
+        if (direction.equals("ASC")) return sortAscending(column);
+        else return sortDescending(column);
+    }
+
+    private Sort sortAscending(String column) {
+        return Sort.by(column).ascending();
+    }
+
+    private Sort sortDescending(String column) {
+        return Sort.by(column).descending();
     }
 }
