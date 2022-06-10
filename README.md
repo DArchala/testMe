@@ -1,15 +1,23 @@
 # TestMe
 ## Functionalities of TestMe application
-- login
-- register
-- designing new exams
+- logging  in
+- registering 
+- creating new exams
 - taking exams
 - editing exams
-- reviewing the history of exam attempts
+- displaying, sorting, paging exam attempts
+- editing user role
+- deleting users
+- displaying, sorting, paging users
+- password resetting
+- password changing
 
 ## Tools and technologies
 - Java
 - Angular
+  - Typescript
+  - HTML
+  - CSS
 - Hibernate
 - H2 Database
 - Spring Boot
