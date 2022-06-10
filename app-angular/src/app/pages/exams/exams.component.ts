@@ -9,16 +9,17 @@ import {DialogService} from "../../services/dialog.service";
   templateUrl: './exams.component.html',
   styleUrls: ['./exams.component.css']
 })
-export class ExamsComponent implements OnInit {
+export class ExamsComponent {
 
   constructor(private examService: ExamsService, private dialogService: DialogService) {
+    this.examService.getExams().subscribe(exams => {
+      if(exams.length === 0) this.lackOfExams = true;
+      this.exams = exams;
+    });
   }
 
   exams: Exam[] = [];
-
-  ngOnInit(): void {
-    this.examService.getExams().subscribe(exam => this.exams = exam);
-  }
+  lackOfExams!: boolean;
 
   deleteExam(information: string, id: any) {
     const answer = this.dialogService.getDialog(information);
