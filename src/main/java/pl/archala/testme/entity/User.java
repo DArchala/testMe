@@ -17,7 +17,6 @@ import java.util.*;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -113,5 +112,18 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", examAttempts=" + examAttempts +
+                ", enabled=" + isEnabled() +
+                ", id=" + getId() +
+                '}';
     }
 }
