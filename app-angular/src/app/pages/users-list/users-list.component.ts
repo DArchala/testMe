@@ -21,8 +21,9 @@ export class UsersListComponent {
 
   constructor(private _liveAnnouncer: LiveAnnouncer, public userService: UserService, private router: Router,
               private dialogService: DialogService, private authService: AuthenticationService) {
-    this.userService.getUsers().subscribe((user:User[]) => {
-      this.dataSource = new MatTableDataSource<User>(user);
+    this.userService.getUsers().subscribe((users:User[]) => {
+      if(users.length === 0) this.lackOfUsers = true;
+      this.dataSource = new MatTableDataSource<User>(users);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.paginator._intl.itemsPerPageLabel="Users per page: ";
@@ -35,6 +36,7 @@ export class UsersListComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  lackOfUsers!: boolean;
 
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {

@@ -1,5 +1,5 @@
 <div id="table-container">
-  <div id="users-list">
+  <div id="users-list" *ngIf="!lackOfUsers">
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
 
       <ng-container matColumnDef="id">
@@ -34,5 +34,8 @@
                    showFirstLastButtons
                    aria-label="Select page of users">
     </mat-paginator>
+  </div>
+  <div *ngIf="lackOfUsers">
+    Brak użytkowników
   </div>
 </div>
