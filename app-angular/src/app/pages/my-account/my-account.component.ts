@@ -4,6 +4,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../services/authentication.service";
 import {DialogService} from "../../services/dialog.service";
 import {PasswordChangeRequest} from "../../models/password-change-request";
+import {InfoStatic} from "../../support/info-static";
 
 @Component({
   selector: 'app-my-account',
@@ -34,7 +35,7 @@ export class MyAccountComponent {
 
   emailControl = new FormControl('', [
     Validators.required,
-    Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+    Validators.pattern(InfoStatic.staticEmailPattern)
   ]);
 
   currentPasswordControl = new FormControl('', [
@@ -91,6 +92,6 @@ export class MyAccountComponent {
           }
         }
       );
-    } else alert("Check form data correctness.")
+    } else alert(InfoStatic.checkFormData)
   }
 }

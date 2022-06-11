@@ -101,7 +101,7 @@
             </mat-form-field>
             <mat-checkbox [(ngModel)]="answer.correctness" style="padding-top: 10px"
                           [ngModelOptions]="{standalone: true}"
-                          [disabled]="question.type === 'short'" color="primary"
+                          [disabled]="question.type === 'short'" [color]="getQuestionColorCheckbox(question.type)"
                           (change)="selectAnswer(answer, question)"
                           matTooltip="Click, to mark this answer as correct"
                           matTooltipPosition="above">

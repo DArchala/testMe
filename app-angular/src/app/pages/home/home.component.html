@@ -2,101 +2,95 @@
   <h1>Welcome on TestMe homepage! :)</h1>
 </div>
 <div class="info-text">
-  <h3>Jak napisać egzamin?</h3>
+  <h3>How to take an exam?</h3>
   <ol>
-    <li>Przejdź do zakładki '<b>Exams</b>'.</li>
-    <li>Wybierz dostępny egzamin.</li>
-    <li>Po zapoznaniu się z informacjami, wybierz przycisk '<b>Start exam!</b>'.</li>
-    <li>Pytania podzielone są na 3 rodzaje:</li>
+    <li>Click in '<b>Exams</b>' tab.</li>
+    <li>Choose any exam.</li>
+    <li>After reading the informations, click the button '<b>Start exam!</b>'.</li>
+    <li>There are 3 question types:</li>
     <ul>
-      <li><u>Jednokrotnego wyboru</u> - tylko jedna odpowiedź jest prawidłowa.</li>
-      <li><u>Wielokrotnego wyboru</u> - conajmniej jedna odpowiedź jest prawidłowa.</li>
-      <li><u>Krótka odpowiedź</u> - użytkownik wpisuje jedną lub wiele odpowiedzi oddzielonych przecinkiem.</li>
+      <li><u>Single choice</u> - only one answer is correct.</li>
+      <li><u>Multiple choice</u> - at least one answer is correct.</li>
+      <li><u>Short answer</u> - user enter at least one answer in text input, if there are more than one answer, they have to be separated by comma (,).</li>
     </ul>
-    <li>Egzamin zakończy się w momencie osiągnięcia limitu czasowego,
-      lub ręcznego zakończenia egzaminu przez użytkownika (przyciskiem '<b>Send exam</b>').
+    <li>Exam ends when time is over, or user finish it by clicking '<b>Send exam</b>') button.
     </li>
-    <li>Po ukończeniu egzaminu, zostaną wyświetlone informacje o czasie pisania egzaminu oraz wyniku punktowym.</li>
+    <li>After finish exam, there will be displayed informations about your score and exam time.</li>
   </ol>
 </div>
 
 <div class="info-text">
-  <h3>Jak działa punktacja egzaminu?</h3>
+  <h3>How exam points scoring works?</h3>
   <ol>
-    <li><u>Pytanie jednokrotnego wyboru</u></li>
+    <li><u>Single choice question</u></li>
     <ul>
-      <li>Zaznaczenie poprawnej odpowiedzi: +1 punkt</li>
-      <li>Zaznaczenie niepoprawnej odpowiedzi: 0 punktów</li>
+      <li>Choosing correct answer: +1 point</li>
+      <li>Choosing incorrect answer: 0 points</li>
     </ul>
-    <li><u>Pytanie wielokrotnego wyboru</u></li>
+    <li><u>Multiple choice question</u></li>
     <ul>
-      <li>Zaznaczenie poprawnej odpowiedzi: +1 punkt</li>
-      <li>Zaznaczenie niepoprawnej odpowiedzi: -1 punkt</li>
-      <li>Niemożliwe jest uzyskanie ujemnej liczby punktów za wszystkie odpowiedzi w pytaniu.</li>
+      <li>Choosing correct answer: +1 point</li>
+      <li>Choosing incorrect answer: -1 point</li>
+      <li>It is impossible to get less than 0 points for all answers in one question.</li>
     </ul>
-    <li><u>Pytanie z odpowiedzią pisemną</u></li>
+    <li><u>Short answer question</u></li>
     <ul>
-      <li>Odpowiedzi muszą być oddzielone przecinkiem (,) - w przeciwnym razie cała odpowiedź zostanie
-        uznana za pojedynczą wartość.
+      <li>Answers have to be separated by comma (,) - otherwise, every user answer in an input will be recognized as one answer.
       </li>
-      <li>Wpisanie poprawnej odpowiedzi: +1 punkt</li>
-      <li>Wpisanie niepoprawnej odpowiedzi: -1 punkt</li>
-      <li>Wpisanie większej liczby odpowiedzi niż istnieje ich poprawna ilość: -1 punkt za każdą nadmierną odpowiedź
+      <li>Entering correct answer: +1 point</li>
+      <li>Entering incorrect answer: -1 point</li>
+      <li>Entering more answers than there are: -1 point for every useless answer
       </li>
     </ul>
-    <li>Brak wpisania lub wybrania odpowiedzi ze strony użytkownika skutkuje uzyskaniem zerowej ilości punktów.</li>
+    <li>Keeping answer empty, choosing no one answer will score zero points.</li>
   </ol>
 </div>
 
 <div class="info-text">
-  <h3>Jak dodać nowy egzamin?</h3>
+  <h3>How to add new exam?</h3>
   <ol>
-    <li>Przejdź do zakładki '<b>New Exam</b>'.</li>
+    <li>Click in '<b>New Exam</b>' tab.</li>
     <ol>
-      <li>Uzupełnij pole <b>Nazwa egzaminu</b>.</li>
-      <li>Wybierz <b>poziom trudności</b> z listy rozwijanej.</li>
-      <li>Uzupełnij pole <b>Czas egzaminu</b>.</li>
+      <li>Fill the <b>Exam name</b> field.</li>
+      <li>Choose <b>difficulty level</b> from drop down list.</li>
+      <li>Fill the <b>Exam time</b> field.</li>
       <ul>
-        <li>Wybierz liczbę godzin: od 0 do 99</li>
-        <li>Wybierz liczbę minut: od 0 do 59</li>
-        <li>Czas egzaminu <u>nie może</u> być <b>zerowy</b>!</li>
+        <li>Entered exam time has to match with HH:MM format (HH - hours, MM - minutes)</li>
+        <li>Exam time <u>cannot be</u> <b> equal to zero</b>!</li>
       </ul>
-      <li>Aby dodawać kolejne pytania, kliknij w przycisk <b>Dodaj pytanie</b>.</li>
-      <li>Podczas dodawania pytań i wybierania poprawnych odpowiedzi,
-        liczba pytań oraz maksymalna możliwa do uzyskania liczba punktów za egzamin
-        będzie się zmieniać.
+      <li>To add next questions, click in <b>Add question</b> button.</li>
+      <li>While adding questions and choosing correct answers,
+        questions number and max exam points will be changing.
       </li>
-      <li>W zależności od wybranego typu pytania, zostanie dodany jego określony rodzaj:</li>
+      <li>In depend on question type, there will be added exactly this question type:</li>
       <ol>
-        <li><u>Jednokrotny wybór</u></li>
+        <li><u>Single choice</u></li>
         <ul>
-          <li>Użytkownik otrzyma pytanie z odpowiedziami, w którym będzie mógł wybrać tylko jedną z nich.</li>
-          <li>Musi posiadać dokładnie jedną prawidłową odpowiedź.</li>
-          <li>Musi posiadać conajmniej dwie odpowiedzi.</li>
+          <li>User will get question with answers to choose only one of them.</li>
+          <li>This question type has to contain one, and only one correct answer.</li>
+          <li>This question type has to contain at least two answers.</li>
         </ul>
-        <li><u>Wielokrotny wybór</u></li>
+        <li><u>Multiple choice</u></li>
         <ul>
-          <li>Użytkownik otrzyma pytanie z odpowiedziami, w którym będzie mógł wybrać wiele z nich.</li>
-          <li>Musi posiadać conajmniej jedną prawidłową odpowiedź.</li>
-          <li>Musi posiadać conajmniej dwie odpowiedzi.</li>
+          <li>User will get question with answers, to choose one or more of them.</li>
+          <li>This question type has to contain at least one correct answer.</li>
+          <li>This question type has to contain at least two answers.</li>
         </ul>
-        <li><u>Pisemna odpowiedź</u></li>
+        <li><u>Short answer</u></li>
         <ul>
-          <li>Użytkownik otrzyma pole, w którym ręcznie wpisuje odpowiedź na pytanie.</li>
-          <li>Może posiadać dowolną liczbę odpowiedzi.</li>
-          <li>Każda odpowiedź musi być prawidłowa (w tym typie pytania,
-            wszystkie odpowiedzi automatycznie są zaznaczone jako prawidłowe).
+          <li>User will get a field, where he can enter his answer.</li>
+          <li>This question type can contain one or more answers.</li>
+          <li>While creating this question type, every answer has to be correct (it will be marked automatically).
           </li>
         </ul>
       </ol>
-      <li>Aby oznaczyć wybraną odpowiedź w pytaniu jako prawidłową,
-        zaznacz okrągłe lub kwadratowe pole obok treści odpowiedzi.
+      <li>To choose which questions are correct, click in square field between answer content and delete button.
       </li>
-      <li>Aby usunąć pytanie, kliknij w przycisk <b>Usuń pytanie</b>, obok wybranego pytania.</li>
-      <li>Aby usunąć odpowiedź przypisaną do pytania, kliknij w przycisk <b>Usuń</b>, obok wybranej odpowiedzi.</li>
-      <li>Aby zapisać egzamin w bazie danych, po uzupełnieniu pól oraz dodaniu
-        pytań oraz odpowiedzi, kliknij w przycik <b>Zapisz egzamin</b>.
-        Po kliknięciu otrzymasz informację odnośnie wyniku procesu zapisywania egzaminu.
+      <li>To delete question, click in <b>Delete question</b> button, near chosen question.</li>
+      <li>To delete answer, click in <b>Delete</b> button, near chosen answer.</li>
+      <li>To save exam in database, after filling fields and adding questions and answers,
+        click in <b>Save exam</b> button.
+        After click, you will get information about the result of saving.
       </li>
     </ol>
   </ol>

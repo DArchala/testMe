@@ -63,7 +63,7 @@ export class UsersListComponent {
   }
 
   deleteUser(user: User) {
-    const answer = this.dialogService.getDialog("Czy chcesz usunąć użytkownika: " + user.username + "?");
+    const answer = this.dialogService.getDialog("Do you want to delete user: " + user.username + "?");
     answer.afterClosed().subscribe(accept => {
       if (accept) this.userService.deleteUser(user.id).subscribe(
         () => {
@@ -93,7 +93,7 @@ export class UsersListComponent {
         roles.push(role.toString());
       });
     });
-    const answer = this.dialogService.getUserNewRoleDialog("Wybierz nową rolę użytkownika: " + user.username, roles);
+    const answer = this.dialogService.getUserNewRoleDialog("Choose new role for user: " + user.username, roles);
     answer.afterClosed().subscribe((accept: AcceptRole) => {
       if (accept.accept) {
         let userDTO = this.getUserDTOFromUser(user);

@@ -3,6 +3,7 @@ import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
+import {InfoStatic} from "../../support/info-static";
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,7 @@ export class RegisterComponent {
 
   emailControl = new FormControl('', [
     Validators.required,
-    Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+    Validators.pattern(InfoStatic.staticEmailPattern)
   ]);
 
   passwordControl = new FormControl('', [
@@ -49,7 +50,7 @@ export class RegisterComponent {
 
   registerUser() {
     if (this.userRegisterForm.invalid || this.passwordControl.value != this.passwordRepeatControl.value) {
-      alert("Sprawdź poprawność wpisanych informacji.");
+      alert(InfoStatic.checkFormData);
     } else {
       this.turnSpinnerOn = true;
       this.userModel.username = this.usernameControl.value;

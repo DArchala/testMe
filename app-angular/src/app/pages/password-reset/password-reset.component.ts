@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../services/user.service";
+import {InfoStatic} from "../../support/info-static";
 
 @Component({
   selector: 'app-password-reset',
@@ -16,7 +17,7 @@ export class PasswordResetComponent {
 
   emailControl = new FormControl('', [
     Validators.required,
-    Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+    Validators.pattern(InfoStatic.staticEmailPattern)
   ]);
 
   emailFormGroup = new FormGroup({
@@ -26,7 +27,7 @@ export class PasswordResetComponent {
   sendPasswordResetToken() {
     this.turnSpinnerOn = true;
     if (this.emailFormGroup.invalid) {
-      alert("Sprawdź poprawność wprowadzonych danych.");
+      alert(InfoStatic.checkFormData);
     } else {
       this.userService.postPasswordResetEmailRequest(this.emailControl.value).subscribe(
         () => {

@@ -68,7 +68,7 @@ export class ExamComponent {
     this.examForm.examDateTime = this.examDateTime;
     this.examForm.examDateTime.userExamTime = this.userLastExamTime;
     this.examService.postExamToCheckCorrectness(this.examForm).subscribe(data => this.responseExamPoints = data);
-    alert("Egzamin zakończony!");
+    alert("Exam ended!");
     this.examStarted = false;
     this.examService.getExamById(this.examId).subscribe(data => this.examTimeLeft = data.timeInSeconds);
   }
@@ -85,7 +85,8 @@ export class ExamComponent {
   }
 
   finishTestByClick(info: string) {
-    if (!this.doUserFillAllAnswers()) info = "W egzaminie nadal istnieją pytania pozostawione bez odpowiedzi. Czy napewno chcesz zakończyć egzamin?";
+    if (!this.doUserFillAllAnswers())
+      info = "Exam still contain questions without your answer. Do you really want to finish exam now?";
     const answer = this.dialogService.getDialog(info);
     answer.afterClosed().subscribe(accept => {
       if (accept) this.finishTest();
