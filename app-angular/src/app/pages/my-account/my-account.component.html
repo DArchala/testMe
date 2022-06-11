@@ -3,16 +3,16 @@
     <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="changePasswordForm">
 
       <mat-form-field appearance="outline">
-        <mat-label>Nazwa użytkownika</mat-label>
+        <mat-label>Username</mat-label>
 
         <input type="text" matInput readonly [formControl]="usernameControl">
 
         <mat-error *ngIf="usernameControl.hasError('required')">
-          Nazwa użytkownika jest wymagana
+          Username is required
         </mat-error>
         <mat-error *ngIf="usernameControl.hasError('minlength')
               || usernameControl.hasError('maxlength')">
-          Nazwa użytkownika musi zawierać od 3 do 60 znaków
+          Username has to contain from 3 to 60 characters
         </mat-error>
       </mat-form-field>
 
@@ -22,62 +22,62 @@
         <input type="text" matInput readonly [formControl]="emailControl">
 
         <mat-error *ngIf="emailControl.hasError('required')">
-          Adres e-mail jest wymagany
+          mail is required
         </mat-error>
         <mat-error *ngIf="emailControl.hasError('pattern')">
-          Nieprawidłowy format adresu e-mail
+          Incorrect e-mail format
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Aktualne hasło</mat-label>
+        <mat-label>Current password</mat-label>
 
         <input type="password" matInput [formControl]="currentPasswordControl">
 
         <mat-error *ngIf="currentPasswordControl.hasError('required')">
-          Aktualne hasło jest wymagane
+          Current password is required
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Nowe hasło</mat-label>
+        <mat-label>New password</mat-label>
 
         <input type="password" matInput [formControl]="newPasswordControl">
 
         <mat-error *ngIf="newPasswordControl.hasError('required')">
-          Nowe hasło jest wymagane
+          New password is required
         </mat-error>
         <mat-error *ngIf="newPasswordControl.hasError('minlength')
               || newPasswordControl.hasError('maxlength')">
-          Hasło musi zawierać od 6 do 30 znaków
+          New password has to contain from 6 to 30 characters
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Powtórz nowe hasło</mat-label>
+        <mat-label>Repeat new password</mat-label>
         <input type="password" matInput [formControl]="newPasswordRepeatControl">
 
         <mat-error *ngIf="newPasswordRepeatControl.hasError('required')">
-          Powtórzenie hasła jest wymagane
+          Repeated new password is required
         </mat-error>
 
         <mat-error *ngIf="newPasswordControl.value != newPasswordRepeatControl.value">
-          Hasła nie są zgodne
+          Passwords do not match
         </mat-error>
 
       </mat-form-field>
 
-      <button type="submit" mat-raised-button color="primary">Zapisz nowe hasło</button>
+      <button type="submit" mat-raised-button color="primary">Save new password</button>
     </form>
 
   </div>
   <div id="my-exams">
-    <h2>Twoja rola: {{this.myRole}}</h2>
-    <h2 routerLink="/my-exam-attempts">Przeglądaj historię egzaminów</h2>
+    <h2>Your role: {{this.myRole}}</h2>
+    <h2 routerLink="/my-exam-attempts">Browse my exam attempts</h2>
 
     <div id="admin-panel" *ngIf="this.myRole === 'ADMIN'">
       <ul>
-        <li><p routerLink="/users">Przeglądaj użytkowników</p></li>
+        <li><p routerLink="/users">Browse users</p></li>
       </ul>
     </div>
 

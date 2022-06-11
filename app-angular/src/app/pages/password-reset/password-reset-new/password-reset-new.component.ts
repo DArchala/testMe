@@ -3,6 +3,7 @@ import {UserService} from "../../../services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../../models/user";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {InfoStatic} from "../../../support/info-static";
 
 @Component({
   selector: 'app-password-reset-new',
@@ -59,7 +60,7 @@ export class PasswordResetNewComponent {
   setNewResetedPassword() {
     if (this.setNewPasswordForm.invalid
       || this.passwordControl.value != this.passwordRepeatControl.value) {
-      alert("Sprawdź poprawność wprowadzonych danych.");
+      alert(InfoStatic.checkFormData);
     } else {
       this.user.password = this.passwordControl.value;
       this.userService.putUserWithNewPassword(this.user).subscribe(
@@ -68,7 +69,7 @@ export class PasswordResetNewComponent {
         error => {
           switch (error.status) {
             case 200:
-              alert("Hasło zostało zmienione, możesz teraz się zalogować z jego użyciem.");
+              alert("Password was changed, now you can log in using it.");
               this.router.navigate(['login']);
               break;
             default:

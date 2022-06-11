@@ -1,22 +1,22 @@
 <div id="exam-super-container">
   <div id="exam-data-div">
     <p><span>ID:</span> {{exam.id}}</p>
-    <p><span>Nazwa:</span> {{exam.examName}}</p>
-    <p><span>Poziom trudności:</span> {{exam.difficultyLevel}}</p>
-    <p><span>Czas egzaminu:</span> {{exam.timeInSeconds | examTimer}}</p>
-    <p><span>Liczba pytań: </span>{{exam.questions?.length}}</p>
-    <p><span>Twój ostatni wynik: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}
+    <p><span>Exam name:</span> {{exam.examName}}</p>
+    <p><span>Difficulty level:</span> {{exam.difficultyLevel}}</p>
+    <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
+    <p><span>Questions number: </span>{{exam.questions?.length}}</p>
+    <p><span>Your las score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}
       = {{getPercentageExamScore(this.responseExamPoints, this.examMaxPoints)}}</p>
-    <p><span>Twój ostatni czas egzaminu:</span> {{userLastExamTime | examTimer}}</p>
+    <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
 
     <div class="exam-start-finish-button-div" *ngIf="!examStarted">
-      <button mat-raised-button color="primary"(click)="startTest()">Rozpocznij egzamin!</button>
+      <button mat-raised-button color="primary"(click)="startTest()">Start exam!</button>
     </div>
 
     <div class="exam-start-finish-button-div" *ngIf="examStarted">
       <button mat-raised-button color="primary"
-              (click)="finishTestByClick('Czy chcesz zakończyć egzamin?')">
-        Zakończ egzamin</button>
+              (click)="finishTestByClick('Do you want to finish the exam?')">
+        Finish exam</button>
     </div>
   </div>
 
@@ -49,7 +49,7 @@
 
         <div *ngSwitchCase="'short'">
           <mat-form-field appearance="outline">
-            <mat-label>Twoja odpowiedź</mat-label>
+            <mat-label>Your answer</mat-label>
             <input type="text" matInput required [(ngModel)]="question.userAnswer">
           </mat-form-field>
         </div>

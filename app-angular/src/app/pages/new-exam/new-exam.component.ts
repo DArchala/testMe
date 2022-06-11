@@ -6,6 +6,7 @@ import {SingleChoiceQuestion} from "../../models/questionTypes/single-choice-que
 import {ExamsService} from "../../services/exams.service";
 import {DialogService} from "../../services/dialog.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {InfoStatic} from "../../support/info-static";
 
 @Component({
   selector: 'app-new-exam',
@@ -90,19 +91,12 @@ export class NewExamComponent {
 
         }, error => {
           switch (error.error) {
-            case 'This exam name is already taken.':
-              alert("Ta nazwa egzaminu jest już zajęta.");
-              break;
-            case 'Number of correct answer in any question cannot be less than 1.':
-              alert("Każde pytanie powinno zawierać conajmniej jedną prawidłową odpowiedź.")
-              break;
-            case 'Saving exam failed.':
-              alert("Zapisywanie egzaminu nie powiodło się.");
-              break;
+            default:
+              alert(error.error);
           }
           switch (error.error.text) {
             case 'Exam saved.':
-              alert("Egzamin został zapisany.");
+              alert("Exam saved.");
               window.location.reload();
               break;
             default:
@@ -113,17 +107,17 @@ export class NewExamComponent {
 
     } else {
       if (!this.doAllAnswersContainContent())
-        alert("Wszystkie odpowiedzi muszą zawierać odpowiedź.");
+        alert("All answers have to contain a content.");
       else if (!this.doAllQuestionsContainContent())
-        alert("Wszystkie pytania muszą zawierać odpowiedź.")
+        alert("All questions have to contain a content.")
       else if (!this.doQuestionsContainMinimalAnswersNumber())
-        alert("Pytania z pisemną odpowiedzią muszą zawierać conajmniej jedną odpowiedź, pozostałe conajmniej dwie.");
+        alert("Single choice questions have to contain at least one answer, others - at least two.");
       else if (this.examTimeCalc() === 0)
-        alert("Czas egzaminu nie może być zerowy.");
+        alert("Exam time cannot be zero.");
       else if (!this.doQuestionsContainMinimalCorrectAnswersNumber())
-        alert("Każde pytanie musi zawierać conajmniej jedną prawidłową odpowiedź.");
+        alert("Every question has to contain at least one correct answer.");
       else
-        alert("Sprawdź poprawność wprowadzonych danych.");
+        alert(InfoStatic.checkFormData);
     }
   }
 
@@ -186,6 +180,17 @@ export class NewExamComponent {
     if (question.type === 'single') {
       question.answers.forEach(answer => answer.correctness = false);
       answer.correctness = true;
+    }
+  }
+
+  getQuestionColorCheckbox(type: string) {
+    switch (type) {
+      case 'single':
+        return 'warn';
+      case 'multiple':
+        return 'primary';
+      default:
+        return "primary";
     }
   }
 }
