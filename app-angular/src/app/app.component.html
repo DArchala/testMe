@@ -1,15 +1,15 @@
 <div id="header">
   <div id="header-pages">
-    <a class="page" routerLink="/home" *ngIf="authService.isUserLoggedIn()">Strona główna</a>
-    <a class="page" routerLink="/exams" *ngIf="authService.isUserLoggedIn()">Egzaminy</a>
-    <a class="page" routerLink="/new-exam" *ngIf="authService.isUserLoggedIn()">Nowy egzamin</a>
-    <a class="page" routerLink="/login" *ngIf="!authService.isUserLoggedIn()">Zaloguj się</a>
-    <a class="page" routerLink="/register" *ngIf="!authService.isUserLoggedIn()">Rejestracja</a>
+    <a class="page" routerLink="/home" *ngIf="authService.isUserLoggedIn()">Homepage</a>
+    <a class="page" routerLink="/exams" *ngIf="authService.isUserLoggedIn()">Exams</a>
+    <a class="page" routerLink="/new-exam" *ngIf="authService.isUserLoggedIn()">New exam</a>
+    <a class="page" routerLink="/login" *ngIf="!authService.isUserLoggedIn()">Log in</a>
+    <a class="page" routerLink="/register" *ngIf="!authService.isUserLoggedIn()">Sign in</a>
   </div>
   <div id="header-logout">
-    <a class="page" routerLink="/my-account" *ngIf="authService.isUserLoggedIn()">Moje konto</a>
-    <a class="page" (click)="logMeOut('Czy chcesz się wylogować?')"
-       *ngIf="authService.isUserLoggedIn()">Wyloguj się</a>
+    <a class="page" routerLink="/my-account" *ngIf="authService.isUserLoggedIn()">My account</a>
+    <a class="page" (click)="logMeOut('Do you want to log out?')"
+       *ngIf="authService.isUserLoggedIn()">Logout</a>
     <a id="header-username">{{authService.getUsername()}}</a>
   </div>
 </div>
