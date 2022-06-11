@@ -6,6 +6,7 @@ import {Exam} from "../../models/exam";
 import {Question} from "../../models/question";
 import {ActivatedRoute} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {InfoStatic} from "../../support/info-static";
 
 @Component({
   selector: 'app-edit-exam',
@@ -91,21 +92,21 @@ export class EditExamComponent {
       this.examModel.difficultyLevel = this.difficultyLevelControl.value;
       this.examModel.timeInSeconds = this.examTimeCalc();
       this.examService.putExam(this.examModel).subscribe(console.log);
-      alert("Egzamin został zapisany.");
+      alert("Exam saved.");
       window.location.reload();
     } else {
       if (!this.doAllAnswersContainContent())
-        alert("Wszystkie odpowiedzi muszą zawierać odpowiedź.");
+        alert("All answers have to contain a content.");
       else if (!this.doAllQuestionsContainContent())
-        alert("Wszystkie pytania muszą zawierać odpowiedź.")
+        alert("All questions have to contain a content.")
       else if (!this.doQuestionsContainMinimalAnswersNumber())
-        alert("Pytania z pisemną odpowiedzią muszą zawierać co najmniej jedną odpowiedź, pozostałe co najmniej dwie.");
+        alert("Single choice questions have to contain at least one answer, others - at least two.");
       else if (this.examTimeCalc() === 0)
-        alert("Czas egzaminu nie może być zerowy.");
+        alert("Exam time cannot be zero.");
       else if (!this.doQuestionsContainMinimalCorrectAnswersNumber())
-        alert("Każde pytanie musi zawierać co najmniej jedną prawidłową odpowiedź.");
+        alert("Every question has to contain at least one correct answer.");
       else
-        alert("Sprawdź poprawność wprowadzonych danych.");
+        alert(InfoStatic.checkFormData);
     }
   }
 
