@@ -78,7 +78,7 @@ public class UserService {
         User user = userRepo.findById(id).orElse(null);
         if (user == null) return 0;
 
-        if (user.getRole().equals(ADMIN) && getAllAdmins().size() == 1) return 1;
+        if (user.getRole().equals(ADMIN) && findAllAdmins().size() == 1) return 1;
 
         List<Token> userTokens = tokenRepo.findAllByUserUsername(user.getUsername());
         if (!userTokens.isEmpty()) tokenRepo.deleteAll(userTokens);
@@ -87,7 +87,7 @@ public class UserService {
         return 2;
     }
 
-    private List<User> getAllAdmins() {
+    private List<User> findAllAdmins() {
         return userRepo.findAll()
                 .stream()
                 .filter(u -> u.getRole().equals(ADMIN))
@@ -130,7 +130,7 @@ public class UserService {
         return 3;
     }
 
-    public int updatePassword(PasswordChangeRequest passwordChangeRequest) {
+    public int updatePasswordByRequest(PasswordChangeRequest passwordChangeRequest) {
         User user = userRepo.findByUsername(passwordChangeRequest.getUsername()).orElse(null);
         if (user == null) return 0;
 
@@ -210,7 +210,6 @@ public class UserService {
         Pageable pageable = PageRequest.of(dtSortPage.getPage(), dtSortPage.getLength(), sort);
 
         return userRepo.findAll(pageable).getContent();
-
     }
 
     private Sort getSortingType(String direction, String column) {

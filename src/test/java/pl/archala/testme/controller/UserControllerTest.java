@@ -404,7 +404,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
 
         //when
-        when(userService.updatePassword(passwordChangeRequest)).thenReturn(0);
+        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(0);
 
         //then
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
@@ -417,7 +417,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("The password and password provided for the account do not match", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.updatePassword(passwordChangeRequest)).thenReturn(1);
+        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(1);
 
         //then
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
@@ -430,7 +430,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("Username do not match with user email", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.updatePassword(passwordChangeRequest)).thenReturn(2);
+        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(2);
 
         //then
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
@@ -443,7 +443,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("New password cannot be equal to old password.", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.updatePassword(passwordChangeRequest)).thenReturn(3);
+        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(3);
 
         //then
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
@@ -456,7 +456,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("User saved.", HttpStatus.OK);
 
         //when
-        when(userService.updatePassword(passwordChangeRequest)).thenReturn(4);
+        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(4);
 
         //then
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
@@ -469,7 +469,7 @@ class UserControllerTest {
         ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
 
         //when
-        when(userService.updatePassword(passwordChangeRequest)).thenReturn(-1);
+        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(-1);
 
         //then
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));

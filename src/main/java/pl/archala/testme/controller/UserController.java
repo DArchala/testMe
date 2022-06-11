@@ -136,7 +136,7 @@ public class UserController {
 
     @PostMapping("/changeMyPassword")
     public ResponseEntity<?> changeMyPassword(@RequestBody @Valid PasswordChangeRequest passwordChangeRequest) {
-        switch (userService.updatePassword(passwordChangeRequest)) {
+        switch (userService.updatePasswordByRequest(passwordChangeRequest)) {
             case 0:
                 return USER_DOES_NOT_EXIST;
             case 1:

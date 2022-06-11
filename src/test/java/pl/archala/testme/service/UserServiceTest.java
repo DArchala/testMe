@@ -15,7 +15,6 @@ import pl.archala.testme.enums.RoleEnum;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -272,7 +271,7 @@ class UserServiceTest {
         when(userRepo.findByUsername("username")).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.updatePassword(passwordChangeRequest));
+        assertEquals(0, userService.updatePasswordByRequest(passwordChangeRequest));
     }
 
     @Test
@@ -287,7 +286,7 @@ class UserServiceTest {
         when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(false);
 
         //then
-        assertEquals(1, userService.updatePassword(passwordChangeRequest));
+        assertEquals(1, userService.updatePasswordByRequest(passwordChangeRequest));
     }
 
     @Test
@@ -305,7 +304,7 @@ class UserServiceTest {
         when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
 
         //then
-        assertEquals(2, userService.updatePassword(passwordChangeRequest));
+        assertEquals(2, userService.updatePasswordByRequest(passwordChangeRequest));
     }
 
     @Test
@@ -324,7 +323,7 @@ class UserServiceTest {
         when(passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())).thenReturn(true);
 
         //then
-        assertEquals(3, userService.updatePassword(passwordChangeRequest));
+        assertEquals(3, userService.updatePasswordByRequest(passwordChangeRequest));
     }
 
     @Test
@@ -345,7 +344,7 @@ class UserServiceTest {
         when(passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())).thenReturn(false);
 
         //then
-        assertEquals(4, userService.updatePassword(passwordChangeRequest));
+        assertEquals(4, userService.updatePasswordByRequest(passwordChangeRequest));
     }
 
     @Test
