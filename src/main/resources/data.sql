@@ -8,10 +8,10 @@ values (1, 'dexter-user', '$2a$12$s7GnHP2rlMAI0GnMdhhr9.Izu1VFUVYPrrJCaj8hogk9h4
 
 insert into answers (id, content, correctness)
 values (1, 'Database', true),
-       (2, 'DuaLipa', false),
+       (2, 'Dormitory', false),
        (3, 'DiagramBeta', false),
-       (4, 'Tak', true),
-       (5, 'Nie', false),
+       (4, 'Yes', true),
+       (5, 'No', false),
        (6, 'class', true),
        (7, 'continue', true),
        (8, 'jump', false),
@@ -30,22 +30,22 @@ values (1, 'Database', true),
        (21, 'short', true),
        (22, 'int', true),
        (23, 'long', true),
-       (24, 'Usuwa co drugi znak w łańcuchu znaków', false),
-       (25, 'Tworzy tablicę w której przechowywany jest osobno każdy znak w łańcuchu znaków', true),
-       (26, 'Sprawdza czy łańcuch znaków zawiera cyfry, a następnie usuwa je.', false),
-       (27, 'Usuwa białe znaki na początku i końcu łańcucha', true),
-       (28, 'Odwraca kolejność znaków w łańcuchu', false),
-       (29, 'Odwraca wielkość znaków w ciągu', false);
+       (24, 'Deletes every other character in a string', false),
+       (25, 'Creates an array that stores each character in a string individually', true),
+       (26, 'Checks that a string contains numbers and then removes them.', false),
+       (27, 'Removes white space from the beginning and end of the string', true),
+       (28, 'Reverses the order of characters in a string', false),
+       (29, 'Reverses the case of characters in a string', false);
 
 insert into questions (id, content, user_answer, dtype)
-values (1, 'Co to jest DB?', '', 'SingleChoiceQuestion'),
-       (2, 'Czy Java jest językiem obiektowym?', '', 'SingleChoiceQuestion'),
-       (3, 'Wybierz słowa kluczowe:', '', 'MultipleChoiceQuestion'),
-       (4, 'Zaznacz klasy opakowujące:', '', 'MultipleChoiceQuestion'),
-       (5, 'Wymień typy zmiennych przechowujących wartości liczb zmiennoprzecinkowych.', '', 'ShortAnswerQuestion'),
-       (6, 'Wymień typy zmiennych przechowujących wartości liczb całkowitych.', '', 'ShortAnswerQuestion'),
-       (7, 'Co robi metoda split klasy String?', '', 'SingleChoiceQuestion'),
-       (8, 'Co robi metoda trim klasy String?', '', 'SingleChoiceQuestion');
+values (1, 'What is DB?', '', 'SingleChoiceQuestion'),
+       (2, 'Is Java an object oriented language?', '', 'SingleChoiceQuestion'),
+       (3, 'Choose keywords:', '', 'MultipleChoiceQuestion'),
+       (4, 'Select the wrapping classes:', '', 'MultipleChoiceQuestion'),
+       (5, 'List the types of variables that hold the values of floating-point numbers.', '', 'ShortAnswerQuestion'),
+       (6, 'List the types of variables holding integer values.', '', 'ShortAnswerQuestion'),
+       (7, 'What does the split method of a String class do?', '', 'SingleChoiceQuestion'),
+       (8, 'What does the trim method of a String class do?', '', 'SingleChoiceQuestion');
 
 insert into exams (id, difficulty_level, exam_name, exam_time)
 values (1, 'MEDIUM', 'Java knowledge', 3600);
