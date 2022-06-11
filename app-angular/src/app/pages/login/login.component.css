@@ -12,6 +12,7 @@ form {
 
 form * {
   padding-bottom: 4%;
+  width: 400px;
 }
 
 #password-reset-text {
@@ -21,4 +22,8 @@ form * {
 #password-reset-text:hover {
   cursor: pointer;
   text-decoration: underline;
+}
+
+h1 {
+  text-align: center;
 }

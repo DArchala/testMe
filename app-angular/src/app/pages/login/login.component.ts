@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
+import {InfoStatic} from "../../support/info-static";
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class LoginComponent {
   login() {
     this.turnSpinnerOn = true;
     if (this.userLoginForm.invalid) {
-      alert("Sprawdź poprawność wpisanych informacji.");
+      alert(InfoStatic.checkFormData);
       this.turnSpinnerOn = false;
     } else {
       this.authService.authenticate(this.usernameControl.value, this.passwordControl.value).subscribe(
