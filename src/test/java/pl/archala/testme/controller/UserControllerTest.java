@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.archala.testme.dto.DataTableSortPage;
 import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.enums.RoleEnum;
@@ -525,18 +524,5 @@ class UserControllerTest {
 
         //then
         assertEquals(response, userController.resetPassword(email));
-    }
-
-    @Test
-    void findAllUsersPaginatedShouldReturnUsersList() {
-        //given
-        var dataTableSortPage = new DataTableSortPage(0, 5, "id", "ASC");
-        List<User> users = new ArrayList<>();
-        ResponseEntity<?> response = new ResponseEntity<>(users, HttpStatus.OK);
-
-        //when
-        when(userService.findAllUsersPaginated(dataTableSortPage)).thenReturn(users);
-
-        assertEquals(response, userController.findAllUsersPaginated(dataTableSortPage));
     }
 }
