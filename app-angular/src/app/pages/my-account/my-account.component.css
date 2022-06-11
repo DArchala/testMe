@@ -25,26 +25,25 @@ form mat-form-field {
   padding-bottom: 5%;
 }
 
-#my-exams h2:hover {
+.panel h2:hover {
   cursor: pointer;
   text-decoration: underline;
 }
 
-#admin-panel {
+.panel {
   border: 3px solid black;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   width: 50%;
+  padding-bottom: 2%;
+
 }
 
-#admin-panel p {
-  padding-left: 20px;
-  font-weight: bold;
-  flex-grow: 0.5;
+.panel-title {
+  padding-bottom: 2%;
 }
 
-#admin-panel p:hover {
-  text-decoration: underline;
-  cursor: pointer;
+.panel h2 {
+  padding-left: 2%;
 }
