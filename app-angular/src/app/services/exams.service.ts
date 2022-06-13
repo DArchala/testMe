@@ -51,16 +51,7 @@ export class ExamsService {
   }
 
   deleteExam(examId: any) {
-    return this.httpClient.delete<any>(this.url + `/exams/delete/` + examId).subscribe(
-      next => {
-      }, error => {
-        if (error.status === 200) {
-          alert("Egzamin usunięto pomyślnie.");
-          window.location.reload();
-        } else if (error.status === 403) alert("Brak uprawnień.");
-        else return;
-      },
-    );
+    return this.httpClient.delete<any>(this.url + `/exams/delete/` + examId).pipe(tap(console.log));
   }
 
   getNewQuestion(questionType: string) {
