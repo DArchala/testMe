@@ -25,7 +25,16 @@ export class ExamsComponent {
     const answer = this.dialogService.getDialog(information);
 
     answer.afterClosed().subscribe(accept => {
-      if (accept) this.examService.deleteExam(id);
+      if (accept) this.examService.deleteExam(id).subscribe(
+        () => {
+        }, error => {
+          if (error.status === 200) {
+            alert("Exam deleted.");
+            window.location.reload();
+          } else if (error.status === 403) alert("Forbidden.");
+          else return;
+        },
+      );
     });
 
   }
