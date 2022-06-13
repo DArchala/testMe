@@ -17,6 +17,9 @@ public final class CustomResponseEntity {
     public static final ResponseEntity<?> PASSWORD_DOES_NOT_MATCH = new ResponseEntity<>("The password and password provided for the account do not match", HttpStatus.BAD_REQUEST);
     public static final ResponseEntity<?> USERNAME_DO_NOT_MATCH_WITH_EMAIL = new ResponseEntity<>("Username do not match with user email", HttpStatus.BAD_REQUEST);
     public static final ResponseEntity<?> NEW_PASSWORD_CANNOT_BE_EQUAL_TO_OLD_PASSWORD = new ResponseEntity<>("New password cannot be equal to old password.", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> USERNAME_AND_EMAIL_CANNOT_BE_EQUAL = new ResponseEntity<>("Username and email cannot be equal.", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> PASSWORD_CANNOT_BE_EQUAL_TO_USERNAME = new ResponseEntity<>("Password cannot be equal to username.", HttpStatus.BAD_REQUEST);
+    public static final ResponseEntity<?> PASSWORD_CANNOT_BE_EQUAL_TO_EMAIL = new ResponseEntity<>("Password cannot be equal to e-mail.", HttpStatus.BAD_REQUEST);
 
 
     //EXAM
