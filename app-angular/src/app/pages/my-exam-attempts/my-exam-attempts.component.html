@@ -69,6 +69,10 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                   showFirstLastButtons
+                   aria-label="Select page of exam attempts">
+    </mat-paginator>
   </div>
   <div *ngIf="lackOfExamAttempts">
     <h1>No exam attempts found :)</h1>
