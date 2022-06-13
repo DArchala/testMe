@@ -44,10 +44,10 @@ class UserControllerTest {
     private TokenRepository tokenRepo;
 
     @Test
-    void registerUserShouldReturnUsernameAlreadyTakenIfServiceReturnZero() {
+    void registerUserShouldReturnUserRegisteredCheckMailboxIfServiceReturnZero() {
         //given
         User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("This username is already taken.", HttpStatus.BAD_REQUEST);
+        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.CREATED);
 
         //when
         when(userService.registerUser(user)).thenReturn(0);
@@ -57,10 +57,10 @@ class UserControllerTest {
     }
 
     @Test
-    void registerUserShouldReturnEmailAlreadyTakenIfServiceReturnOne() {
+    void registerUserShouldReturnUsernameAlreadyTakenIfServiceReturnOne() {
         //given
         User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("This e-mail is already taken.", HttpStatus.BAD_REQUEST);
+        ResponseEntity<?> response = new ResponseEntity<>("This username is already taken.", HttpStatus.BAD_REQUEST);
 
         //when
         when(userService.registerUser(user)).thenReturn(1);
@@ -70,10 +70,10 @@ class UserControllerTest {
     }
 
     @Test
-    void registerUserShouldReturnUserRegisteredCheckMailboxIfServiceReturnTwo() {
+    void registerUserShouldReturnEmailAlreadyTakenIfServiceReturnTwo() {
         //given
         User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.CREATED);
+        ResponseEntity<?> response = new ResponseEntity<>("This e-mail is already taken.", HttpStatus.BAD_REQUEST);
 
         //when
         when(userService.registerUser(user)).thenReturn(2);
@@ -83,7 +83,46 @@ class UserControllerTest {
     }
 
     @Test
-    void registerUserShouldReturnUndefinedErrorAndInternalErrorStatusAsDefaultValue() {
+    void registerUserShouldReturnUsernameCannotBeEqualToEmailIfServiceReturnThree() {
+        //given
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("Username and email cannot be equal.", HttpStatus.BAD_REQUEST);
+
+        //when
+        when(userService.registerUser(user)).thenReturn(3);
+
+        //then
+        assertEquals(response, userController.registerUser(user));
+    }
+
+    @Test
+    void registerUserShouldReturnPasswordCannotBeEqualToUsernameIfServiceReturnFour() {
+        //given
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("Password cannot be equal to username.", HttpStatus.BAD_REQUEST);
+
+        //when
+        when(userService.registerUser(user)).thenReturn(4);
+
+        //then
+        assertEquals(response, userController.registerUser(user));
+    }
+
+    @Test
+    void registerUserShouldReturnPasswordCannotBeEqualToEmailIfServiceReturnFive() {
+        //given
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("Password cannot be equal to e-mail.", HttpStatus.BAD_REQUEST);
+
+        //when
+        when(userService.registerUser(user)).thenReturn(5);
+
+        //then
+        assertEquals(response, userController.registerUser(user));
+    }
+
+    @Test
+    void registerUserShouldReturnUndefinedAsDefaultValue() {
         //given
         ResponseEntity<?> response = new ResponseEntity<>("Undefined error.",
                 HttpStatus.INTERNAL_SERVER_ERROR);
