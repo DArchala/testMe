@@ -88,19 +88,14 @@ export class NewExamComponent {
       this.examModel.timeInSeconds = this.examTimeCalc();
       this.examService.postNewExam(this.examModel).subscribe(
         () => {
-
         }, error => {
-          switch (error.error) {
-            default:
-              alert(error.error);
-          }
-          switch (error.error.text) {
-            case 'Exam saved.':
+          switch (error.status) {
+            case 200:
               alert("Exam saved.");
               window.location.reload();
               break;
             default:
-              return;
+              alert(error.error);
           }
         }
       );
