@@ -3,13 +3,14 @@ package pl.archala.testme.entity.abstractEntities;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import pl.archala.testme.entity.Answer;
-import pl.archala.testme.interfaces.Questionable;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
+import pl.archala.testme.interfaces.Questionable;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,9 +27,12 @@ import java.util.Objects;
 })
 public abstract class Question extends AbstractEntity<Long> implements Questionable {
 
+    @NotEmpty
+    @Size(min = 1, max = 255)
     protected String content;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Size(min = 1, max = 30)
     protected List<Answer> answers;
 
     public Question() {
