@@ -1,7 +1,7 @@
 # TestMe
 
 ## Showcase of the application
-youtube-link
+ soon
 
 ## Functionalities of TestMe application
 - logging  in
