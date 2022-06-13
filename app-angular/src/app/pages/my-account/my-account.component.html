@@ -1,6 +1,6 @@
 <div id="my-account-container">
   <div id="form-container">
-    <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="changePasswordForm">
+    <form (ngSubmit)="saveUser('Do you want to save changes?')" [formGroup]="changePasswordForm">
 
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
@@ -90,6 +90,5 @@
   </div>
 
 </div>
-<mat-spinner style="margin: -10% 0 0 47.5%;"
-             mode="indeterminate" color="accent"
+<mat-spinner mode="indeterminate" color="accent"
              *ngIf="turnSpinnerOn"></mat-spinner>
