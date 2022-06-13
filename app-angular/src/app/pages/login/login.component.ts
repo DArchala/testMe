@@ -44,13 +44,13 @@ export class LoginComponent {
             case 200:
               if (error.error.text.startsWith("<!DOCTYPE html>")) {
                 alert("Wrong username or password.");
-                this.turnSpinnerOn = false;
               }
               break;
             default:
               alert(error.error);
               break;
           }
+          this.turnSpinnerOn = false;
         }
       );
     }
