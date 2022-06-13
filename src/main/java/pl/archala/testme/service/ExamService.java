@@ -2,14 +2,19 @@ package pl.archala.testme.service;
 
 import org.springframework.stereotype.Service;
 import pl.archala.testme.component.ExamForm;
-import pl.archala.testme.entity.*;
+import pl.archala.testme.entity.Answer;
+import pl.archala.testme.entity.Exam;
+import pl.archala.testme.entity.ExamAttempt;
+import pl.archala.testme.entity.User;
 import pl.archala.testme.entity.abstractEntities.Question;
-import pl.archala.testme.repository.*;
+import pl.archala.testme.repository.AnswerRepository;
+import pl.archala.testme.repository.ExamRepository;
+import pl.archala.testme.repository.QuestionRepository;
+import pl.archala.testme.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExamService {
@@ -46,13 +51,15 @@ public class ExamService {
     }
 
     public int getMaxPossibleExamPoints(Long examId) {
-        Optional<Exam> exam = examRepo.findById(examId);
-        int counter = 0;
-        for (Question q : exam.orElseThrow().getQuestions()) {
-            counter += q.countCorrectAnswers();
+        Exam exam = examRepo.findById(examId).orElse(null);
+        if(exam == null) return -1;
+
+        int points = 0;
+        for (Question q : exam.getQuestions()) {
+            points += q.countCorrectAnswers();
         }
 
-        return counter;
+        return points;
     }
 
     public int saveNewExam(Exam exam) {
@@ -83,7 +90,7 @@ public class ExamService {
     }
 
     public boolean putExam(Exam exam) {
-        if (exam.isNew()) throw new EntityNotFoundException("Exam not contain id.");
+        if (exam.isNew()) throw new EntityNotFoundException("Exam does not contain id.");
         Exam examToUpdate = findExamById(exam.getId());
 
         for (Question q : exam.getQuestions()) {
