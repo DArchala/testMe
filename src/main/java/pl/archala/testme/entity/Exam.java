@@ -25,7 +25,7 @@ public class Exam extends AbstractEntity<Long> {
     private String examName;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Size(min = 1)
+    @Size(min = 1, max = 500)
     private List<Question> questions = new ArrayList<>();
 
     @NotNull
@@ -92,8 +92,8 @@ public class Exam extends AbstractEntity<Long> {
     }
 
     public void setTimeInSeconds(long timeInSeconds) {
-        if (timeInSeconds < 60 || timeInSeconds > 86_400)
-            throw new IllegalArgumentException("Exam time in seconds has to be greater than 60 and less than 86400.");
+        if (timeInSeconds < 60 || timeInSeconds > 360_000)
+            throw new IllegalArgumentException("Exam time in seconds has to be greater than 60 and less than 360000.");
         this.timeInSeconds = timeInSeconds;
     }
 
