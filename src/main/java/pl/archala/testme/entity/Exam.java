@@ -24,7 +24,7 @@ public class Exam extends AbstractEntity<Long> {
     @Size(min = 1, max = 255)
     private String examName;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany
     @Size(min = 1, max = 500)
     private List<Question> questions = new ArrayList<>();
 

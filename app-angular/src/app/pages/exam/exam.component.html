@@ -5,7 +5,7 @@
     <p><span>Difficulty level:</span> {{exam.difficultyLevel}}</p>
     <p><span>Exam time:</span> {{exam.timeInSeconds | examTimer}}</p>
     <p><span>Questions number: </span>{{exam.questions?.length}}</p>
-    <p><span>Your las score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}
+    <p><span>Your last score: </span>{{this.responseExamPoints}} / {{this.examMaxPoints}}
       = {{getPercentageExamScore(this.responseExamPoints, this.examMaxPoints)}}</p>
     <p><span>Your last exam time:</span> {{userLastExamTime | examTimer}}</p>
 

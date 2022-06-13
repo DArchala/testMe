@@ -31,7 +31,7 @@ public abstract class Question extends AbstractEntity<Long> implements Questiona
     @Size(min = 1, max = 255)
     protected String content;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany
     @Size(min = 1, max = 30)
     protected List<Answer> answers;
 
