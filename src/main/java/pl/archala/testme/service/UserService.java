@@ -55,7 +55,7 @@ public class UserService {
 
     private void sendTokenMail(User user, TokenMailType mailType) {
         String tokenValue = saveNewToken(user);
-        String url = "", subject = "", message = "";
+        String url, subject, message;
         switch (mailType) {
             case PASSWORD_RESET:
                 url = "http://localhost:4200/#/password-reset-new/" + tokenValue;
@@ -67,6 +67,8 @@ public class UserService {
                 subject = "Activation link";
                 message = getActivateAccountMailMessage(url);
                 break;
+            default:
+                throw new IllegalArgumentException("TokenMailType is invalid.");
         }
         sendMail(user.getEmail(), subject, message);
     }
