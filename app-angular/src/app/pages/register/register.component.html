@@ -52,7 +52,7 @@
       </mat-error>
 
       <mat-error *ngIf="passwordControl.value != passwordRepeatControl.value">
-        Passwords do not match
+        `Passwords do not match`
       </mat-error>
 
     </mat-form-field>
@@ -61,6 +61,5 @@
   </form>
 
 </div>
-<mat-spinner style="margin: -10% 0 0 47.5%;"
-             mode="indeterminate" color="accent"
+<mat-spinner mode="indeterminate" color="accent"
              *ngIf="turnSpinnerOn"></mat-spinner>

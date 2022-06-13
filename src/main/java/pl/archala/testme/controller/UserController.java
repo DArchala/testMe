@@ -88,11 +88,17 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
         switch (userService.registerUser(user)) {
             case 0:
-                return USERNAME_ALREADY_TAKEN;
-            case 1:
-                return EMAIL_ALREADY_TAKEN;
-            case 2:
                 return USER_REGISTERED_CHECK_MAILBOX;
+            case 1:
+                return USERNAME_ALREADY_TAKEN;
+            case 2:
+                return EMAIL_ALREADY_TAKEN;
+            case 3:
+                return USERNAME_AND_EMAIL_CANNOT_BE_EQUAL;
+            case 4:
+                return PASSWORD_CANNOT_BE_EQUAL_TO_USERNAME;
+            case 5:
+                return PASSWORD_CANNOT_BE_EQUAL_TO_EMAIL;
             default:
                 return UNDEFINED_ERROR;
         }

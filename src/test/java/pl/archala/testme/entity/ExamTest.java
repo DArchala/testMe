@@ -78,8 +78,8 @@ class ExamTest {
     }
 
     @Test
-    void shouldReturnFalseIfExamTimeInSecondsIsGreaterThan86400() {
-        assertThrows(IllegalArgumentException.class, () -> sampleExam.setTimeInSeconds(90_000));
+    void shouldReturnFalseIfExamTimeInSecondsIsGreaterThan360000() {
+        assertThrows(IllegalArgumentException.class, () -> sampleExam.setTimeInSeconds(360_001));
     }
 
     @Test

@@ -83,7 +83,7 @@ public class ShortAnswerQuestion extends Question {
 
     @Override
     public int hashCode() {
-        return Objects.hash(content, answers, userAnswer, serialVersionUID);
+        return Objects.hash(content, answers, userAnswer, serialVersionUID, super.getId());
     }
 
     @Override

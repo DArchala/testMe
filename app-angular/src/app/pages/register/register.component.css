@@ -12,4 +12,9 @@ form {
 
 form * {
   padding-bottom: 4%;
+  width: 400px;
+}
+
+h1 {
+  text-align: center;
 }

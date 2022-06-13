@@ -47,7 +47,7 @@ class UserServiceTest {
     private MailService mailService;
 
     @Test
-    void registerUserShouldReturnZeroIfUserFoundByUsername() {
+    void registerUserShouldReturnOneIfUserFoundByUsername() {
         //given
         User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
@@ -55,11 +55,11 @@ class UserServiceTest {
         when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(0, userService.registerUser(user));
+        assertEquals(1, userService.registerUser(user));
     }
 
     @Test
-    void registerUserShouldReturnOneIfUserFoundByEmail() {
+    void registerUserShouldReturnTwoIfUserFoundByEmail() {
         //given
         User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
@@ -68,11 +68,11 @@ class UserServiceTest {
         when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(1, userService.registerUser(user));
+        assertEquals(2, userService.registerUser(user));
     }
 
     @Test
-    void registerUserShouldReturnTwoIfUserSavedAndTokenWasSent() {
+    void registerUserShouldReturnZeroIfUserWasSavedAndTokenWasSent() {
         //given
         User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
@@ -81,26 +81,7 @@ class UserServiceTest {
         when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         //then
-        assertEquals(2, userService.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldInvokeSetPasswordAndSaveUser() {
-        //given
-        User user = mock(User.class);
-
-        //when
-        when(userRepo.findByUsername(anyString())).thenReturn(Optional.empty());
-        when(userRepo.findByEmail(anyString())).thenReturn(Optional.empty());
-        when(user.getUsername()).thenReturn("username");
-        when(user.getPassword()).thenReturn("password");
-        when(user.getEmail()).thenReturn("email@gmail.com");
-
-        userService.registerUser(user);
-
-        //then
-        verify(user).setPassword(passwordEncoder.encode(user.getPassword()));
-        verify(userRepo).save(user);
+        assertEquals(0, userService.registerUser(user));
     }
 
     @Test
@@ -476,6 +457,5 @@ class UserServiceTest {
         //then
         assertEquals(1, userService.updateNewPasswordUser(newPasswordUser));
     }
-
 
 }

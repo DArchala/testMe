@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class Answer extends AbstractEntity<Long> {
     private static final long serialVersionUID = 6L;
 
     @NotEmpty
-    @Min(1)
+    @Size(min = 1, max = 255)
     private String content;
     private boolean correctness;
 
@@ -65,7 +66,7 @@ public class Answer extends AbstractEntity<Long> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(content, correctness);
+        return Objects.hash(content, correctness, super.getId());
     }
 
     @Override

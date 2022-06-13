@@ -1,6 +1,6 @@
 <div id="my-account-container">
   <div id="form-container">
-    <form (ngSubmit)="saveUser('Czy chcesz zapisać zmiany?')" [formGroup]="changePasswordForm">
+    <form (ngSubmit)="saveUser('Do you want to save changes?')" [formGroup]="changePasswordForm">
 
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
@@ -72,18 +72,23 @@
 
   </div>
   <div id="my-exams">
-    <h2>Your role: {{this.myRole}}</h2>
-    <h2 routerLink="/my-exam-attempts">Browse my exam attempts</h2>
+    <div class="panel-title">
+      <h3 style="color: red">Your role: {{this.myRole}}</h3>
+      <h3>User panel</h3>
+      <div class="panel" >
+        <h2 routerLink="/my-exam-attempts">Show my exam attempts</h2>
+      </div>
+    </div>
 
-    <div id="admin-panel" *ngIf="this.myRole === 'ADMIN'">
-      <ul>
-        <li><p routerLink="/users">Browse users</p></li>
-      </ul>
+    <div class="panel-title" *ngIf="this.myRole === 'ADMIN'">
+      <h3>Admin panel</h3>
+      <div class="panel" *ngIf="this.myRole === 'ADMIN'">
+        <h2 routerLink="/users">Browse users</h2>
+      </div>
     </div>
 
   </div>
 
 </div>
-<mat-spinner style="margin: -10% 0 0 47.5%;"
-             mode="indeterminate" color="accent"
+<mat-spinner mode="indeterminate" color="accent"
              *ngIf="turnSpinnerOn"></mat-spinner>

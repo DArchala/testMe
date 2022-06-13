@@ -45,7 +45,7 @@ public class SingleChoiceQuestion extends Question {
 
     @Override
     public int hashCode() {
-        return Objects.hash(content, answers, serialVersionUID);
+        return Objects.hash(content, answers, serialVersionUID, super.getId());
     }
 
     @Override

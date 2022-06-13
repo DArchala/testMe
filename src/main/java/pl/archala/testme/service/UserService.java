@@ -9,6 +9,7 @@ import pl.archala.testme.dto.DataTableSortPage;
 import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.Token;
 import pl.archala.testme.entity.User;
+import pl.archala.testme.enums.TokenMailType;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 
@@ -19,8 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static pl.archala.testme.enums.RoleEnum.ADMIN;
-import static pl.archala.testme.enums.RoleEnum.USER;
+import static pl.archala.testme.enums.RoleEnum.*;
+import static pl.archala.testme.enums.TokenMailType.*;
 
 @Service
 public class UserService {
@@ -41,37 +42,60 @@ public class UserService {
     }
 
     public int registerUser(User user) {
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) return 0;
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) return 1;
+        if (userRepo.findByUsername(user.getUsername()).isPresent()) return 1;
+        if (userRepo.findByEmail(user.getEmail()).isPresent()) return 2;
+        if (user.getUsername().equals(user.getEmail())) return 3;
+        if (user.getUsername().equals(user.getPassword())) return 4;
+        if (user.getEmail().equals(user.getPassword())) return 5;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-        sendAccountActivateToken(user);
-        return 2;
+        sendTokenMail(user, ACTIVATE_ACCOUNT);
+        return 0;
     }
 
-    private void sendAccountActivateToken(User user) {
-        String tokenValue = UUID.randomUUID().toString();
+    private void sendTokenMail(User user, TokenMailType mailType) {
+        String tokenValue = saveNewToken(user);
+        String url, subject, message;
+        switch (mailType) {
+            case PASSWORD_RESET:
+                url = "http://localhost:4200/#/password-reset-new/" + tokenValue;
+                subject = "Password reset";
+                message = getPasswordResetMailMessage(url);
+                break;
+            case ACTIVATE_ACCOUNT:
+                url = "http://localhost:4200/#/activate-account/" + tokenValue;
+                subject = "Activation link";
+                message = getActivateAccountMailMessage(url);
+                break;
+            default:
+                throw new IllegalArgumentException("TokenMailType is invalid.");
+        }
+        sendMail(user.getEmail(), subject, message);
+    }
 
+    private String saveNewToken(User user) {
+        String tokenValue = UUID.randomUUID().toString();
         Token token = new Token(user, tokenValue, LocalDateTime.now().plusMinutes(10));
         tokenRepo.save(token);
+        return tokenValue;
+    }
 
-        String url = "http://localhost:4200/#/activate-account/" + tokenValue;
-        String message = getActivateAccountMailMessage(url);
-
-        try {
-            mailService.sendMail(user.getEmail(), "Link aktywacyjny", message, false);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
+    private String getPasswordResetMailMessage(String url) {
+        return "Click in the link below, to redirect you to password change page:\n\n"
+                + url + "\n\nMessage generated automatically";
     }
 
     private String getActivateAccountMailMessage(String url) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Kliknij w poniższy link, aby aktywować Twoje konto:\n\n");
-        sb.append(url);
-        sb.append("\n\nAutor aplikacji: Damian Archała");
-        return sb.toString();
+        return "Click in the link below, to activate your account:\n\n"
+                + url + "\n\nMessage generated automatically";
+    }
+
+    private void sendMail(String userEmail, String subject, String message) {
+        try {
+            mailService.sendMail(userEmail, subject, message, false);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public int deleteUser(Long id) {
@@ -87,7 +111,7 @@ public class UserService {
         return 2;
     }
 
-    private List<User> findAllAdmins() {
+    public List<User> findAllAdmins() {
         return userRepo.findAll()
                 .stream()
                 .filter(u -> u.getRole().equals(ADMIN))
@@ -130,15 +154,15 @@ public class UserService {
         return 3;
     }
 
-    public int updatePasswordByRequest(PasswordChangeRequest passwordChangeRequest) {
-        User user = userRepo.findByUsername(passwordChangeRequest.getUsername()).orElse(null);
+    public int updatePasswordByRequest(PasswordChangeRequest request) {
+        User user = userRepo.findByUsername(request.getUsername()).orElse(null);
         if (user == null) return 0;
 
-        if (!passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())) return 1;
-        if (!user.getEmail().equals(passwordChangeRequest.getEmail())) return 2;
-        if (passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())) return 3;
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) return 1;
+        if (!user.getEmail().equals(request.getEmail())) return 2;
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) return 3;
 
-        user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
         userRepo.save(user);
         return 4;
@@ -149,31 +173,8 @@ public class UserService {
         if (user == null) return 0;
         if (!user.isEnabled()) return 2;
 
-        sendResetPasswordToken(user);
+        sendTokenMail(user, PASSWORD_RESET);
         return 1;
-    }
-
-    private void sendResetPasswordToken(User user) {
-        String tokenValue = UUID.randomUUID().toString();
-        Token token = new Token(user, tokenValue, LocalDateTime.now().plusMinutes(10));
-        tokenRepo.save(token);
-
-        String url = "http://localhost:4200/#/password-reset-new/" + tokenValue;
-        String message = getPasswordResetMailMessage(url);
-
-        try {
-            mailService.sendMail(user.getEmail(), "Reset hasła", message, false);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getPasswordResetMailMessage(String url) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Kliknij w poniższy link, aby przejść do panelu zmiany hasła do Twojego konta:\n\n");
-        sb.append(url);
-        sb.append("\n\nAutor aplikacji: Damian Archała");
-        return sb.toString();
     }
 
     public int resetPasswordByToken(String value) {
