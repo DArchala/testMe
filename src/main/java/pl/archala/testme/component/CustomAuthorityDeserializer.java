@@ -15,6 +15,9 @@ import java.util.List;
 
 public class CustomAuthorityDeserializer extends JsonDeserializer<Object> {
 
+    private CustomAuthorityDeserializer() {
+    }
+
     @Override
     public Object deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         ObjectMapper mapper = (ObjectMapper) jp.getCodec();
@@ -29,5 +32,4 @@ public class CustomAuthorityDeserializer extends JsonDeserializer<Object> {
         }
         return grantedAuthorities;
     }
-
 }

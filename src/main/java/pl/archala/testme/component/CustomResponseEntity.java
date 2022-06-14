@@ -44,6 +44,5 @@ public final class CustomResponseEntity {
     public static final ResponseEntity<?> PASSWORD_RESETTING_FOR_DISABLED_USER_IS_FORBIDDEN = new ResponseEntity<>("Password resetting for disabled user is forbidden.", HttpStatus.FORBIDDEN);
 
     //OTHER
-
     public static final ResponseEntity<?> UNDEFINED_ERROR = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
 }
