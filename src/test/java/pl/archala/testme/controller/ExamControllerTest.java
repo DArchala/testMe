@@ -9,9 +9,9 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.entity.Answer;
 import pl.archala.testme.entity.Exam;
-import pl.archala.testme.component.ExamForm;
 import pl.archala.testme.entity.abstractEntities.Question;
 import pl.archala.testme.entity.questionTypes.MultipleChoiceQuestion;
 import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
@@ -21,16 +21,16 @@ import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.service.ExamService;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,249 +53,195 @@ class ExamControllerTest {
     private Principal principal;
 
     @Test
-    void getExamsShouldReturnResponseEntityWithExamsListIfDBContainAnyExam() {
+    void getExamsShouldReturnExamsList() {
         //given
-        Exam exam = getSampleExam();
-
-        List<Exam> examsFromDB = new ArrayList<>(List.of(exam));
-
-        ResponseEntity<List<Exam>> assertResponse = new ResponseEntity<>(examsFromDB, HttpStatus.OK);
+        List<Exam> exams = new ArrayList<>(List.of(new Exam()));
+        ResponseEntity<List<Exam>> response = new ResponseEntity<>(exams, HttpStatus.OK);
 
         //when
-        when(examService.getAllExams()).thenReturn(examsFromDB);
-
-        //then
-        assertThat(assertResponse, equalTo(examController.getExams()));
-
-    }
-
-    @Test
-    void getExamsShouldReturnResponseEntityWithNotFoundStatusIfThereIsNotAnyExam() {
-        //given
-        ResponseEntity<?> response = new ResponseEntity<>("No exams found.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(examService.getAllExams()).thenReturn(List.of());
+        when(examService.getAllExams()).thenReturn(exams);
 
         //then
         assertEquals(response, examController.getExams());
-
     }
 
     @Test
-    void getExamMaxPointsShouldReturnMaxPointsForExam() {
+    void getExamMaxPointsShouldReturnUserCorrectAnswersNumber() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>(12, HttpStatus.OK);
+        ResponseEntity<Integer> response = new ResponseEntity<>(10, HttpStatus.OK);
 
         //when
-        when(examRepo.findById(anyLong())).thenReturn(Optional.of(new Exam()));
-        when(examService.getMaxPossibleExamPoints(1L)).thenReturn(12);
+        when(examService.getMaxPossibleExamPoints(1L)).thenReturn(10);
 
         //then
         assertEquals(response, examController.getExamMaxPoints(1L));
     }
 
     @Test
-    void getExamMaxPointsShouldReturnExamNotExistAndNotFoundStatusIfExamDoesNotExist() {
+    void getExamMaxPointsShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
+        ResponseEntity<String> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
 
         //when
-        when(examRepo.findById(anyLong())).thenReturn(Optional.empty());
+        when(examService.getMaxPossibleExamPoints(1L)).thenThrow(new EntityNotFoundException("Exam does not exist"));
 
         //then
-        assertEquals(response, examController.getExamMaxPoints(anyLong()));
+        assertEquals(response, examController.getExamMaxPoints(1L));
     }
 
     @Test
-    void getExamByIdShouldReturnResponseEntityWithExamWithAllAnswersSetToFalseIfItExists() {
+    void getExamScoreShouldReturnExamScore() {
+        //given
+        ExamForm examForm = new ExamForm();
+        examForm.setExam(new Exam());
+        ResponseEntity<Integer> response = new ResponseEntity<>(5, HttpStatus.OK);
+
         //when
-        when(examRepo.findById(1L)).thenReturn(Optional.of(getSampleExam()));
+        when(examService.countUserExamPoints(examForm.getExam())).thenReturn(5);
 
         //then
-        assertThat(examController.getExamById(1L), equalTo(new ResponseEntity<>(getSampleExam().setAllAnswersFalse(), HttpStatus.OK)));
+        assertEquals(response, examController.getExamScore(examForm, principal));
     }
 
     @Test
-    void getExamByIdShouldReturnNullAndNotFoundHttpStatusIfExamNotExists() {
+    void getExamScoreShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
+        ExamForm examForm = new ExamForm();
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
 
         //when
-        when(examRepo.findById(1L)).thenReturn(Optional.empty());
+        doThrow(new EntityNotFoundException("User does not exist"))
+                .when(examService).countUserExamPoints(examForm.getExam());
+
+        //then
+        assertEquals(response, examController.getExamScore(examForm, principal));
+    }
+
+    @Test
+    void getExamByIdShouldReturnExam() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<?> response = new ResponseEntity<>(exam, HttpStatus.OK);
+
+        //when
+        when(examService.findExamById(1L)).thenReturn(exam);
 
         //then
         assertEquals(response, examController.getExamById(1L));
     }
 
     @Test
-    void getNewExamDataShouldReturnExamDifficultyLevelValues() {
+    void getExamByIdShouldReturnCaughtExceptionMessage() {
         //given
-        ExamDifficultyLevel[] values = ExamDifficultyLevel.values();
+        ResponseEntity<String> response = new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
 
-        ResponseEntity<ExamDifficultyLevel[]> response = new ResponseEntity<>(values, HttpStatus.OK);
+        //when
+        when(examService.findExamById(1L)).thenThrow(new EntityNotFoundException("Exam not found"));
 
         //then
-        assertEquals(examController.getNewExamData(), response);
+        assertEquals(response, examController.getExamById(1L));
     }
 
     @Test
-    void saveNewExamShouldExamNameAlreadyTakenIfServiceReturnZero() {
+    void getExamByIdToTakeShouldReturnExamWithAnswersSetAsFalse() {
         //given
-        Exam exam = new Exam();
-        ResponseEntity<?> response = new ResponseEntity<>("This exam name is already taken.", HttpStatus.BAD_REQUEST);
+        Exam exam = getSampleExam();
+        Exam examToTake = getSampleExam().setAllAnswersFalse();
+        ResponseEntity<?> response = new ResponseEntity<>(examToTake, HttpStatus.OK);
 
         //when
-        when(examService.saveNewExam(exam)).thenReturn(0);
+        when(examService.findExamById(1L)).thenReturn(exam);
+
+        //then
+        assertEquals(response, examController.getExamByIdToTake(1L));
+    }
+
+    @Test
+    void getExamByIdToTakeShouldReturnCaughtExceptionMessage() {
+        //given
+        ResponseEntity<String> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+
+        //when
+        when(examService.findExamById(1L)).thenThrow(new EntityNotFoundException("Exam does not exist"));
+
+        //then
+        assertEquals(response, examController.getExamByIdToTake(1L));
+    }
+
+    @Test
+    void getExamDifficultyLevelsShouldReturnExamDifficultyLevelValues() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>(ExamDifficultyLevel.values(), HttpStatus.OK);
+
+        //then
+        assertEquals(response, examController.getExamDifficultyLevels());
+    }
+
+    @Test
+    void saveNewExamShouldReturnExamSaved() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>("Exam saved", HttpStatus.OK);
+
+        //then
+        assertEquals(response, examController.saveNewExam(any(Exam.class)));
+    }
+
+    @Test
+    void saveNewExamShouldReturnCaughtExceptionMessage() {
+        //given
+        Exam exam = new Exam();
+        ResponseEntity<?> response = new ResponseEntity<>("This exam name is already taken", HttpStatus.BAD_REQUEST);
+
+        //when
+        doThrow(new EntityExistsException("This exam name is already taken"))
+                .when(examService).saveNewExam(exam);
 
         //then
         assertEquals(response, examController.saveNewExam(exam));
     }
 
     @Test
-    void saveNewExamShouldReturnQuestionDoesNotContainAnyCorrectAnswerIfServiceReturnOne() {
+    void putExamShouldReturnExamSaved() {
         //given
-        Exam exam = new Exam();
-        ResponseEntity<?> response = new ResponseEntity<>("Number of correct answer in any question cannot be less than 1.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(examService.saveNewExam(exam)).thenReturn(1);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam saved", HttpStatus.OK);
 
         //then
-        assertEquals(response, examController.saveNewExam(exam));
+        assertEquals(response, examController.putExam(any(Exam.class)));
     }
 
     @Test
-    void saveNewExamShouldReturnExamSavedIfServiceReturnTwo() {
+    void putExamShouldCaughtExceptionMessage() {
+
         //given
         Exam exam = new Exam();
-        ResponseEntity<?> response = new ResponseEntity<>("Exam saved.", HttpStatus.OK);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not contain id", HttpStatus.BAD_REQUEST);
 
         //when
-        when(examService.saveNewExam(exam)).thenReturn(2);
-
-        //then
-        assertEquals(response, examController.saveNewExam(exam));
-    }
-
-    @Test
-    void saveNewExamShouldReturnSavingExamFailedIfServiceDidNotReturnCorrectValue() {
-        //given
-        Exam exam = new Exam();
-        ResponseEntity<?> response = new ResponseEntity<>("Saving exam failed.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(examService.saveNewExam(exam)).thenReturn(10);
-
-        //then
-        assertEquals(response, examController.saveNewExam(exam));
-    }
-
-    @Test
-    void getExamToEditByIdShouldReturnResponseEntityWithNotFoundStatusIfExamNotExists() {
-        //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(examRepo.findById(1L)).thenReturn(Optional.empty());
-
-        //then
-        assertEquals(response, examController.getExamToEditById(1L));
-    }
-
-    @Test
-    void getExamToEditByIdShouldReturnResponseEntityWithExamAndOKStatusIfExamExists() {
-        //given
-        Exam exam = new Exam();
-        exam.setId(1L);
-
-        ResponseEntity<Exam> response = new ResponseEntity<>(exam, HttpStatus.OK);
-
-        //when
-        when(examRepo.findById(exam.getId())).thenReturn(Optional.of(exam));
-
-        //then
-        assertEquals(response, examController.getExamToEditById(exam.getId()));
-    }
-
-    @Test
-    void putExamShouldReturnResponseEntityWithOKStatusIfExamServiceSaveItSuccessfully() {
-        //given
-        Exam exam = new Exam();
-        exam.setId(1L);
-
-        ResponseEntity<?> response = new ResponseEntity<>("Exam saved.", HttpStatus.OK);
-
-        //when
-        when(examService.putExam(exam)).thenReturn(true);
+        doThrow(new EntityNotFoundException("Exam does not contain id")).when(examService).putExam(exam);
 
         //then
         assertEquals(response, examController.putExam(exam));
     }
 
     @Test
-    void putExamShouldReturnResponseEntityWithNotModifiedStatusIfExamServiceCannotPutExam() {
-        //given
-        Exam exam = new Exam();
-        exam.setId(1L);
-
-        ResponseEntity<Exam> response = new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-
-        //when
-        when(examService.putExam(exam)).thenReturn(false);
-
-        //then
-        assertEquals(response, examController.putExam(exam));
-    }
-
-    @Test
-    void checkExamCorrectnessShouldReturnValueFromExamService() {
-        //given
-        ExamForm examform = new ExamForm();
-        ResponseEntity<?> response = new ResponseEntity<>(1, HttpStatus.OK);
-
-        //when
-        when(examService.countUserExamPoints(examform.getExam())).thenReturn(1);
-
-        //then
-        assertEquals(response, examController.checkExamCorrectness(examform, principal));
-    }
-
-    @Test
-    void checkExamCorrectnessShouldReturnUserDoesNotExistInBadWay() {
-        //given
-        ExamForm examForm = new ExamForm();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(examService.saveExamAttemptToUser(examForm, principal.getName())).thenReturn(true);
-
-        //then
-        assertEquals(response, examController.checkExamCorrectness(examForm, principal));
-    }
-
-    @Test
-    void deleteExamShouldReturnStatusOKResponseIfExamServiceDeleteIt() {
+    void deleteExamShouldReturnExamSaved() {
         //given
         ResponseEntity<?> response = new ResponseEntity<>("Exam deleted", HttpStatus.OK);
 
-        //when
-        when(examService.deleteExam(anyLong())).thenReturn(true);
-
         //then
         assertEquals(response, examController.deleteExam(anyLong()));
     }
 
     @Test
-    void deleteExamShouldReturnStatusNotFoundResponseIfExamServiceCannotDeleteIt() {
+    void deleteExamShouldCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("Exam does not exist", HttpStatus.BAD_REQUEST);
 
         //when
-        when(examService.deleteExam(anyLong())).thenReturn(false);
+        doThrow(new EntityNotFoundException("Exam does not exist")).when(examService).deleteExam(1L);
 
         //then
-        assertEquals(response, examController.deleteExam(anyLong()));
+        assertEquals(response, examController.deleteExam(1L));
     }
 
     private Exam getSampleExam() {
