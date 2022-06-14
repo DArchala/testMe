@@ -12,9 +12,6 @@ import pl.archala.testme.service.ExamService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Optional;
-
-import static pl.archala.testme.component.CustomResponseEntity.*;
 
 @Slf4j
 @RestController
@@ -35,27 +32,6 @@ public class ExamController {
         return new ResponseEntity<>(examService.getAllExams(), HttpStatus.OK);
     }
 
-    @PostMapping("/exam")
-    public ResponseEntity<?> checkExamCorrectness(@RequestBody @Valid ExamForm examForm, Principal principal) {
-        try {
-            examService.saveExamAttemptToUser(examForm, principal.getName());
-            int score = examService.countUserExamPoints(examForm.getExam());
-            return new ResponseEntity<>(score, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/exam/{id}")
-    public ResponseEntity<?> findExamById(@PathVariable("id") Long id) {
-        try {
-            Exam exam = examService.findExamById(id);
-            return new ResponseEntity<>(exam, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PostMapping("/exam/max-points")
     public ResponseEntity<?> getExamMaxPoints(@RequestBody Long id) {
         try {
@@ -66,8 +42,39 @@ public class ExamController {
         }
     }
 
+    @PostMapping("/exam")
+    public ResponseEntity<?> getExamScore(@RequestBody @Valid ExamForm examForm, Principal principal) {
+        try {
+            examService.saveExamAttemptToUser(examForm, principal.getName());
+            int score = examService.countUserExamPoints(examForm.getExam());
+            return new ResponseEntity<>(score, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/exam/{id}")
+    public ResponseEntity<?> getExamById(@PathVariable("id") Long id) {
+        try {
+            Exam exam = examService.findExamById(id);
+            return new ResponseEntity<>(exam, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/exam/take/{id}")
+    public ResponseEntity<?> getExamByIdToTake(@PathVariable("id") Long id) {
+        try {
+            Exam exam = examService.findExamById(id);
+            return new ResponseEntity<>(exam.setAllAnswersFalse(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/new-exam")
-    public ResponseEntity<ExamDifficultyLevel[]> getNewExamData() {
+    public ResponseEntity<ExamDifficultyLevel[]> getExamDifficultyLevels() {
         return new ResponseEntity<>(ExamDifficultyLevel.values(), HttpStatus.OK);
     }
 
@@ -75,7 +82,7 @@ public class ExamController {
     public ResponseEntity<?> saveNewExam(@RequestBody @Valid Exam exam) {
         try {
             examService.saveNewExam(exam);
-            return new ResponseEntity<>("Exam saved.", HttpStatus.OK);
+            return new ResponseEntity<>("Exam saved", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
