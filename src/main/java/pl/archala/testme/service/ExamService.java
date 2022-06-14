@@ -12,6 +12,7 @@ import pl.archala.testme.repository.ExamRepository;
 import pl.archala.testme.repository.QuestionRepository;
 import pl.archala.testme.repository.UserRepository;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,7 @@ public class ExamService {
     }
 
     public int getMaxPossibleExamPoints(Long examId) {
-        Exam exam = examRepo.findById(examId).orElse(null);
-        if(exam == null) return -1;
+        Exam exam = examRepo.findById(examId).orElseThrow(() -> new EntityNotFoundException("Exam does not exist"));
 
         int points = 0;
         for (Question q : exam.getQuestions()) {
@@ -62,8 +62,10 @@ public class ExamService {
         return points;
     }
 
-    public int saveNewExam(Exam exam) {
-        if(examRepo.findByExamName(exam.getExamName()).isPresent()) return 0;
+    public void saveNewExam(Exam exam) {
+        if (examRepo.findByExamName(exam.getExamName()).isPresent())
+            throw new EntityExistsException("This exam name is already taken");
+
         List<Question> questionList = new ArrayList<>();
 
         for (Question q : exam.getQuestions()) {
@@ -72,7 +74,8 @@ public class ExamService {
 
             q.setAnswers(answerList);
 
-            if (q.countCorrectAnswers() == 0) return 1;
+            if (q.countCorrectAnswers() == 0)
+                throw new RuntimeException("One of questions does not contain any correct answer");
             questionList.add(q);
         }
 
@@ -80,17 +83,14 @@ public class ExamService {
 
         exam.setQuestions(questionList);
         examRepo.save(exam);
-
-        return 2;
     }
 
     public Exam findExamById(Long id) {
-        return examRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Exam not found."));
+        return examRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Exam not found"));
     }
 
-    public boolean putExam(Exam exam) {
-        if (exam.isNew()) throw new EntityNotFoundException("Exam does not contain id.");
+    public void putExam(Exam exam) {
+        if (exam.isNew()) throw new EntityNotFoundException("Exam does not contain id");
         Exam examToUpdate = findExamById(exam.getId());
 
         for (Question q : exam.getQuestions()) {
@@ -99,28 +99,21 @@ public class ExamService {
 
         examToUpdate.overwriteFields(exam);
         examRepo.save(examToUpdate);
-
-        return true;
     }
 
-    public boolean deleteExam(Long id) {
+    public void deleteExam(Long id) {
         findExamById(id);
         examRepo.deleteById(id);
-
-        return true;
     }
 
-    public boolean saveExamAttemptToUser(ExamForm examForm, String username) {
+    public void saveExamAttemptToUser(ExamForm examForm, String username) {
         ExamAttempt examAttempt = new ExamAttempt(examForm);
         examAttempt.setExamUserPoints(countUserExamPoints(examForm.getExam()));
         examAttempt.setExamMaxPoints(getMaxPossibleExamPoints(examForm.getExam().getId()));
 
-        User user = userRepo.findByUsername(username).orElse(null);
-        if (user == null) return true;
+        User user = userRepo.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
         user.getExamAttempts().add(examAttempt);
         userRepo.save(user);
-
-        return false;
     }
 }
