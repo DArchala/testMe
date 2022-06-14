@@ -20,6 +20,7 @@ import pl.archala.testme.entity.questionTypes.ShortAnswerQuestion;
 import pl.archala.testme.entity.questionTypes.SingleChoiceQuestion;
 import pl.archala.testme.repository.*;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
@@ -220,32 +221,49 @@ class ExamServiceTest {
     }
 
     @Test
-    void saveNewExamShouldReturnTwoIfExamSavedCorrectly() {
+    void getMaxPossibleExamPointsShouldThrowExceptionIfExamNameIsAlreadyTaken() {
         //given
-        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+        Exam exam = new Exam();
+        exam.setExamName("examName123");
 
-        assertEquals(2, examService.saveNewExam(newExam));
+        //when
+//        Exception is throwing by default
+//        when(examRepo.findByExamName(exam.getExamName())).thenReturn(Optional.of(exam));
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> examService.getMaxPossibleExamPoints(1L));
     }
 
     @Test
-    void saveNewExamShouldReturnOneIfAtLeastOneQuestionInExamDoesNotContainAnyCorrectAnswer() {
+    void saveNewExamShouldThrowExceptionIfExamNameIsAlreadyTaken() {
+        //given
+        Exam currentExam = new Exam();
+        Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
+
+        //when
+        when(examRepo.findByExamName(anyString())).thenReturn(Optional.of(currentExam));
+
+        //then
+        assertThrows(EntityExistsException.class, () -> examService.saveNewExam(newExam));
+    }
+
+    @Test
+    void saveNewExamShouldThrowExceptionIfOneOfQuestionsDoesNotContainAnyCorrectAnswer() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
         for (Answer answer : newExam.getQuestions().get(0).getAnswers()) {
             answer.setCorrectness(false);
         }
 
-        assertEquals(1, examService.saveNewExam(newExam));
+        assertThrows(RuntimeException.class, () -> examService.saveNewExam(newExam));
     }
 
     @Test
-    void saveNewExamShouldReturnZeroIfExamWithThisNameAlreadyExistInDB() {
+    void saveNewExamShouldNotThrowAnyExceptionIfExamIsCorrect() {
         //given
         Exam newExam = new Exam(new ArrayList<>(Arrays.asList(getAnswersFromDB())), "examName", ExamDifficultyLevel.MEDIUM, 3600);
 
-        when(examRepo.findByExamName(anyString())).thenReturn(Optional.of(new Exam()));
-
-        assertEquals(0, examService.saveNewExam(newExam));
+        assertDoesNotThrow(() -> examService.saveNewExam(newExam));
     }
 
     @Test
@@ -264,10 +282,30 @@ class ExamServiceTest {
     }
 
     @Test
+    void findExamByIdShouldThrowExceptionIfExamDoesNotExist() {
+        //when
+        when(examRepo.findById(1L)).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> examService.findExamById(1L));
+    }
+
+    @Test
+    void findExamByIdShouldNotThrowAnyExceptionIfExamExist() {
+        //when
+        Exam exam = new Exam();
+        when(examRepo.findById(1L)).thenReturn(Optional.of(exam));
+
+        //then
+        assertDoesNotThrow(() -> examService.findExamById(1L));
+    }
+
+    @Test
     void putExamShouldThrowExceptionIfExamNotContainId() {
         //given
         Exam exam = new Exam();
 
+        //then
         assertThrows(EntityNotFoundException.class, () -> examService.putExam(exam));
     }
 
@@ -284,7 +322,7 @@ class ExamServiceTest {
     }
 
     @Test
-    void putExamShouldReturnTrueIfExamIsCreatedCorrectly() {
+    void putExamShouldNotThrowsAnyExceptionIfExamPutCorrectly() {
         //given
         Exam exam = new Exam(List.of(getAnswersFromDB()), "name", ExamDifficultyLevel.MEDIUM, 3600);
         exam.setId(1L);
@@ -293,7 +331,7 @@ class ExamServiceTest {
         when(examRepo.findById(exam.getId())).thenReturn(Optional.of(exam));
 
         //then
-        assertTrue(examService.putExam(exam));
+        assertDoesNotThrow(() -> examService.putExam(exam));
     }
 
     @Test
@@ -304,11 +342,12 @@ class ExamServiceTest {
     @Test
     void deleteExamShouldReturnTrueIfExamWasFoundByRepo() {
         when(examRepo.findById(anyLong())).thenReturn(Optional.of(new Exam()));
-        assertTrue(examService.deleteExam(anyLong()));
+
+        assertDoesNotThrow(() -> examService.deleteExam(anyLong()));
     }
 
     @Test
-    void saveExamAttemptToUserShouldReturnTrueIfUserDoesNotExist() {
+    void saveExamAttemptToUserShouldThrowExceptionIfUserDoesNotExist() {
         //given
         ExamDateTime examDateTime = new ExamDateTime();
         Exam exam = new Exam();
@@ -320,12 +359,12 @@ class ExamServiceTest {
         when(userRepo.findByUsername("username")).thenReturn(Optional.empty());
 
         //then
-        assertTrue(examService.saveExamAttemptToUser(examForm, "username"));
+        assertThrows(EntityNotFoundException.class, () -> examService.saveExamAttemptToUser(examForm, "username"));
 
     }
 
     @Test
-    void saveExamAttemptToUserShouldReturnFalseIfUserWasSent() {
+    void saveExamAttemptToUserShouldNotThrowsAnyExceptionIfSavingEndedCorrectly() {
         //given
         ExamDateTime examDateTime = new ExamDateTime();
         Exam exam = new Exam();
@@ -338,8 +377,7 @@ class ExamServiceTest {
         when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
 
         //then
-        assertFalse(examService.saveExamAttemptToUser(examForm, "username"));
-
+        assertDoesNotThrow(() -> examService.saveExamAttemptToUser(examForm, "username"));
     }
 
     private Question[] getAnswersFromDB() {
