@@ -52,16 +52,21 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(content, answers, serialVersionUID, super.getId());
+    public String toString() {
+        return "MultipleChoiceQuestion{" +
+                "content='" + content + '\'' +
+                ", answers=" + answers +
+                ", id=" + getId() +
+                '}';
     }
 
     @Override
-    public String toString() {
-        return "MultipleChoiceQuestion{" +
-                "id='" + getId() + '\'' +
-                ", content='" + content + '\'' +
-                ", answers=" + answers +
-                '}';
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), serialVersionUID);
     }
 }

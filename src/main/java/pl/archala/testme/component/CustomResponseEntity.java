@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 
 public final class CustomResponseEntity {
 
+    private CustomResponseEntity() {
+    }
+
     //USER
     public static final ResponseEntity<?> USER_DOES_NOT_EXIST = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
     public static final ResponseEntity<?> USER_REGISTERED_CHECK_MAILBOX = new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.CREATED);
@@ -19,8 +22,8 @@ public final class CustomResponseEntity {
     public static final ResponseEntity<?> NEW_PASSWORD_CANNOT_BE_EQUAL_TO_OLD_PASSWORD = new ResponseEntity<>("New password cannot be equal to old password.", HttpStatus.BAD_REQUEST);
     public static final ResponseEntity<?> USERNAME_AND_EMAIL_CANNOT_BE_EQUAL = new ResponseEntity<>("Username and email cannot be equal.", HttpStatus.BAD_REQUEST);
     public static final ResponseEntity<?> PASSWORD_CANNOT_BE_EQUAL_TO_USERNAME = new ResponseEntity<>("Password cannot be equal to username.", HttpStatus.BAD_REQUEST);
-    public static final ResponseEntity<?> PASSWORD_CANNOT_BE_EQUAL_TO_EMAIL = new ResponseEntity<>("Password cannot be equal to e-mail.", HttpStatus.BAD_REQUEST);
 
+    public static final ResponseEntity<?> PASSWORD_CANNOT_BE_EQUAL_TO_EMAIL = new ResponseEntity<>("Password cannot be equal to e-mail.", HttpStatus.BAD_REQUEST);
 
     //EXAM
     public static final ResponseEntity<?> EXAM_DOES_NOT_EXIST = new ResponseEntity<>("Exam does not exist.", HttpStatus.NOT_FOUND);
@@ -29,17 +32,18 @@ public final class CustomResponseEntity {
     public static final ResponseEntity<?> EXAM_SAVED = new ResponseEntity<>("Exam saved.", HttpStatus.OK);
     public static final ResponseEntity<?> EXAM_DELETED = new ResponseEntity<>("Exam deleted", HttpStatus.OK);
     public static final ResponseEntity<?> EXAM_NAME_ALREADY_TAKEN = new ResponseEntity<>("This exam name is already taken.", HttpStatus.BAD_REQUEST);
-    public static final ResponseEntity<?> EXAM_ANY_QUESTION_DOES_NOT_CONTAIN_ANY_CORRECT_ANSWER = new ResponseEntity<>("Number of correct answer in any question cannot be less than 1.", HttpStatus.BAD_REQUEST);
 
+    public static final ResponseEntity<?> EXAM_ANY_QUESTION_DOES_NOT_CONTAIN_ANY_CORRECT_ANSWER = new ResponseEntity<>("Number of correct answer in any question cannot be less than 1.", HttpStatus.BAD_REQUEST);
 
     //TOKEN
     public static final ResponseEntity<?> TOKEN_DOES_NOT_EXIST = new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
     public static final ResponseEntity<?> TOKEN_HAS_NO_USER = new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
     public static final ResponseEntity<?> TOKEN_HAS_EXPIRED = new ResponseEntity<>("Your token has expired.", HttpStatus.BAD_REQUEST);
     public static final ResponseEntity<?> PASSWORD_RESET_LINK_WAS_SENT_CHECK_MAILBOX = new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.BAD_REQUEST);
+
     public static final ResponseEntity<?> PASSWORD_RESETTING_FOR_DISABLED_USER_IS_FORBIDDEN = new ResponseEntity<>("Password resetting for disabled user is forbidden.", HttpStatus.FORBIDDEN);
 
-
     //OTHER
+
     public static final ResponseEntity<?> UNDEFINED_ERROR = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
 }

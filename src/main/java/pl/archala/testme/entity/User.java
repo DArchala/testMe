@@ -14,12 +14,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.*;
 
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
-
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity<Long> implements UserDetails {
@@ -46,8 +40,16 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ExamAttempt> examAttempts = new ArrayList<>();
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public User() {
+    }
+
+    public User(String username, String password, String email, RoleEnum role, boolean isEnabled, List<ExamAttempt> examAttempts) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.isEnabled = isEnabled;
+        this.examAttempts = examAttempts;
     }
 
     public void setUsername(String username) {
@@ -74,8 +76,16 @@ public class User extends AbstractEntity<Long> implements UserDetails {
         this.role = role;
     }
 
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
     public List<ExamAttempt> getExamAttempts() {
         return examAttempts;
+    }
+
+    public void setExamAttempts(List<ExamAttempt> examAttempts) {
+        this.examAttempts = examAttempts;
     }
 
     @JsonDeserialize(using = CustomAuthorityDeserializer.class)
@@ -114,6 +124,7 @@ public class User extends AbstractEntity<Long> implements UserDetails {
         return isEnabled;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
@@ -121,9 +132,23 @@ public class User extends AbstractEntity<Long> implements UserDetails {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
+                ", isEnabled=" + isEnabled +
                 ", examAttempts=" + examAttempts +
-                ", enabled=" + isEnabled() +
                 ", id=" + getId() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return isEnabled == user.isEnabled && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && role == user.role && Objects.equals(examAttempts, user.examAttempts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), username, password, email, role, isEnabled, examAttempts);
     }
 }

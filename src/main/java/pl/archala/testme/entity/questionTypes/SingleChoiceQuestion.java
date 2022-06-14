@@ -44,11 +44,6 @@ public class SingleChoiceQuestion extends Question {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(content, answers, serialVersionUID, super.getId());
-    }
-
-    @Override
     public void setAnswers(List<Answer> answers) {
         if (answers.size() < 2)
             throw new IllegalArgumentException("Number of available answers should be greater or equal to 2.");
@@ -62,5 +57,16 @@ public class SingleChoiceQuestion extends Question {
                 ", content='" + content + '\'' +
                 ", answers=" + answers +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), serialVersionUID);
     }
 }

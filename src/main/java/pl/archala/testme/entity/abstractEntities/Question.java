@@ -71,13 +71,16 @@ public abstract class Question extends AbstractEntity<Long> implements Questiona
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Question)) return false;
         if (!super.equals(o)) return false;
         Question question = (Question) o;
         return Objects.equals(content, question.content) && Objects.equals(answers, question.answers);
     }
 
-    public abstract int hashCode();
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), content, answers);
+    }
 
     @Override
     public String toString() {

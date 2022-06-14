@@ -97,18 +97,18 @@ public class Exam extends AbstractEntity<Long> {
         this.timeInSeconds = timeInSeconds;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Exam)) return false;
+        if (!super.equals(o)) return false;
         Exam exam = (Exam) o;
-        return timeInSeconds == exam.timeInSeconds && Objects.equals(questions, exam.questions) && Objects.equals(examName, exam.examName) && difficultyLevel == exam.difficultyLevel;
+        return timeInSeconds == exam.timeInSeconds && Objects.equals(examName, exam.examName) && Objects.equals(questions, exam.questions) && difficultyLevel == exam.difficultyLevel;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(questions, examName, difficultyLevel, timeInSeconds);
+        return Objects.hash(super.hashCode(), examName, questions, difficultyLevel, timeInSeconds);
     }
 
     @Override

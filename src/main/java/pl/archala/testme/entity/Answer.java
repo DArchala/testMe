@@ -59,14 +59,15 @@ public class Answer extends AbstractEntity<Long> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Answer)) return false;
+        if (!super.equals(o)) return false;
         Answer answer = (Answer) o;
         return correctness == answer.correctness && Objects.equals(content, answer.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(content, correctness, super.getId());
+        return Objects.hash(super.hashCode(), content, correctness);
     }
 
     @Override
