@@ -86,7 +86,7 @@ public class ExamService {
     }
 
     public Exam findExamById(Long id) {
-        return examRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Exam not found"));
+        return examRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Exam does not exist"));
     }
 
     public void putExam(Exam exam) {
