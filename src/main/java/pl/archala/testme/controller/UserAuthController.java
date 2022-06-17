@@ -21,26 +21,6 @@ public class UserAuthController {
         this.userAuthService = userAuthService;
     }
 
-    @GetMapping("/activate/token")
-    public ResponseEntity<?> activateAccountByToken(@RequestParam String value) {
-        try {
-            userAuthService.activateAccountByToken(value);
-            return new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/password/reset/token")
-    public ResponseEntity<?> confirmPasswordResetByToken(@RequestParam String value) {
-        try {
-            userAuthService.resetPasswordByToken(value);
-            return new ResponseEntity<>(userAuthService.findUserByTokenValue(value), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
         try {
@@ -51,11 +31,31 @@ public class UserAuthController {
         }
     }
 
+    @GetMapping("/activate/token")
+    public ResponseEntity<?> activateAccountByToken(@RequestParam String value) {
+        try {
+            userAuthService.activateAccountByToken(value);
+            return new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/password/reset")
     public ResponseEntity<?> resetPassword(@RequestBody String email) {
         try {
             userAuthService.resetPassword(email);
             return new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/password/reset/token")
+    public ResponseEntity<?> confirmPasswordResetByToken(@RequestParam String value) {
+        try {
+            userAuthService.resetPasswordByToken(value);
+            return new ResponseEntity<>(userAuthService.findUserByTokenValue(value), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

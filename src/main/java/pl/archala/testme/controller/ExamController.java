@@ -30,11 +30,21 @@ public class ExamController {
         return new ResponseEntity<>(examService.getAllExams(), HttpStatus.OK);
     }
 
-    @PostMapping("/exam/max-points")
-    public ResponseEntity<?> getExamMaxPoints(@RequestBody Long id) {
+    @GetMapping("/exam/{id}")
+    public ResponseEntity<?> getExamById(@PathVariable("id") Long id) {
         try {
-            int examMaxPoints = examService.getMaxPossibleExamPoints(id);
-            return new ResponseEntity<>(examMaxPoints, HttpStatus.OK);
+            Exam exam = examService.findExamById(id);
+            return new ResponseEntity<>(exam, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/exam/take/{id}")
+    public ResponseEntity<?> getExamByIdToTake(@PathVariable("id") Long id) {
+        try {
+            Exam exam = examService.findExamById(id);
+            return new ResponseEntity<>(exam.setAllAnswersFalse(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -51,21 +61,11 @@ public class ExamController {
         }
     }
 
-    @GetMapping("/exam/{id}")
-    public ResponseEntity<?> getExamById(@PathVariable("id") Long id) {
+    @PostMapping("/exam/max-points")
+    public ResponseEntity<?> getExamMaxPoints(@RequestBody Long id) {
         try {
-            Exam exam = examService.findExamById(id);
-            return new ResponseEntity<>(exam, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/exam/take/{id}")
-    public ResponseEntity<?> getExamByIdToTake(@PathVariable("id") Long id) {
-        try {
-            Exam exam = examService.findExamById(id);
-            return new ResponseEntity<>(exam.setAllAnswersFalse(), HttpStatus.OK);
+            int examMaxPoints = examService.getMaxPossibleExamPoints(id);
+            return new ResponseEntity<>(examMaxPoints, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
