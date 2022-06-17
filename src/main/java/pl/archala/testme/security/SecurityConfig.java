@@ -47,19 +47,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/api/users/update/password",
-                        "/api/users/register",
-                        "/api/users/activateAccount/token",
-                        "/api/users/passwordReset/token",
-                        "/api/users/changeMyPassword",
-                        "/api/users/findBy/username",
-                        "/api/users/passwordResetRequest").permitAll()
+                .antMatchers("/api/exam-attempts",
+                        "/api/exams/**",
+                        "/api/auth/**",
+                        "/api/users/**"
+                ).permitAll()
 
-                .antMatchers("/api/users",
-                        "/api/users/update/role",
+                .antMatchers("/api/exams/delete/**",
+                        "/api/users/role",
                         "/api/users/delete/**",
-                        "/api/exams/delete/**",
-                        "/api/users/roles").hasAuthority("ADMIN")
+                        "/api/users/findAll/paginated"
+                ).hasAuthority("ADMIN")
 
                 .antMatchers("/api/**").authenticated()
 
