@@ -38,7 +38,7 @@ class ExamAttemptControllerTest {
     void getMyExamAttemptsShouldReturnUserDoesNotExistIfRepoCannotFindUserByUsername() {
         //given
         User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
 
         //when
         when(userRepo.findByUsername(principal.getName())).thenReturn(Optional.empty());

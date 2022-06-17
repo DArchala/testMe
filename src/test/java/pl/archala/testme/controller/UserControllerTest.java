@@ -17,6 +17,8 @@ import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 import pl.archala.testme.service.UserService;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,380 +47,173 @@ class UserControllerTest {
     private TokenRepository tokenRepo;
 
     @Test
-    void registerUserShouldReturnUserRegisteredCheckMailboxIfServiceReturnZero() {
+    void registerUserShouldReturnUserRegisteredCheckMailbox() {
         //given
         User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.CREATED);
-
-        //when
-        when(userService.registerUser(user)).thenReturn(0);
+        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.OK);
 
         //then
         assertEquals(response, userController.registerUser(user));
     }
 
     @Test
-    void registerUserShouldReturnUsernameAlreadyTakenIfServiceReturnOne() {
+    void registerUserShouldReturnCaughtExceptionMessage() {
         //given
         User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("This username is already taken.", HttpStatus.BAD_REQUEST);
+        ResponseEntity<?> response = new ResponseEntity<>("Username is already taken", HttpStatus.BAD_REQUEST);
 
-        //when
-        when(userService.registerUser(user)).thenReturn(1);
+        //
+        doThrow(new EntityExistsException("Username is already taken")).when(userService).registerUser(user);
 
         //then
         assertEquals(response, userController.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldReturnEmailAlreadyTakenIfServiceReturnTwo() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("This e-mail is already taken.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.registerUser(user)).thenReturn(2);
-
-        //then
-        assertEquals(response, userController.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldReturnUsernameCannotBeEqualToEmailIfServiceReturnThree() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Username and email cannot be equal.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.registerUser(user)).thenReturn(3);
-
-        //then
-        assertEquals(response, userController.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldReturnPasswordCannotBeEqualToUsernameIfServiceReturnFour() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Password cannot be equal to username.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.registerUser(user)).thenReturn(4);
-
-        //then
-        assertEquals(response, userController.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldReturnPasswordCannotBeEqualToEmailIfServiceReturnFive() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Password cannot be equal to e-mail.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.registerUser(user)).thenReturn(5);
-
-        //then
-        assertEquals(response, userController.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldReturnUndefinedAsDefaultValue() {
-        //given
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.",
-                HttpStatus.INTERNAL_SERVER_ERROR);
-        User sampleUser = new User();
-
-        //when
-        when(userService.registerUser(sampleUser)).thenReturn(-1);
-
-        //then
-        assertEquals(response, userController.registerUser(sampleUser));
-    }
-
-    @Test
-    void activateAccountByTokenShouldReturnTokenDoesNotExistIfServiceReturnZero() {
-        //given
-        String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.activateAccountByToken(tokenValue)).thenReturn(0);
-
-        //then
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
-    }
-
-    @Test
-    void activateAccountByTokenShouldReturnTokenHasExpiredIfServiceReturnOne() {
-        //given
-        String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("Your token has expired.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.activateAccountByToken(tokenValue)).thenReturn(1);
-
-        //then
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
-    }
-
-    @Test
-    void activateAccountByTokenShouldReturnTokenHasNoUserIfServiceReturnTwo() {
-        //given
-        String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("Token has no user.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.activateAccountByToken(tokenValue)).thenReturn(2);
-
-        //then
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
-    }
-
-    @Test
-    void activateAccountByTokenShouldReturnAccountEnabledIfServiceReturnThree() {
-        //given
-        String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
-
-        //when
-        when(userService.activateAccountByToken(tokenValue)).thenReturn(3);
-
-        //then
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
-    }
-
-    @Test
-    void activateAccountByTokenShouldReturnUndefinedErrorAsDefaultValue() {
-        //given
-        String tokenValue = UUID.randomUUID().toString();
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
-
-        //when
-        when(userService.activateAccountByToken(tokenValue)).thenReturn(-1);
-
-        //then
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
     }
 
     @Test
     void findAllUsersShouldReturnUsersList() {
         //given
-        List<User> userList = new ArrayList<>();
-        ResponseEntity<?> response = new ResponseEntity<>(userList, HttpStatus.OK);
+        List<User> users = new ArrayList<>(List.of(new User()));
+        ResponseEntity<?> response = new ResponseEntity<>(users, HttpStatus.OK);
 
         //when
-        when(userRepo.findAll()).thenReturn(userList);
+        when(userRepo.findAll()).thenReturn(users);
 
         //then
         assertEquals(response, userController.findAllUsers());
     }
 
     @Test
-    void findUserByUsernameShouldReturnUserAndOKStatusIfUserExists() {
+    void findUserByUsernameShouldReturnUser() {
         //given
         User user = new User();
         ResponseEntity<?> response = new ResponseEntity<>(user, HttpStatus.OK);
 
         //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userService.findUserByUsername("username")).thenReturn(user);
 
         //then
-        assertEquals(response, userController.findUserByUsername(user.getUsername()));
-
+        assertEquals(response, userController.findUserByUsername("username"));
     }
 
     @Test
-    void findUserByUsernameShouldReturnNotFoundStatusIfUserDoesNotExist() {
+    void findUserByUsernameShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userRepo.findByUsername(anyString())).thenReturn(Optional.empty());
+        doThrow(new EntityNotFoundException("User does not exist")).when(userService).findUserByUsername("username");
 
         //then
-        assertEquals(response, userController.findUserByUsername(anyString()));
-
+        assertEquals(response, userController.findUserByUsername("username"));
     }
 
     @Test
-    void deleteUserShouldReturnUserDoesNotExistIfServiceReturnZero() {
+    void updateUserRoleShouldReturnUserUpdated() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.deleteUser(anyLong())).thenReturn(0);
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("User updated", HttpStatus.OK);
 
         //then
-        assertEquals(response, userController.deleteUser(anyLong()));
+        assertEquals(response, userController.updateUserRole(user));
     }
 
     @Test
-    void deleteUserShouldReturnDeletingLastAdminForbiddenIfServiceReturnOne() {
+    void updateUserRoleShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Deleting last admin is forbidden.", HttpStatus.FORBIDDEN);
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.deleteUser(anyLong())).thenReturn(1);
+        doThrow(new EntityNotFoundException("User does not exist")).when(userService).updateUserRole(user);
 
         //then
-        assertEquals(response, userController.deleteUser(anyLong()));
+        assertEquals(response, userController.updateUserRole(user));
     }
 
     @Test
-    void deleteUserShouldReturnUserDeletedIfServiceReturnTwo() {
+    void updateUserPasswordShouldReturnUserUpdated() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("User deleted.", HttpStatus.OK);
-
-        //when
-        when(userService.deleteUser(anyLong())).thenReturn(2);
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("User updated", HttpStatus.OK);
 
         //then
-        assertEquals(response, userController.deleteUser(anyLong()));
+        assertEquals(response, userController.updateUserPassword(user));
     }
 
     @Test
-    void deleteUserShouldReturnUndefinedErrorAsDefaultValue() {
+    void updateUserPasswordShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.deleteUser(anyLong())).thenReturn(-1);
+        doThrow(new EntityNotFoundException("User does not exist")).when(userService).updateNewPasswordUser(user);
 
         //then
-        assertEquals(response, userController.deleteUser(anyLong()));
+        assertEquals(response, userController.updateUserPassword(user));
+    }
+
+    @Test
+    void deleteUserShouldReturnUserDeleted() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>("User deleted", HttpStatus.OK);
+
+        //then
+        assertEquals(response, userController.deleteUser(1L));
+    }
+
+    @Test
+    void deleteUserShouldReturnCaughtExceptionMessage() {
+        //given
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
+
+        //when
+        doThrow(new EntityNotFoundException("User does not exist")).when(userService).deleteUser(1L);
+
+        //then
+        assertEquals(response, userController.deleteUser(1L));
+    }
+
+    @Test
+    void activateAccountByTokenShouldReturnUserAccountIsEnable() {
+        //given
+        String tokenValue = "tokenvalue!#&$*#(!1111222";
+        ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
+
+        //when
+        assertEquals(response, userController.activateAccountByToken(tokenValue));
+    }
+
+    @Test
+    void activateAccountByTokenShouldReturnCaughtExceptionMessage() {
+        //given
+        String tokenValue = "tokenvalue!#&$*#(!1111222";
+        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.BAD_REQUEST);
+
+        //when
+        doThrow(new EntityNotFoundException("Token does not exist")).when(userService).activateAccountByToken(tokenValue);
+
+        //when
+        assertEquals(response, userController.activateAccountByToken(tokenValue));
     }
 
     @Test
     void getRolesShouldReturnRoleEnumValues() {
+        //given
         ResponseEntity<?> response = new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
+
+        //when
         assertEquals(response, userController.getRoles());
     }
 
     @Test
-    void updateUserRoleShouldReturnUserDoesNotExistIfServiceReturnZero() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.updateUserRole(user)).thenReturn(0);
-
-        //then
-        assertEquals(response, userController.updateUserRole(user));
-    }
-
-    @Test
-    void updateUserRoleShouldReturnUserSavedIfServiceReturnOne() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User saved.", HttpStatus.OK);
-
-        //when
-        when(userService.updateUserRole(user)).thenReturn(1);
-
-        //then
-        assertEquals(response, userController.updateUserRole(user));
-    }
-
-    @Test
-    void updateUserRoleShouldReturnUndefinedErrorAsDefaultValue() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
-
-        //when
-        when(userService.updateUserRole(user)).thenReturn(-1);
-
-        //then
-        assertEquals(response, userController.updateUserRole(user));
-    }
-
-    @Test
-    void updateUserRoleShouldReturnDeletingLastAdminForbiddenIfServiceReturnTwo() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Deleting last admin is forbidden.", HttpStatus.FORBIDDEN);
-
-        //when
-        when(userService.updateUserRole(user)).thenReturn(2);
-
-        //then
-        assertEquals(response, userController.updateUserRole(user));
-    }
-
-    @Test
-    void updateNewPasswordUserShouldReturnUserDoesNotExistIfServiceReturnZero() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.updateNewPasswordUser(user)).thenReturn(0);
-
-        //then
-        assertEquals(response, userController.updateUserPassword(user));
-    }
-
-    @Test
-    void updateNewPasswordUserShouldReturnUserSavedIfServiceReturnOne() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User saved.", HttpStatus.OK);
-
-        //when
-        when(userService.updateNewPasswordUser(user)).thenReturn(1);
-
-        //then
-        assertEquals(response, userController.updateUserPassword(user));
-    }
-
-    @Test
-    void updateNewPasswordUserShouldReturnUndefinedErrorAsDefaultValue() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
-
-        //when
-        when(userService.updateNewPasswordUser(user)).thenReturn(-1);
-
-        //then
-        assertEquals(response, userController.updateUserPassword(user));
-    }
-
-
-    @Test
-    void confirmPasswordResetByTokenShouldReturnTokenDoesNotExistIfServiceReturnZero() {
-        //given
-        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.resetPasswordByToken("value")).thenReturn(0);
-
-        //then
-        assertEquals(response, userController.confirmPasswordResetByToken("value"));
-    }
-
-    @Test
-    void confirmPasswordResetByTokenShouldReturnTokenHasExpiredIfServiceReturnOne() {
-        //given
-        ResponseEntity<?> response = new ResponseEntity<>("Your token has expired.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.resetPasswordByToken("value")).thenReturn(1);
-
-        //then
-        assertEquals(response, userController.confirmPasswordResetByToken("value"));
-    }
-
-    @Test
-    void confirmPasswordResetByTokenShouldReturnUserAndOKStatusIfServiceReturnTwo() {
+    void confirmPasswordResetByTokenShouldReturnUser() {
         //given
         User user = new User();
         ResponseEntity<?> response = new ResponseEntity<>(user, HttpStatus.OK);
 
         //when
-        when(userService.resetPasswordByToken("value")).thenReturn(2);
         when(userService.findUserByTokenValue("value")).thenReturn(user);
 
         //then
@@ -425,142 +221,58 @@ class UserControllerTest {
     }
 
     @Test
-    void confirmPasswordResetByTokenShouldReturnUndefinedErrorAsDefaultValue() {
+    void confirmPasswordResetByTokenShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.resetPasswordByToken("value")).thenReturn(-1);
+        doThrow(new EntityNotFoundException("Token does not exist")).when(userService).resetPasswordByToken("value");
 
         //then
         assertEquals(response, userController.confirmPasswordResetByToken("value"));
     }
 
     @Test
-    void changeMyPasswordShouldReturnUserDoesNotExistIfServiceReturnZero() {
+    void changeMyPasswordShouldReturnUserSaved() {
         //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("User updated", HttpStatus.OK);
 
         //when
-        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(0);
+        assertEquals(response, userController.changeMyPassword(new PasswordChangeRequest()));
+    }
 
-        //then
+    @Test
+    void changeMyPasswordShouldReturnCaughtExceptionMessage() {
+        //given
+        var passwordChangeRequest = new PasswordChangeRequest();
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
+
+        //when
+        doThrow(new EntityNotFoundException("User does not exist")).when(userService).updatePasswordByRequest(passwordChangeRequest);
+
+        //when
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
     }
 
     @Test
-    void changeMyPasswordShouldReturnPasswordDoesNotMatchIfServiceReturnOne() {
-        //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        ResponseEntity<?> response = new ResponseEntity<>("The password and password provided for the account do not match", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(1);
-
-        //then
-        assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
-    }
-
-    @Test
-    void changeMyPasswordShouldReturnUsernameDoNotMatchWithEmailIfServiceReturnTwo() {
-        //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        ResponseEntity<?> response = new ResponseEntity<>("Username do not match with user email", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(2);
-
-        //then
-        assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
-    }
-
-    @Test
-    void changeMyPasswordShouldReturnNewPasswordCannotBeEqualToOldPasswordIfServiceReturnThree() {
-        //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        ResponseEntity<?> response = new ResponseEntity<>("New password cannot be equal to old password.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(3);
-
-        //then
-        assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
-    }
-
-    @Test
-    void changeMyPasswordShouldReturnUserSavedIfServiceReturnFour() {
-        //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        ResponseEntity<?> response = new ResponseEntity<>("User saved.", HttpStatus.OK);
-
-        //when
-        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(4);
-
-        //then
-        assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
-    }
-
-    @Test
-    void changeMyPasswordShouldReturnUndefinedErrorAsDefaultValue() {
-        //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
-
-        //when
-        when(userService.updatePasswordByRequest(passwordChangeRequest)).thenReturn(-1);
-
-        //then
-        assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
-    }
-
-    @Test
-    void resetPasswordShouldReturnUserDoesNotExistIfServiceReturnZero() {
+    void resetPasswordShouldReturnPasswordResetLinkWasSent() {
         //given
         String email = "email@gmail.com";
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.NOT_FOUND);
-
-        //when
-        when(userService.resetPassword(email)).thenReturn(0);
+        ResponseEntity<?> response  = new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.OK);
 
         //then
         assertEquals(response, userController.resetPassword(email));
     }
 
     @Test
-    void resetPasswordShouldReturnPasswordResetLinkWasSentCheckMailboxIfServiceReturnOne() {
+    void resetPasswordShouldReturnCaughtExceptionMessage() {
         //given
         String email = "email@gmail.com";
-        ResponseEntity<?> response = new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.BAD_REQUEST);
+        ResponseEntity<?> response  = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
 
         //when
-        when(userService.resetPassword(email)).thenReturn(1);
-
-        //then
-        assertEquals(response, userController.resetPassword(email));
-    }
-
-    @Test
-    void resetPasswordShouldReturnPasswordResettingForDisabledUserIsForbiddenIfServiceReturnTwo() {
-        //given
-        String email = "email@gmail.com";
-        ResponseEntity<?> response = new ResponseEntity<>("Password resetting for disabled user is forbidden.", HttpStatus.FORBIDDEN);
-
-        //when
-        when(userService.resetPassword(email)).thenReturn(2);
-
-        //then
-        assertEquals(response, userController.resetPassword(email));
-    }
-
-    @Test
-    void resetPasswordShouldReturnUndefinedErrorAsDefaultValue() {
-        //given
-        String email = "email@gmail.com";
-        ResponseEntity<?> response = new ResponseEntity<>("Undefined error.", HttpStatus.INTERNAL_SERVER_ERROR);
-
-        //when
-        when(userService.resetPassword(email)).thenReturn(-1);
+        doThrow(new EntityNotFoundException("User does not exist")).when(userService).resetPassword(email);
 
         //then
         assertEquals(response, userController.resetPassword(email));
@@ -569,13 +281,16 @@ class UserControllerTest {
     @Test
     void findAllUsersPaginatedShouldReturnUsersList() {
         //given
-        var dataTableSortPage = new DataTableSortPage(0, 5, "id", "ASC");
-        List<User> users = new ArrayList<>();
+        var dataTableSortPage = new DataTableSortPage();
+        List<User> users = new ArrayList<>(List.of(new User()));
         ResponseEntity<?> response = new ResponseEntity<>(users, HttpStatus.OK);
 
         //when
         when(userService.findAllUsersPaginated(dataTableSortPage)).thenReturn(users);
 
+        //then
         assertEquals(response, userController.findAllUsersPaginated(dataTableSortPage));
     }
+
+
 }

@@ -80,7 +80,7 @@ class ExamControllerTest {
     @Test
     void getExamMaxPointsShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<String> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<String> response = new ResponseEntity<>("Exam does not exist", HttpStatus.BAD_REQUEST);
 
         //when
         when(examService.getMaxPossibleExamPoints(1L)).thenThrow(new EntityNotFoundException("Exam does not exist"));
@@ -107,7 +107,7 @@ class ExamControllerTest {
     void getExamScoreShouldReturnCaughtExceptionMessage() {
         //given
         ExamForm examForm = new ExamForm();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<?> response = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
 
         //when
         doThrow(new EntityNotFoundException("User does not exist"))
@@ -133,7 +133,7 @@ class ExamControllerTest {
     @Test
     void getExamByIdShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<String> response = new ResponseEntity<>("Exam not found", HttpStatus.NOT_FOUND);
+        ResponseEntity<String> response = new ResponseEntity<>("Exam not found", HttpStatus.BAD_REQUEST);
 
         //when
         when(examService.findExamById(1L)).thenThrow(new EntityNotFoundException("Exam not found"));
@@ -159,7 +159,7 @@ class ExamControllerTest {
     @Test
     void getExamByIdToTakeShouldReturnCaughtExceptionMessage() {
         //given
-        ResponseEntity<String> response = new ResponseEntity<>("Exam does not exist", HttpStatus.NOT_FOUND);
+        ResponseEntity<String> response = new ResponseEntity<>("Exam does not exist", HttpStatus.BAD_REQUEST);
 
         //when
         when(examService.findExamById(1L)).thenThrow(new EntityNotFoundException("Exam does not exist"));

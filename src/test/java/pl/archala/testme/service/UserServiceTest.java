@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.archala.testme.dto.DataTableSortPage;
 import pl.archala.testme.dto.PasswordChangeRequest;
 import pl.archala.testme.entity.Token;
 import pl.archala.testme.entity.User;
@@ -15,6 +16,9 @@ import pl.archala.testme.enums.RoleEnum;
 import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +26,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static pl.archala.testme.enums.RoleEnum.ADMIN;
+import static pl.archala.testme.enums.RoleEnum.USER;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -47,7 +51,28 @@ class UserServiceTest {
     private MailService mailService;
 
     @Test
-    void registerUserShouldReturnOneIfUserFoundByUsername() {
+    void findUserByUsernameShouldThrowExceptionIfUserDoesNotExist() {
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserByUsername("username"));
+    }
+
+    @Test
+    void findUserByUsernameShouldReturnUser() {
+        //given
+        User user = new User();
+
+        //when
+        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+
+        //then
+        assertEquals(user, userService.findUserByUsername("username"));
+    }
+
+    @Test
+    void registerUserShouldThrowExceptionIfUsernameIsAlreadyTaken() {
         //given
         User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
@@ -55,11 +80,11 @@ class UserServiceTest {
         when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(1, userService.registerUser(user));
+        assertThrows(EntityExistsException.class, () -> userService.registerUser(user));
     }
 
     @Test
-    void registerUserShouldReturnTwoIfUserFoundByEmail() {
+    void registerUserShouldThrowExceptionIfEmailIsAlreadyTaken() {
         //given
         User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
 
@@ -68,295 +93,336 @@ class UserServiceTest {
         when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(2, userService.registerUser(user));
+        assertThrows(EntityExistsException.class, () -> userService.registerUser(user));
     }
 
     @Test
-    void registerUserShouldReturnZeroIfUserWasSavedAndTokenWasSent() {
+    void registerUserShouldThrowExceptionIfUsernameIsEqualToEmail() {
         //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
+        User user = new User("user@gmail.com", "password", "user@gmail.com", RoleEnum.USER, true, null);
 
         //when
         when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
         when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.registerUser(user));
+        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
     }
 
     @Test
-    void deleteUserShouldReturnZeroIfUserCannotBeFoundById() {
+    void registerUserShouldThrowExceptionIfUsernameIsEqualToPassword() {
+        //given
+        User user = new User("password", "password", "email@gmail.com", RoleEnum.USER, true, null);
+
         //when
-        when(userRepo.findById(anyLong())).thenReturn(Optional.empty());
+        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.deleteUser(anyLong()));
+        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
     }
 
     @Test
-    void deleteUserShouldReturnOneIfAdminWantToDeleteTheLastAdminInDB() {
+    void registerUserShouldThrowExceptionIfEmailIsEqualToPassword() {
         //given
+        User user = new User("username", "email@gmail.com", "email@gmail.com", RoleEnum.USER, true, null);
+
+        //when
+        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
+    }
+
+    @Test
+    void registerUserShouldNotThrowAnyExceptionIfUserDataAreCorrect() {
+        //given
+        User user = new User("username", "password", "email@gmail.com", RoleEnum.USER, true, null);
+
+        //when
+        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+
+        //then
+        assertDoesNotThrow(() -> userService.registerUser(user));
+    }
+
+    @Test
+    void deleteUserShouldThrowExceptionIfUserDoesNotExist() {
+        //when
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> userService.deleteUser(1L));
+    }
+
+    @Test
+    void deleteUserShouldThrowExceptionDeletingLastAdminIsForbidden() {
+        //when
         User user = new User();
-        user.setRole(RoleEnum.ADMIN);
-        List<User> admins = new ArrayList<>(List.of(user));
+        user.setRole(ADMIN);
 
         //when
-        when(userRepo.findById(anyLong())).thenReturn(Optional.of(user));
-        when(userRepo.findAll().stream().filter(u -> u.getRole().equals(RoleEnum.ADMIN)).collect(Collectors.toList()))
-                .thenReturn(admins);
+        when(userRepo.findAll()).thenReturn(List.of(user));
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(1, userService.deleteUser(anyLong()));
+        assertThrows(IllegalArgumentException.class, () -> userService.deleteUser(1L));
     }
 
     @Test
-    void deleteUserShouldReturnTwoIfAllConditionsAreMet() {
-        //given
+    void deleteUserShouldNotThrowAnyException() {
+        //when
         User user = new User();
         User user2 = new User();
-        user.setRole(RoleEnum.ADMIN);
-        user2.setRole(RoleEnum.ADMIN);
-        List<User> admins = new ArrayList<>(List.of(user, user2));
+        user.setRole(ADMIN);
+        user2.setRole(ADMIN);
 
         //when
-        when(userRepo.findById(anyLong())).thenReturn(Optional.of(user));
-        when(userRepo.findAll().stream().filter(u -> u.getRole().equals(RoleEnum.ADMIN)).collect(Collectors.toList()))
-                .thenReturn(admins);
+        when(userRepo.findAll()).thenReturn(List.of(user, user2));
+        when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(2, userService.deleteUser(anyLong()));
+        assertDoesNotThrow(() -> userService.deleteUser(1L));
     }
 
     @Test
-    void updateUserRoleShouldReturnZeroIfUserIsNew() {
+    void updateUserRoleShouldThrowExceptionIfUserDoesNotContainId() {
         //given
         User user = new User();
 
         //then
-        assertEquals(0, userService.updateUserRole(user));
+        assertThrows(EntityNotFoundException.class, () -> userService.updateUserRole(user));
     }
 
     @Test
-    void updateUserRoleShouldReturnZeroIfUserCannotBeFoundById() {
+    void updateUserRoleShouldThrowExceptionIfUserDoesNotExist() {
         //given
         User user = new User();
-        user.setId(100L);
+        user.setId(1L);
 
         //when
-        when(userRepo.findById(100L)).thenReturn(Optional.empty());
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.updateUserRole(user));
+        assertThrows(EntityNotFoundException.class, () -> userService.updateUserRole(user));
     }
 
     @Test
-    void updateUserRoleShouldReturnOneIfUserWasSaved() {
-        //given
-        User user = new User();
-        user.setId(100L);
-
-        //when
-        when(userRepo.findById(100L)).thenReturn(Optional.of(user));
-
-        //then
-        assertEquals(1, userService.updateUserRole(user));
-    }
-
-    @Test
-    void updateUserRoleShouldReturnTwoIfThereIsARequestToSetLastAdminAsUser() {
+    void updateUserRoleShouldThrowExceptionForDeletingLastAdmin() {
         //given
         User newUser = new User();
-        newUser.setId(100L);
+        newUser.setRole(USER);
+        newUser.setId(1L);
 
-        User currentuser = new User();
-        currentuser.setId(100L);
-        currentuser.setRole(ADMIN);
-
-        List<User> admins = new ArrayList<>(List.of(currentuser));
+        User currentUser = new User();
+        currentUser.setRole(ADMIN);
+        currentUser.setId(1L);
 
         //when
-        when(userRepo.findById(100L)).thenReturn(Optional.of(currentuser));
-        when(userRepo.findByRole(ADMIN)).thenReturn(admins);
+        when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
+        when(userRepo.findByRole(ADMIN)).thenReturn(List.of(currentUser));
 
         //then
-        assertEquals(2, userService.updateUserRole(newUser));
+        assertThrows(IllegalArgumentException.class, () -> userService.updateUserRole(newUser));
     }
 
     @Test
-    void activateAccountShouldReturnZeroIfTokenDoesNotExist() {
+    void updateUserRoleShouldUpdateUserIfConditionsAreMet() {
         //given
-        String tokenValue = "sample-token-value-123";
+        User newUser = new User();
+        newUser.setRole(ADMIN);
+        newUser.setId(1L);
+
+        User currentUser = new User();
+        currentUser.setRole(USER);
+        currentUser.setId(1L);
 
         //when
-        when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.empty());
+        when(userRepo.findById(1L)).thenReturn(Optional.of(currentUser));
 
         //then
-        assertEquals(0, userService.activateAccountByToken(tokenValue));
+        assertDoesNotThrow(() -> userService.updateUserRole(newUser));
     }
 
     @Test
-    void activateAccountShouldReturnOneIfTokenHasExpired() {
-        //given
-        User user = new User();
-        user.setUsername("username");
+    void activateAccountByTokenShouldThrowExceptionIfTokenDoesNotExist() {
+        //when
+        when(tokenRepo.findByValue("value")).thenReturn(Optional.empty());
 
+        //then
+        assertThrows(EntityNotFoundException.class, () -> userService.activateAccountByToken("value"));
+    }
+
+    @Test
+    void activateAccountByTokenShouldThrowExceptionIfTokenHasExpired() {
+        //given
         Token token = new Token();
-        token.setUser(user);
-        token.setExpirationDate(LocalDateTime.now().minusMinutes(10));
-        String tokenValue = "sample-token-value-123";
+        token.setExpirationDate(LocalDateTime.now().minusMinutes(60));
 
         //when
-        when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));
-        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
+        when(tokenRepo.findByValue("value")).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(1, userService.activateAccountByToken(tokenValue));
+        assertThrows(RuntimeException.class, () -> userService.activateAccountByToken("value"));
     }
 
     @Test
-    void activateAccountShouldReturnTwoIfTokenHasNoUser() {
+    void activateAccountByTokenShouldThrowExceptionIfTokenUserDoesNotExist() {
         //given
         Token token = new Token();
         token.setExpirationDate(LocalDateTime.now().plusMinutes(60));
-        String tokenValue = "sample-token-value-123";
 
         //when
-        when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));
+        when(tokenRepo.findByValue("value")).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(2, userService.activateAccountByToken(tokenValue));
+        assertThrows(EntityNotFoundException.class, () -> userService.activateAccountByToken("value"));
     }
 
     @Test
-    void activateAccountShouldReturnThreeIfUserWasSavedAndTokenWasDeleted() {
+    void activateAccountByTokenShouldNotThrowAnyException() {
         //given
         Token token = new Token();
         token.setUser(new User());
         token.setExpirationDate(LocalDateTime.now().plusMinutes(60));
-        String tokenValue = "sample-token-value-123";
 
         //when
-        when(tokenRepo.findByValue(tokenValue)).thenReturn(Optional.of(token));
+        when(tokenRepo.findByValue("value")).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(3, userService.activateAccountByToken(tokenValue));
+        assertDoesNotThrow(() -> userService.activateAccountByToken("value"));
     }
 
     @Test
-    void updatePasswordShouldReturnZeroIfUserDoesNotExist() {
+    void activateAccountByTokenShouldDeleteUserIfTokenHasExpiredAndUserExistAndUserIsDisabled() {
         //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        passwordChangeRequest.setUsername("username");
+        User user = new User();
+        user.setEnabled(false);
+        user.setUsername("username");
+
+        Token token = new Token();
+        token.setUser(user);
+        token.setExpirationDate(LocalDateTime.now().minusMinutes(60));
 
         //when
-        when(userRepo.findByUsername("username")).thenReturn(Optional.empty());
+        when(tokenRepo.findByValue("value")).thenReturn(Optional.of(token));
+        when(userRepo.findByUsername(token.getUser().getUsername())).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(0, userService.updatePasswordByRequest(passwordChangeRequest));
+        assertThrows(RuntimeException.class, () -> userService.activateAccountByToken("value"));
     }
 
     @Test
-    void updatePasswordShouldReturnOneIfPasswordFromRequestAndUserPasswordFromDBDoNotMatch() {
+    void updatePasswordByRequestShouldThrowExceptionIfUserDoesNotExist() {
         //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        passwordChangeRequest.setUsername("username");
+        var request = new PasswordChangeRequest();
+
+        //when
+        when(userRepo.findByUsername(request.getUsername())).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> userService.updatePasswordByRequest(request));
+    }
+
+    @Test
+    void updatePasswordByRequestShouldThrowExceptionIfProvidedPasswordDoNotMatchWithCurrentPassword() {
+        //given
+        var request = new PasswordChangeRequest();
         User user = new User();
 
         //when
-        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(false);
+        when(userRepo.findByUsername(request.getUsername())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())).thenReturn(false);
 
         //then
-        assertEquals(1, userService.updatePasswordByRequest(passwordChangeRequest));
+        assertThrows(IllegalArgumentException.class, () -> userService.updatePasswordByRequest(request));
     }
 
     @Test
-    void updatePasswordShouldReturnTwoIfEmailDoNotMatchToUsername() {
+    void updatePasswordByRequestShouldThrowExceptionIfProvidedEmailDoNotMatchWithCurrentEmail() {
         //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        passwordChangeRequest.setUsername("username");
-        passwordChangeRequest.setEmail("email2");
+        var request = new PasswordChangeRequest();
+        request.setEmail("AAAAA@gmail.com");
 
         User user = new User();
-        user.setEmail("email1");
+        user.setEmail("BBBB@gmail.com");
 
         //when
-        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
+        when(userRepo.findByUsername(request.getUsername())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())).thenReturn(true);
 
         //then
-        assertEquals(2, userService.updatePasswordByRequest(passwordChangeRequest));
+        assertThrows(IllegalArgumentException.class, () -> userService.updatePasswordByRequest(request));
     }
 
     @Test
-    void updatePasswordShouldReturnThreeIfNewPasswordIsEqualToCurrentPassword() {
+    void updatePasswordByRequestShouldThrowExceptionIfProvidedPasswordIsEqualToCurrentPassword() {
         //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        passwordChangeRequest.setUsername("username");
-        passwordChangeRequest.setEmail("email1");
+        var request = new PasswordChangeRequest();
+        request.setEmail("AAAAA@gmail.com");
 
         User user = new User();
-        user.setEmail("email1");
+        user.setEmail("AAAAA@gmail.com");
 
         //when
-        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
-        when(passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())).thenReturn(true);
+        when(userRepo.findByUsername(request.getUsername())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())).thenReturn(true);
+        when(passwordEncoder.matches(request.getNewPassword(), user.getPassword())).thenReturn(true);
 
         //then
-        assertEquals(3, userService.updatePasswordByRequest(passwordChangeRequest));
+        assertThrows(IllegalArgumentException.class, () -> userService.updatePasswordByRequest(request));
     }
 
     @Test
-    void updatePasswordShouldReturnFourIfAllConditionsAreMet() {
+    void updatePasswordByRequestShouldNotThrowAnyException() {
         //given
-        var passwordChangeRequest = new PasswordChangeRequest();
-        passwordChangeRequest.setUsername("username");
-        passwordChangeRequest.setNewPassword("newPass");
-        passwordChangeRequest.setEmail("email1");
+        var request = new PasswordChangeRequest();
+        request.setEmail("AAAAA@gmail.com");
+        request.setNewPassword("user2468");
 
         User user = new User();
-        user.setPassword("currentPass");
-        user.setEmail("email1");
+        user.setEmail("AAAAA@gmail.com");
+        user.setPassword("$2a$12$s7GnHP2rlMAI0GnMdhhr9.Izu1VFUVYPrrJCaj8hogk9h4JloRH3i");
 
         //when
-        when(userRepo.findByUsername("username")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())).thenReturn(true);
-        when(passwordEncoder.matches(passwordChangeRequest.getNewPassword(), user.getPassword())).thenReturn(false);
+        when(userRepo.findByUsername(request.getUsername())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())).thenReturn(true);
 
         //then
-        assertEquals(4, userService.updatePasswordByRequest(passwordChangeRequest));
+        assertDoesNotThrow(() -> userService.updatePasswordByRequest(request));
     }
 
     @Test
-    void resetPasswordShouldReturnZeroIfUserDoesNotExist() {
+    void resetPasswordShouldThrowExceptionIfUserDoesNotExist() {
         //given
-        String email = "email@gmail.com";
+        String email = "email-123@gmail.com";
 
         //when
         when(userRepo.findByEmail(email)).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.resetPassword(email));
+        assertThrows(EntityNotFoundException.class, () -> userService.resetPassword(email));
     }
 
     @Test
-    void resetPasswordShouldReturnTwoIfUserIsDisabled() {
+    void resetPasswordShouldThrowExceptionIfUserIsDisabled() {
         //given
-        String email = "email@gmail.com";
+        String email = "email-123@gmail.com";
         User user = new User();
 
         //when
         when(userRepo.findByEmail(email)).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(2, userService.resetPassword(email));
+        assertThrows(IllegalArgumentException.class, () -> userService.resetPassword(email));
     }
 
     @Test
-    void resetPasswordShouldReturnOneIfPasswordResetTokenWasSent() {
+    void resetPasswordShouldSendTokenMail() {
         //given
-        String email = "email@gmail.com";
+        String email = "email-123@gmail.com";
         User user = new User();
         user.setEnabled(true);
 
@@ -364,39 +430,39 @@ class UserServiceTest {
         when(userRepo.findByEmail(email)).thenReturn(Optional.of(user));
 
         //then
-        assertEquals(1, userService.resetPassword(email));
+        assertDoesNotThrow(() -> userService.resetPassword(email));
     }
 
     @Test
-    void resetPasswordByTokenShouldReturnZeroIfTokenDoesNotExist() {
+    void resetPasswordByTokenShouldThrowExceptionIfUserDoesNotExist() {
         //given
-        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        String value = "valueTOKEN";
 
         //when
         when(tokenRepo.findByValue(value)).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.resetPasswordByToken(value));
+        assertThrows(EntityNotFoundException.class, () -> userService.resetPasswordByToken(value));
     }
 
     @Test
-    void resetPasswordByTokenShouldReturnOneIfTokenHasExpired() {
+    void resetPasswordByTokenShouldThrowExceptionIfTokenHasExpired() {
         //given
-        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        String value = "valueTOKEN";
         Token token = new Token();
-        token.setExpirationDate(LocalDateTime.now().minusMinutes(10));
+        token.setExpirationDate(LocalDateTime.now().minusMinutes(60));
 
         //when
         when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(1, userService.resetPasswordByToken(value));
+        assertThrows(RuntimeException.class, () -> userService.resetPasswordByToken(value));
     }
 
     @Test
-    void resetPasswordByTokenShouldReturnTwoIfTokenWasFoundAndConfirmed() {
+    void resetPasswordByTokenShouldNotThrowAnyException() {
         //given
-        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        String value = "valueTOKEN";
         Token token = new Token();
         token.setExpirationDate(LocalDateTime.now().plusMinutes(60));
 
@@ -404,27 +470,42 @@ class UserServiceTest {
         when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
 
         //then
-        assertEquals(2, userService.resetPasswordByToken(value));
+        assertDoesNotThrow(() -> userService.resetPasswordByToken(value));
     }
 
     @Test
-    void findUserByTokenValueShouldReturnZeroIfTokenDoesNotExist() {
+    void findUserByTokenValueShouldThrowExceptionIfTokenDoesNotExist() {
         //given
-        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        String value = "tokenValue123";
 
         //when
         when(tokenRepo.findByValue(value)).thenReturn(Optional.empty());
 
         //then
-        assertThrows(NoSuchElementException.class, () -> userService.findUserByTokenValue(value));
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserByTokenValue(value));
     }
 
     @Test
-    void findUserByTokenValueShouldReturnTokenUserIfTokenExists() {
+    void findUserByTokenValueShouldThrowExceptionIfTokenUserDoesNotExist() {
         //given
-        String value = "sampletokenvalue-2131-loremipsumloremipsum";
+        Token token = new Token();
+        String value = "tokenValue123";
+
+        //when
+        when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserByTokenValue(value));
+    }
+
+    @Test
+    void findUserByTokenValueShouldReturnUser() {
+        //given
+
+        Token token = new Token();
         User user = new User();
-        Token token = new Token(user, value, LocalDateTime.now().plusMinutes(60));
+        token.setUser(user);
+        String value = "tokenValue123";
 
         //when
         when(tokenRepo.findByValue(value)).thenReturn(Optional.of(token));
@@ -434,28 +515,28 @@ class UserServiceTest {
     }
 
     @Test
-    void updateNewPasswordUserShouldReturnZeroIfUserDoesNotExist() {
+    void updateNewPasswordUserShouldThrowExceptionIfUserDoesNotExist() {
         //given
         User newPasswordUser = new User();
+        newPasswordUser.setUsername("username");
 
         //when
         when(userRepo.findByUsername(newPasswordUser.getUsername())).thenReturn(Optional.empty());
 
         //then
-        assertEquals(0, userService.updateNewPasswordUser(newPasswordUser));
+        assertThrows(EntityNotFoundException.class, () -> userService.updateNewPasswordUser(newPasswordUser));
     }
 
     @Test
-    void updateNewPasswordUserShouldReturnOneIfUserWithNewPasswordWasSaved() {
+    void updateNewPasswordUserShouldNoThrowAnyException() {
         //given
         User newPasswordUser = new User();
-        newPasswordUser.setPassword("newpassword123");
+        newPasswordUser.setUsername("username");
 
         //when
         when(userRepo.findByUsername(newPasswordUser.getUsername())).thenReturn(Optional.of(newPasswordUser));
 
         //then
-        assertEquals(1, userService.updateNewPasswordUser(newPasswordUser));
+        assertDoesNotThrow(() -> userService.updateNewPasswordUser(newPasswordUser));
     }
-
 }
