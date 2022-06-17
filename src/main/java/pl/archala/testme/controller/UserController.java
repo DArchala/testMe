@@ -14,8 +14,6 @@ import pl.archala.testme.service.UserService;
 import javax.validation.Valid;
 import java.util.List;
 
-import static pl.archala.testme.component.CustomResponseEntity.*;
-
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/users", produces = "application/json")
@@ -33,105 +31,76 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> findAllUsers() {
-        List<User> users = userRepo.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userRepo.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/findBy/username")
     public ResponseEntity<?> findUserByUsername(@RequestBody String username) {
-        User user = userRepo.findByUsername(username).orElse(null);
-        if (user != null) return new ResponseEntity<>(user, HttpStatus.OK);
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping("/update/role")
-    public ResponseEntity<?> updateUserRole(@RequestBody @Valid User user) {
-        switch (userService.updateUserRole(user)) {
-            case 0:
-                return USER_DOES_NOT_EXIST;
-            case 1:
-                return USER_SAVED;
-            case 2:
-                return DELETING_LAST_ADMIN_FORBIDDEN;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            User user = userService.findUserByUsername(username);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/update/password")
+    @PutMapping("/role")
+    public ResponseEntity<?> updateUserRole(@RequestBody @Valid User user) {
+        try {
+            userService.updateUserRole(user);
+            return new ResponseEntity<>("User updated", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/password")
     public ResponseEntity<?> updateUserPassword(@RequestBody @Valid User user) {
-        switch (userService.updateNewPasswordUser(user)) {
-            case 0:
-                return USER_DOES_NOT_EXIST;
-            case 1:
-                return USER_SAVED;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.updateNewPasswordUser(user);
+            return new ResponseEntity<>("User updated", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        switch (userService.deleteUser(id)) {
-            case 0:
-                return USER_DOES_NOT_EXIST;
-            case 1:
-                return DELETING_LAST_ADMIN_FORBIDDEN;
-            case 2:
-                return USER_DELETED;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.deleteUser(id);
+            return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
-        switch (userService.registerUser(user)) {
-            case 0:
-                return USER_REGISTERED_CHECK_MAILBOX;
-            case 1:
-                return USERNAME_ALREADY_TAKEN;
-            case 2:
-                return EMAIL_ALREADY_TAKEN;
-            case 3:
-                return USERNAME_AND_EMAIL_CANNOT_BE_EQUAL;
-            case 4:
-                return PASSWORD_CANNOT_BE_EQUAL_TO_USERNAME;
-            case 5:
-                return PASSWORD_CANNOT_BE_EQUAL_TO_EMAIL;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.registerUser(user);
+            return new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("/activateAccount/token")
+    @GetMapping("/activate/token")
     public ResponseEntity<?> activateAccountByToken(@RequestParam String value) {
-        switch (userService.activateAccountByToken(value)) {
-            case 0:
-                return TOKEN_DOES_NOT_EXIST;
-            case 1:
-                return TOKEN_HAS_EXPIRED;
-            case 2:
-                return TOKEN_HAS_NO_USER;
-            case 3:
-                return ACCOUNT_ENABLED;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.activateAccountByToken(value);
+            return new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
 
-    @GetMapping("/passwordReset/token")
+    @GetMapping("/password/reset/token")
     public ResponseEntity<?> confirmPasswordResetByToken(@RequestParam String value) {
-        switch (userService.resetPasswordByToken(value)) {
-            case 0:
-                return TOKEN_DOES_NOT_EXIST;
-            case 1:
-                return TOKEN_HAS_EXPIRED;
-            case 2:
-                return new ResponseEntity<>(userService.findUserByTokenValue(value), HttpStatus.OK);
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.resetPasswordByToken(value);
+            return new ResponseEntity<>(userService.findUserByTokenValue(value), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -140,42 +109,29 @@ public class UserController {
         return new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
     }
 
-    @PostMapping("/changeMyPassword")
+    @PostMapping("/password/change")
     public ResponseEntity<?> changeMyPassword(@RequestBody @Valid PasswordChangeRequest passwordChangeRequest) {
-        switch (userService.updatePasswordByRequest(passwordChangeRequest)) {
-            case 0:
-                return USER_DOES_NOT_EXIST;
-            case 1:
-                return PASSWORD_DOES_NOT_MATCH;
-            case 2:
-                return USERNAME_DO_NOT_MATCH_WITH_EMAIL;
-            case 3:
-                return NEW_PASSWORD_CANNOT_BE_EQUAL_TO_OLD_PASSWORD;
-            case 4:
-                return USER_SAVED;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.updatePasswordByRequest(passwordChangeRequest);
+            return new ResponseEntity<>("User updated", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/passwordResetRequest")
+    @PostMapping("/password/reset")
     public ResponseEntity<?> resetPassword(@RequestBody String email) {
-        switch (userService.resetPassword(email)) {
-            case 0:
-                return USER_DOES_NOT_EXIST;
-            case 1:
-                return PASSWORD_RESET_LINK_WAS_SENT_CHECK_MAILBOX;
-            case 2:
-                return PASSWORD_RESETTING_FOR_DISABLED_USER_IS_FORBIDDEN;
-            default:
-                return UNDEFINED_ERROR;
+        try {
+            userService.resetPassword(email);
+            return new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/findAllUsersPaginated")
+    @PostMapping("/findAll/paginated")
     public ResponseEntity<?> findAllUsersPaginated(@RequestBody @Valid DataTableSortPage dtSortPage) {
         List<User> usersPaginated = userService.findAllUsersPaginated(dtSortPage);
         return new ResponseEntity<>(usersPaginated, HttpStatus.OK);
     }
-
 }
