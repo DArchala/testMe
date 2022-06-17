@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static pl.archala.testme.enums.TokenMailType.ACTIVATE_ACCOUNT;
@@ -33,6 +34,40 @@ public class UserAuthService {
         this.passwordEncoder = passwordEncoder;
         this.tokenRepo = tokenRepo;
         this.mailService = mailService;
+    }
+
+    public void resetPasswordByToken(String value) {
+        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
+
+        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
+            tokenRepo.delete(token);
+            throw new RuntimeException("Token has expired");
+        }
+
+    }
+
+    public User findUserByTokenValue(String value) {
+        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
+        if (token.getUser() == null) throw new EntityNotFoundException("Token user does not exist");
+        return token.getUser();
+    }
+
+    public void activateAccountByToken(String value) {
+        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
+
+        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
+            tokenRepo.delete(token);
+            Optional<User> user = userRepo.findByUsername(token.getUser().getUsername());
+            if (user.isPresent() && !user.get().isEnabled()) userRepo.delete(user.get());
+            throw new RuntimeException("Token has expired");
+        }
+
+        if (token.getUser() == null) throw new EntityNotFoundException("User does not exist");
+        User user = token.getUser();
+
+        user.setEnabled(true);
+        userRepo.save(user);
+        tokenRepo.delete(token);
     }
 
     public void registerUser(User user) {

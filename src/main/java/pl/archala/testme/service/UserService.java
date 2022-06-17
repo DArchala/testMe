@@ -78,23 +78,6 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public void activateAccountByToken(String value) {
-        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
-
-        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
-            tokenRepo.delete(token);
-            Optional<User> user = userRepo.findByUsername(token.getUser().getUsername());
-            if (user.isPresent() && !user.get().isEnabled()) userRepo.delete(user.get());
-            throw new RuntimeException("Token has expired");
-        }
-
-        if (token.getUser() == null) throw new EntityNotFoundException("User does not exist");
-        User user = token.getUser();
-
-        user.setEnabled(true);
-        userRepo.save(user);
-        tokenRepo.delete(token);
-    }
 
     public void updatePasswordByRequest(PasswordChangeRequest request) {
         User user = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
@@ -111,22 +94,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
         userRepo.save(user);
-    }
-
-    public void resetPasswordByToken(String value) {
-        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
-
-        if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
-            tokenRepo.delete(token);
-            throw new RuntimeException("Token has expired");
-        }
-
-    }
-
-    public User findUserByTokenValue(String value) {
-        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
-        if (token.getUser() == null) throw new EntityNotFoundException("Token user does not exist");
-        return token.getUser();
     }
 
     public void updateNewPasswordUser(User newPasswordUser) {
