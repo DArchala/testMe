@@ -35,7 +35,10 @@ public class ExamAttempt extends AbstractEntity<Long> {
     public ExamAttempt() {
     }
 
-    public ExamAttempt(String examName, long examTime, long examUserTime, long examUserPoints, long examMaxPoints, LocalDateTime startTimeDate, LocalDateTime endTimeDate, ExamDifficultyLevel examDifficultyLevel) {
+    public ExamAttempt(String examName, long examTime,
+                       long examUserTime, long examUserPoints,
+                       long examMaxPoints, LocalDateTime startTimeDate,
+                       LocalDateTime endTimeDate, ExamDifficultyLevel examDifficultyLevel) {
         this.examName = examName;
         this.examTime = examTime;
         this.examUserTime = examUserTime;
@@ -140,11 +143,17 @@ public class ExamAttempt extends AbstractEntity<Long> {
         if (!(o instanceof ExamAttempt)) return false;
         if (!super.equals(o)) return false;
         ExamAttempt that = (ExamAttempt) o;
-        return examTime == that.examTime && examUserTime == that.examUserTime && examUserPoints == that.examUserPoints && examMaxPoints == that.examMaxPoints && Objects.equals(examName, that.examName) && Objects.equals(startTimeDate, that.startTimeDate) && Objects.equals(endTimeDate, that.endTimeDate) && examDifficultyLevel == that.examDifficultyLevel;
+        return examTime == that.examTime && examUserTime == that.examUserTime
+                && examUserPoints == that.examUserPoints && examMaxPoints == that.examMaxPoints
+                && Objects.equals(examName, that.examName) && Objects.equals(startTimeDate, that.startTimeDate)
+                && Objects.equals(endTimeDate, that.endTimeDate) && examDifficultyLevel == that.examDifficultyLevel;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), examName, examTime, examUserTime, examUserPoints, examMaxPoints, startTimeDate, endTimeDate, examDifficultyLevel);
+        return Objects.hash(super.hashCode(), examName,
+                examTime, examUserTime, examUserPoints,
+                examMaxPoints, startTimeDate, endTimeDate,
+                examDifficultyLevel);
     }
 }
