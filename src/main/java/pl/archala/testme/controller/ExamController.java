@@ -38,7 +38,7 @@ public class ExamController {
             int examMaxPoints = examService.getMaxPossibleExamPoints(id);
             return new ResponseEntity<>(examMaxPoints, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -49,7 +49,7 @@ public class ExamController {
             int score = examService.countUserExamPoints(examForm.getExam());
             return new ResponseEntity<>(score, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -59,7 +59,7 @@ public class ExamController {
             Exam exam = examService.findExamById(id);
             return new ResponseEntity<>(exam, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -69,7 +69,7 @@ public class ExamController {
             Exam exam = examService.findExamById(id);
             return new ResponseEntity<>(exam.setAllAnswersFalse(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
