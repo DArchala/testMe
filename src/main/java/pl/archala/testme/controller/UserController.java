@@ -74,26 +74,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/activate/token")
-    public ResponseEntity<?> activateAccountByToken(@RequestParam String value) {
-        try {
-            userService.activateAccountByToken(value);
-            return new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/password/reset/token")
-    public ResponseEntity<?> confirmPasswordResetByToken(@RequestParam String value) {
-        try {
-            userService.resetPasswordByToken(value);
-            return new ResponseEntity<>(userService.findUserByTokenValue(value), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @GetMapping("/roles")
     public ResponseEntity<?> getRoles() {
         return new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
