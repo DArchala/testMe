@@ -34,83 +34,14 @@ public class UserService {
 
     private final TokenRepository tokenRepo;
 
-    private final MailService mailService;
-
-    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder, TokenRepository tokenRepo, MailService mailService) {
+    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder, TokenRepository tokenRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepo = tokenRepo;
-        this.mailService = mailService;
     }
 
     public User findUserByUsername(String username) {
         return userRepo.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-    }
-
-    public void registerUser(User user) {
-        if (userRepo.findByUsername(user.getUsername()).isPresent())
-            throw new EntityExistsException("Username is already taken");
-
-        if (userRepo.findByEmail(user.getEmail()).isPresent())
-            throw new EntityExistsException("Email is already taken");
-
-        if (user.getUsername().equals(user.getEmail()))
-            throw new IllegalArgumentException("Username cannot be equal to email");
-
-        if (user.getUsername().equals(user.getPassword()))
-            throw new IllegalArgumentException("Username cannot be equal to password");
-
-        if (user.getEmail().equals(user.getPassword()))
-            throw new IllegalArgumentException("Email cannot be equal to password");
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepo.save(user);
-        sendTokenMail(user, ACTIVATE_ACCOUNT);
-    }
-
-    private void sendTokenMail(User user, TokenMailType mailType) {
-        String tokenValue = saveNewToken(user);
-        String url, subject, message;
-        switch (mailType) {
-            case PASSWORD_RESET:
-                url = "http://localhost:4200/#/password-reset-new/" + tokenValue;
-                subject = "Password reset";
-                message = getPasswordResetMailMessage(url);
-                break;
-            case ACTIVATE_ACCOUNT:
-                url = "http://localhost:4200/#/activate-account/" + tokenValue;
-                subject = "Activation link";
-                message = getActivateAccountMailMessage(url);
-                break;
-            default:
-                throw new IllegalArgumentException("TokenMailType is invalid.");
-        }
-        sendMail(user.getEmail(), subject, message);
-    }
-
-    private String saveNewToken(User user) {
-        String tokenValue = UUID.randomUUID().toString();
-        Token token = new Token(user, tokenValue, LocalDateTime.now().plusMinutes(10));
-        tokenRepo.save(token);
-        return tokenValue;
-    }
-
-    private String getPasswordResetMailMessage(String url) {
-        return "Click in the link below, to redirect you to password change page:\n\n"
-                + url + "\n\nMessage generated automatically";
-    }
-
-    private String getActivateAccountMailMessage(String url) {
-        return "Click in the link below, to activate your account:\n\n"
-                + url + "\n\nMessage generated automatically";
-    }
-
-    private void sendMail(String userEmail, String subject, String message) {
-        try {
-            mailService.sendMail(userEmail, subject, message, false);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
     }
 
     public void deleteUser(Long id) {
@@ -180,13 +111,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
         userRepo.save(user);
-    }
-
-    public void resetPassword(String email) {
-        User user = userRepo.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-        if (!user.isEnabled()) throw new IllegalArgumentException("Resetting password for disabled user is forbidden");
-
-        sendTokenMail(user, PASSWORD_RESET);
     }
 
     public void resetPasswordByToken(String value) {

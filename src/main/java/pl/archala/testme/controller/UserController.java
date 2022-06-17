@@ -74,16 +74,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
-        try {
-            userService.registerUser(user);
-            return new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @GetMapping("/activate/token")
     public ResponseEntity<?> activateAccountByToken(@RequestParam String value) {
         try {
@@ -114,16 +104,6 @@ public class UserController {
         try {
             userService.updatePasswordByRequest(passwordChangeRequest);
             return new ResponseEntity<>("User updated", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/password/reset")
-    public ResponseEntity<?> resetPassword(@RequestBody String email) {
-        try {
-            userService.resetPassword(email);
-            return new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

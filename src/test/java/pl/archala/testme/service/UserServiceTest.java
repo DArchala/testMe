@@ -72,83 +72,6 @@ class UserServiceTest {
     }
 
     @Test
-    void registerUserShouldThrowExceptionIfUsernameIsAlreadyTaken() {
-        //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
-
-        //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
-
-        //then
-        assertThrows(EntityExistsException.class, () -> userService.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldThrowExceptionIfEmailIsAlreadyTaken() {
-        //given
-        User user = new User("user", "password", "email@gmail.com", RoleEnum.USER, true, null);
-
-        //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-
-        //then
-        assertThrows(EntityExistsException.class, () -> userService.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldThrowExceptionIfUsernameIsEqualToEmail() {
-        //given
-        User user = new User("user@gmail.com", "password", "user@gmail.com", RoleEnum.USER, true, null);
-
-        //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        //then
-        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldThrowExceptionIfUsernameIsEqualToPassword() {
-        //given
-        User user = new User("password", "password", "email@gmail.com", RoleEnum.USER, true, null);
-
-        //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        //then
-        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldThrowExceptionIfEmailIsEqualToPassword() {
-        //given
-        User user = new User("username", "email@gmail.com", "email@gmail.com", RoleEnum.USER, true, null);
-
-        //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        //then
-        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldNotThrowAnyExceptionIfUserDataAreCorrect() {
-        //given
-        User user = new User("username", "password", "email@gmail.com", RoleEnum.USER, true, null);
-
-        //when
-        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(userRepo.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-
-        //then
-        assertDoesNotThrow(() -> userService.registerUser(user));
-    }
-
-    @Test
     void deleteUserShouldThrowExceptionIfUserDoesNotExist() {
         //when
         when(userRepo.findById(1L)).thenReturn(Optional.empty());
@@ -392,45 +315,6 @@ class UserServiceTest {
 
         //then
         assertDoesNotThrow(() -> userService.updatePasswordByRequest(request));
-    }
-
-    @Test
-    void resetPasswordShouldThrowExceptionIfUserDoesNotExist() {
-        //given
-        String email = "email-123@gmail.com";
-
-        //when
-        when(userRepo.findByEmail(email)).thenReturn(Optional.empty());
-
-        //then
-        assertThrows(EntityNotFoundException.class, () -> userService.resetPassword(email));
-    }
-
-    @Test
-    void resetPasswordShouldThrowExceptionIfUserIsDisabled() {
-        //given
-        String email = "email-123@gmail.com";
-        User user = new User();
-
-        //when
-        when(userRepo.findByEmail(email)).thenReturn(Optional.of(user));
-
-        //then
-        assertThrows(IllegalArgumentException.class, () -> userService.resetPassword(email));
-    }
-
-    @Test
-    void resetPasswordShouldSendTokenMail() {
-        //given
-        String email = "email-123@gmail.com";
-        User user = new User();
-        user.setEnabled(true);
-
-        //when
-        when(userRepo.findByEmail(email)).thenReturn(Optional.of(user));
-
-        //then
-        assertDoesNotThrow(() -> userService.resetPassword(email));
     }
 
     @Test

@@ -46,28 +46,6 @@ class UserControllerTest {
     @Mock
     private TokenRepository tokenRepo;
 
-    @Test
-    void registerUserShouldReturnUserRegisteredCheckMailbox() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User registered, but still not active - check your mailbox.", HttpStatus.OK);
-
-        //then
-        assertEquals(response, userController.registerUser(user));
-    }
-
-    @Test
-    void registerUserShouldReturnCaughtExceptionMessage() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Username is already taken", HttpStatus.BAD_REQUEST);
-
-        //
-        doThrow(new EntityExistsException("Username is already taken")).when(userService).registerUser(user);
-
-        //then
-        assertEquals(response, userController.registerUser(user));
-    }
 
     @Test
     void findAllUsersShouldReturnUsersList() {
@@ -253,29 +231,6 @@ class UserControllerTest {
 
         //when
         assertEquals(response, userController.changeMyPassword(passwordChangeRequest));
-    }
-
-    @Test
-    void resetPasswordShouldReturnPasswordResetLinkWasSent() {
-        //given
-        String email = "email@gmail.com";
-        ResponseEntity<?> response  = new ResponseEntity<>("Password reset link was sent - check mailbox.", HttpStatus.OK);
-
-        //then
-        assertEquals(response, userController.resetPassword(email));
-    }
-
-    @Test
-    void resetPasswordShouldReturnCaughtExceptionMessage() {
-        //given
-        String email = "email@gmail.com";
-        ResponseEntity<?> response  = new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
-
-        //when
-        doThrow(new EntityNotFoundException("User does not exist")).when(userService).resetPassword(email);
-
-        //then
-        assertEquals(response, userController.resetPassword(email));
     }
 
     @Test
