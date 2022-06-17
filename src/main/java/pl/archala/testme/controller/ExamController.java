@@ -19,11 +19,9 @@ import java.security.Principal;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ExamController {
 
-    private final ExamRepository examRepo;
     private final ExamService examService;
 
-    public ExamController(ExamRepository examRepo, ExamService examService) {
-        this.examRepo = examRepo;
+    public ExamController(ExamService examService) {
         this.examService = examService;
     }
 
