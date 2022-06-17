@@ -14,6 +14,8 @@ import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.repository.UserRepository;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -41,16 +43,29 @@ public class UserService {
         this.mailService = mailService;
     }
 
-    public int registerUser(User user) {
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) return 1;
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) return 2;
-        if (user.getUsername().equals(user.getEmail())) return 3;
-        if (user.getUsername().equals(user.getPassword())) return 4;
-        if (user.getEmail().equals(user.getPassword())) return 5;
+    public User findUserByUsername(String username) {
+        return userRepo.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+    }
+
+    public void registerUser(User user) {
+        if (userRepo.findByUsername(user.getUsername()).isPresent())
+            throw new EntityExistsException("Username is already taken");
+
+        if (userRepo.findByEmail(user.getEmail()).isPresent())
+            throw new EntityExistsException("Email is already taken");
+
+        if (user.getUsername().equals(user.getEmail()))
+            throw new IllegalArgumentException("Username cannot be equal to email");
+
+        if (user.getUsername().equals(user.getPassword()))
+            throw new IllegalArgumentException("Username cannot be equal to password");
+
+        if (user.getEmail().equals(user.getPassword()))
+            throw new IllegalArgumentException("Email cannot be equal to password");
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         sendTokenMail(user, ACTIVATE_ACCOUNT);
-        return 0;
     }
 
     private void sendTokenMail(User user, TokenMailType mailType) {
@@ -98,17 +113,16 @@ public class UserService {
         }
     }
 
-    public int deleteUser(Long id) {
-        User user = userRepo.findById(id).orElse(null);
-        if (user == null) return 0;
+    public void deleteUser(Long id) {
+        User user = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
-        if (user.getRole().equals(ADMIN) && findAllAdmins().size() == 1) return 1;
+        if (user.getRole().equals(ADMIN) && findAllAdmins().size() == 1)
+            throw new IllegalArgumentException("Deleting last admin is forbidden");
 
         List<Token> userTokens = tokenRepo.findAllByUserUsername(user.getUsername());
         if (!userTokens.isEmpty()) tokenRepo.deleteAll(userTokens);
 
         userRepo.delete(user);
-        return 2;
     }
 
     public List<User> findAllAdmins() {
@@ -118,89 +132,84 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public int updateUserRole(User newUser) {
-        if (newUser.isNew()) return 0;
+    @SuppressWarnings("all")
+    public void updateUserRole(User newUser) {
+        if (newUser.isNew()) throw new EntityNotFoundException("User does not exist");
 
-        User user = userRepo.findById(newUser.getId()).orElse(null);
-        if (user == null) return 0;
+        User user = userRepo.findById(newUser.getId()).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
         if (user.getRole().equals(ADMIN)
                 && newUser.getRole().equals(USER)
                 && userRepo.findByRole(ADMIN).size() == 1)
-            return 2;
+            throw new IllegalArgumentException("Deleting last admin is forbidden");
 
         user.setRole(newUser.getRole());
         userRepo.save(user);
-        return 1;
     }
 
-    public int activateAccountByToken(String value) {
-        Token token = tokenRepo.findByValue(value).orElse(null);
-        if (token == null) return 0;
+    public void activateAccountByToken(String value) {
+        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
 
         if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
             tokenRepo.delete(token);
             Optional<User> user = userRepo.findByUsername(token.getUser().getUsername());
             if (user.isPresent() && !user.get().isEnabled()) userRepo.delete(user.get());
-            return 1;
+            throw new RuntimeException("Token has expired");
         }
 
+        if (token.getUser() == null) throw new EntityNotFoundException("User does not exist");
         User user = token.getUser();
-        if (user == null) return 2;
 
         user.setEnabled(true);
         userRepo.save(user);
         tokenRepo.delete(token);
-        return 3;
     }
 
-    public int updatePasswordByRequest(PasswordChangeRequest request) {
-        User user = userRepo.findByUsername(request.getUsername()).orElse(null);
-        if (user == null) return 0;
+    public void updatePasswordByRequest(PasswordChangeRequest request) {
+        User user = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) return 1;
-        if (!user.getEmail().equals(request.getEmail())) return 2;
-        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) return 3;
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword()))
+            throw new IllegalArgumentException("The password you provided do not match with your current password");
+
+        if (!user.getEmail().equals(request.getEmail()))
+            throw new IllegalArgumentException("The email you provided do not match with your current email");
+
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword()))
+            throw new IllegalArgumentException("The password you provided cannot be equal to your current password");
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 
         userRepo.save(user);
-        return 4;
     }
 
-    public int resetPassword(String email) {
-        User user = userRepo.findByEmail(email).orElse(null);
-        if (user == null) return 0;
-        if (!user.isEnabled()) return 2;
+    public void resetPassword(String email) {
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+        if (!user.isEnabled()) throw new IllegalArgumentException("Resetting password for disabled user is forbidden");
 
         sendTokenMail(user, PASSWORD_RESET);
-        return 1;
     }
 
-    public int resetPasswordByToken(String value) {
-        Token token = tokenRepo.findByValue(value).orElse(null);
-        if (token == null) return 0;
+    public void resetPasswordByToken(String value) {
+        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
 
         if (token.getExpirationDate().isBefore(LocalDateTime.now())) {
             tokenRepo.delete(token);
-            return 1;
+            throw new RuntimeException("Token has expired");
         }
 
-        return 2;
     }
 
     public User findUserByTokenValue(String value) {
-        Token token = tokenRepo.findByValue(value).orElseThrow();
+        Token token = tokenRepo.findByValue(value).orElseThrow(() -> new EntityNotFoundException("Token does not exist"));
+        if (token.getUser() == null) throw new EntityNotFoundException("Token user does not exist");
         return token.getUser();
     }
 
-    public int updateNewPasswordUser(User newPasswordUser) {
-        User user = userRepo.findByUsername(newPasswordUser.getUsername()).orElse(null);
-        if (user == null) return 0;
+    public void updateNewPasswordUser(User newPasswordUser) {
+        User user = userRepo.findByUsername(newPasswordUser.getUsername()).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
         user.setPassword(passwordEncoder.encode(newPasswordUser.getPassword()));
         userRepo.save(user);
-        return 1;
     }
 
     public List<User> findAllUsersPaginated(DataTableSortPage dtSortPage) {
