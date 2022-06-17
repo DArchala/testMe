@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import pl.archala.testme.entity.ExamAttempt;
 import pl.archala.testme.entity.User;
 import pl.archala.testme.repository.UserRepository;
+import pl.archala.testme.service.ExamAttemptService;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -34,18 +35,8 @@ class ExamAttemptControllerTest {
     @Mock
     private Principal principal;
 
-    @Test
-    void getMyExamAttemptsShouldReturnUserDoesNotExistIfRepoCannotFindUserByUsername() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
-
-        //when
-        when(userRepo.findByUsername(principal.getName())).thenReturn(Optional.empty());
-
-        //then
-        assertEquals(response, examAttemptController.getMyExamAttempts(principal));
-    }
+    @Mock
+    private ExamAttemptService examAttemptService;
 
     @Test
     void getMyExamAttemptsShouldReturnMyExamAttemptsIfUserExist() {
@@ -53,9 +44,6 @@ class ExamAttemptControllerTest {
         User user = new User();
         List<ExamAttempt> myExamAttempts = new ArrayList<>();
         ResponseEntity<?> response = new ResponseEntity<>(myExamAttempts, HttpStatus.OK);
-
-        //when
-        when(userRepo.findByUsername(principal.getName())).thenReturn(Optional.of(user));
 
         //then
         assertEquals(response, examAttemptController.getMyExamAttempts(principal));

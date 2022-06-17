@@ -10,14 +10,14 @@ import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.archala.testme.entity.User;
-import pl.archala.testme.repository.TokenRepository;
 import pl.archala.testme.service.UserAuthService;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -73,5 +73,54 @@ class UserAuthControllerTest {
 
         //then
         assertEquals(response, userAuthController.resetPassword(email));
+    }
+
+    @Test
+    void activateAccountByTokenShouldReturnUserAccountIsEnable() {
+        //given
+        String tokenValue = "tokenvalue!#&$*#(!1111222";
+        ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
+
+        //when
+        assertEquals(response, userAuthController.activateAccountByToken(tokenValue));
+    }
+
+    @Test
+    void activateAccountByTokenShouldReturnCaughtExceptionMessage() {
+        //given
+        String tokenValue = "tokenvalue!#&$*#(!1111222";
+        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.BAD_REQUEST);
+
+        //when
+        doThrow(new EntityNotFoundException("Token does not exist")).when(userAuthService).activateAccountByToken(tokenValue);
+
+        //when
+        assertEquals(response, userAuthController.activateAccountByToken(tokenValue));
+    }
+
+    @Test
+    void confirmPasswordResetByTokenShouldReturnUser() {
+        //given
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>(user, HttpStatus.OK);
+
+        //when
+        when(userAuthService.findUserByTokenValue("value")).thenReturn(user);
+
+        //then
+        assertEquals(response, userAuthController.confirmPasswordResetByToken("value"));
+    }
+
+    @Test
+    void confirmPasswordResetByTokenShouldReturnCaughtExceptionMessage() {
+        //given
+        User user = new User();
+        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.BAD_REQUEST);
+
+        //when
+        doThrow(new EntityNotFoundException("Token does not exist")).when(userAuthService).resetPasswordByToken("value");
+
+        //then
+        assertEquals(response, userAuthController.confirmPasswordResetByToken("value"));
     }
 }

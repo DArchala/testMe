@@ -154,61 +154,12 @@ class UserControllerTest {
     }
 
     @Test
-    void activateAccountByTokenShouldReturnUserAccountIsEnable() {
-        //given
-        String tokenValue = "tokenvalue!#&$*#(!1111222";
-        ResponseEntity<?> response = new ResponseEntity<>("User account is now enable. You can log in.", HttpStatus.OK);
-
-        //when
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
-    }
-
-    @Test
-    void activateAccountByTokenShouldReturnCaughtExceptionMessage() {
-        //given
-        String tokenValue = "tokenvalue!#&$*#(!1111222";
-        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.BAD_REQUEST);
-
-        //when
-        doThrow(new EntityNotFoundException("Token does not exist")).when(userService).activateAccountByToken(tokenValue);
-
-        //when
-        assertEquals(response, userController.activateAccountByToken(tokenValue));
-    }
-
-    @Test
     void getRolesShouldReturnRoleEnumValues() {
         //given
         ResponseEntity<?> response = new ResponseEntity<>(RoleEnum.values(), HttpStatus.OK);
 
         //when
         assertEquals(response, userController.getRoles());
-    }
-
-    @Test
-    void confirmPasswordResetByTokenShouldReturnUser() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>(user, HttpStatus.OK);
-
-        //when
-        when(userService.findUserByTokenValue("value")).thenReturn(user);
-
-        //then
-        assertEquals(response, userController.confirmPasswordResetByToken("value"));
-    }
-
-    @Test
-    void confirmPasswordResetByTokenShouldReturnCaughtExceptionMessage() {
-        //given
-        User user = new User();
-        ResponseEntity<?> response = new ResponseEntity<>("Token does not exist", HttpStatus.BAD_REQUEST);
-
-        //when
-        doThrow(new EntityNotFoundException("Token does not exist")).when(userService).resetPasswordByToken("value");
-
-        //then
-        assertEquals(response, userController.confirmPasswordResetByToken("value"));
     }
 
     @Test
