@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.archala.testme.entity.ExamAttempt;
-import pl.archala.testme.entity.User;
-import pl.archala.testme.repository.UserRepository;
+import pl.archala.testme.service.ExamAttemptService;
 
 import java.security.Principal;
 import java.util.List;
@@ -20,18 +19,15 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ExamAttemptController {
 
-    private final UserRepository userRepo;
+    private final ExamAttemptService examAttemptService;
 
-    public ExamAttemptController(UserRepository userRepo) {
-        this.userRepo = userRepo;
+    public ExamAttemptController(ExamAttemptService examAttemptService) {
+        this.examAttemptService = examAttemptService;
     }
 
-    @GetMapping("/examAttempts")
+    @GetMapping("/exam-attempts")
     public ResponseEntity<?> getMyExamAttempts(Principal principal) {
-        User user = userRepo.findByUsername(principal.getName()).orElse(null);
-        if (user == null) return new ResponseEntity<>("User does not exist.", HttpStatus.BAD_REQUEST);
-
-        List<ExamAttempt> myExamAttempts = user.getExamAttempts();
+        List<ExamAttempt> myExamAttempts = examAttemptService.findExamAttemptsByUsername(principal.getName());
         return new ResponseEntity<>(myExamAttempts, HttpStatus.OK);
     }
 }
