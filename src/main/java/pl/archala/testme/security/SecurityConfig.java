@@ -48,14 +48,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 .antMatchers("/api/exam-attempts",
-                        "/api/exams/**",
-                        "/api/auth/**",
-                        "/api/users/**"
+                        "/api/exams",
+                        "/api/exams/exam/**",
+                        "/api/exams/exam/take/**",
+                        "/api/exams/exam",
+                        "/api/exams/exam/max-points",
+                        "/api/exams/new-exam",
+                        "/api/exams/new-exam/save",
+                        "/api/exams/edit",
+                        "/api/auth/register",
+                        "/api/auth/activate/token",
+                        "/api/auth/password/reset",
+                        "/api/auth/password/reset/token",
+                        "/api/users/findBy/username",
+                        "/api/users/password"
                 ).permitAll()
 
                 .antMatchers("/api/exams/delete/**",
+                        "/api/users",
                         "/api/users/role",
-                        "/api/users/delete/**",
+                        "/api/users/delete/{id}",
+                        "/api/users/roles",
+                        "/api/users/password/change",
                         "/api/users/findAll/paginated"
                 ).hasAuthority("ADMIN")
 
