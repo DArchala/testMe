@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/exams/exam/**",
                         "/api/exams/exam/take/**",
                         "/api/exams/exam",
-                        "/api/exams/exam/max-points",
+                        "/api/exams/exam/max-points/**",
                         "/api/exams/new-exam",
                         "/api/exams/new-exam/save",
                         "/api/exams/edit",
@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/password/reset",
                         "/api/auth/password/reset/token",
                         "/api/users/findBy/username",
+                        "/api/users/password/change",
                         "/api/users/password"
                 ).permitAll()
 
@@ -69,7 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/users/role",
                         "/api/users/delete/{id}",
                         "/api/users/roles",
-                        "/api/users/password/change",
                         "/api/users/findAll/paginated"
                 ).hasAuthority("ADMIN")
 
