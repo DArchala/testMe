@@ -61,8 +61,8 @@ public class ExamController {
         }
     }
 
-    @PostMapping("/exam/max-points")
-    public ResponseEntity<?> getExamMaxPoints(@RequestBody Long id) {
+    @GetMapping("/exam/max-points/{id}")
+    public ResponseEntity<?> getExamMaxPoints(@PathVariable("id") Long id) {
         try {
             int examMaxPoints = examService.getMaxPossibleExamPoints(id);
             return new ResponseEntity<>(examMaxPoints, HttpStatus.OK);
