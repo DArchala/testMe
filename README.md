@@ -4,7 +4,7 @@
 https://www.youtube.com/watch?v=RIsvUAFYsr8
 
 ## Functionalities of TestMe application
-- logging  in
+- logging in
 - registering 
 - creating new exams
 - taking exams
